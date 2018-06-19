@@ -23,6 +23,7 @@ import java.util.List;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.common.movable.EMovableAction;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.input.tasks.ConvertGuiTask;
 import jsettlers.logic.map.grid.movable.MovableGrid;
@@ -67,7 +68,7 @@ public class PioneerGroup {
 		pioneerIds.removeAll(idsToRemove);
 	}
 
-	public void fill(ITaskScheduler taskScheduler, AiStatistics aiStatistics, byte playerId, int maxNewPioneersCount) {
+	public void fill(ITaskScheduler taskScheduler, AiStatistics aiStatistics, byte playerId, ECivilisation civilisation, int maxNewPioneersCount) {
 		if (isFull()) {
 			return;
 		}
@@ -84,7 +85,7 @@ public class PioneerGroup {
 				.collect(Collectors.toList());
 
 		if (newPioneerIds.size() > 0) {
-			taskScheduler.scheduleTask(new ConvertGuiTask(playerId, newPioneerIds, EMovableType.PIONEER));
+			taskScheduler.scheduleTask(new ConvertGuiTask(playerId, civilisation, newPioneerIds, EMovableType.PIONEER));
 			pioneerIds.addAll(newPioneerIds);
 		}
 	}

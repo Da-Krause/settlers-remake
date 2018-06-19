@@ -18,6 +18,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.network.client.task.packets.TaskPacket;
 
@@ -29,13 +30,15 @@ import jsettlers.network.client.task.packets.TaskPacket;
 public class SimpleGuiTask extends TaskPacket {
 	private EGuiAction guiAction;
 	private byte playerId;
+	private ECivilisation civilisation;
 
 	public SimpleGuiTask() {
 	}
 
-	public SimpleGuiTask(EGuiAction guiAction, byte playerId) {
+	public SimpleGuiTask(EGuiAction guiAction, byte playerId, ECivilisation civilisation) {
 		this.guiAction = guiAction;
 		this.playerId = playerId;
+		this.civilisation = civilisation;
 	}
 
 	public EGuiAction getGuiAction() {
@@ -46,16 +49,22 @@ public class SimpleGuiTask extends TaskPacket {
 		return playerId;
 	}
 
+	public ECivilisation getCivilisation() {
+		return civilisation;
+	}
+
 	@Override
 	protected void serializeTask(DataOutputStream dos) throws IOException {
 		dos.writeInt(guiAction.ordinal());
 		dos.writeByte(playerId);
+		dos.writeInt(civilisation.ordinal());
 	}
 
 	@Override
 	protected void deserializeTask(DataInputStream dis) throws IOException {
 		guiAction = EGuiAction.VALUES[dis.readInt()];
 		playerId = dis.readByte();
+		civilisation = ECivilisation.VALUES[dis.readInt()];
 	}
 
 	@Override

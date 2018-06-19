@@ -15,6 +15,7 @@
 package jsettlers.mapcreator.tools.objects;
 
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.loading.data.objects.BuildingMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
 import jsettlers.logic.map.loading.data.objects.MovableObject;
@@ -78,15 +79,17 @@ public class PlaceTemplateTool extends AbstractTool {
 
 	public static class TemplateBuilding extends TemplateObject {
 		private final EBuildingType type;
+		private final ECivilisation civilisation;
 
-		public TemplateBuilding(int dx, int dy, EBuildingType type) {
+		public TemplateBuilding(int dx, int dy, EBuildingType type, ECivilisation civilisation) {
 			super(dx, dy, null);
 			this.type = type;
+			this.civilisation = civilisation;
 		}
 
 		@Override
 		public MapDataObject getObject(byte player) {
-			return new BuildingMapDataObject(type, player);
+			return new BuildingMapDataObject(type, player, civilisation);
 		}
 	}
 

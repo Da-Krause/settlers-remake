@@ -97,7 +97,7 @@ public class ConfigurableGeneral implements ArmyGeneral {
 				.filter(building -> building instanceof OccupyingBuilding)
 				.map(building -> (OccupyingBuilding) building)
 				.filter(building -> !building.isSetToBeFullyOccupied())
-				.forEach(building -> taskScheduler.scheduleTask(new ChangeTowerSoldiersGuiTask(player.playerId, building.getPosition(), ChangeTowerSoldiersGuiTask.EChangeTowerSoldierTaskType.FULL, null)));
+				.forEach(building -> taskScheduler.scheduleTask(new ChangeTowerSoldiersGuiTask(player.playerId, player.getCivilisation(), building.getPosition(), ChangeTowerSoldiersGuiTask.EChangeTowerSoldierTaskType.FULL, null)));
 	}
 
 	private boolean attackIsPossible(SoldierPositions soldierPositions, SoldierPositions enemySoldierPositions, boolean infantryWouldDie) {
@@ -167,14 +167,14 @@ public class ConfigurableGeneral implements ArmyGeneral {
 
 	private void setNumberOfFutureProducedMaterial(byte playerId, EMaterialType materialType, int numberToProduce) {
 		if (aiStatistics.getMaterialProduction(playerId).getAbsoluteProductionRequest(materialType) != numberToProduce) {
-			taskScheduler.scheduleTask(new SetMaterialProductionGuiTask(playerId, aiStatistics.getPositionOfPartition(playerId), materialType,
+			taskScheduler.scheduleTask(new SetMaterialProductionGuiTask(playerId, player.getCivilisation(), aiStatistics.getPositionOfPartition(playerId), materialType,
 					EMaterialProductionType.SET_PRODUCTION, numberToProduce));
 		}
 	}
 
 	private void setRatioOfMaterial(byte playerId, EMaterialType materialType, float ratio) {
 		if (aiStatistics.getMaterialProduction(playerId).getUserConfiguredRelativeRequestValue(materialType) != ratio) {
-			taskScheduler.scheduleTask(new SetMaterialProductionGuiTask(playerId, aiStatistics.getPositionOfPartition(playerId), materialType,
+			taskScheduler.scheduleTask(new SetMaterialProductionGuiTask(playerId, player.getCivilisation(), aiStatistics.getPositionOfPartition(playerId), materialType,
 					EMaterialProductionType.SET_RATIO, ratio));
 		}
 	}
@@ -182,7 +182,7 @@ public class ConfigurableGeneral implements ArmyGeneral {
 	private void upgradeSoldiers() {
 		for (ESoldierType type : SOLDIER_UPGRADE_ORDER) {
 			if (player.getMannaInformation().isUpgradePossible(type)) {
-				taskScheduler.scheduleTask(new UpgradeSoldiersGuiTask(player.playerId, type));
+				taskScheduler.scheduleTask(new UpgradeSoldiersGuiTask(player.playerId, type, player.getCivilisation()));
 			}
 		}
 	}
@@ -233,7 +233,7 @@ public class ConfigurableGeneral implements ArmyGeneral {
 			}
 		}
 
-		taskScheduler.scheduleTask(new MoveToGuiTask(player.playerId, target, attackerIds));
+		taskScheduler.scheduleTask(new MoveToGuiTask(player.playerId, player.getCivilisation(), target, attackerIds));
 	}
 
 	private ShortPoint2D getTargetEnemyDoorToAttack(IPlayer enemyToAttack) {

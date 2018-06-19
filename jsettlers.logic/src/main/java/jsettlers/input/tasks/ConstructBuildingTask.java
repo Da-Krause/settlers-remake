@@ -19,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -34,8 +35,8 @@ public class ConstructBuildingTask extends SimpleGuiTask {
 	public ConstructBuildingTask() {
 	}
 
-	public ConstructBuildingTask(EGuiAction guiAction, byte playerId, ShortPoint2D pos, EBuildingType type) {
-		super(guiAction, playerId);
+	public ConstructBuildingTask(EGuiAction guiAction, byte playerId, ECivilisation civilisation, ShortPoint2D pos, EBuildingType type) {
+		super(guiAction, playerId, civilisation);
 		this.position = pos;
 		this.type = type;
 	}

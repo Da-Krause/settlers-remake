@@ -732,6 +732,7 @@ public class EditorControl extends EditorControlBase implements IMapInterfaceLis
 				PlaceBuildingTool pbt = (PlaceBuildingTool) tool;
 				EBuildingType type = pbt.getType();
 
+
 				// display resources for Mines and Fisher
 				if (type.isMine() || type == EBuildingType.FISHER) {
 					showResourcesBecauseOfTool = true;

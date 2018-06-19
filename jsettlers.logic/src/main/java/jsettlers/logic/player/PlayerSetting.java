@@ -40,7 +40,7 @@ public class PlayerSetting {
 	 * Creates a new {@link PlayerSetting} object for a human player.
 	 */
 	public PlayerSetting(byte teamId) {
-		this(true, EPlayerType.HUMAN, ECivilisation.ROMAN, teamId);
+		this(true, EPlayerType.HUMAN, ECivilisation.ROMANS, teamId);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class PlayerSetting {
 					offsetToSkipHuman++;
 					aiType = EPlayerType.getTypeByIndex(i + offsetToSkipHuman);
 				}
-				playerSettings[i] = new PlayerSetting(true, aiType, ECivilisation.ROMAN, i);
+				playerSettings[i] = new PlayerSetting(true, aiType, ECivilisation.ROMANS, i);
 			}
 		}
 		System.out.println("created player settings: " + Arrays.toString(playerSettings));

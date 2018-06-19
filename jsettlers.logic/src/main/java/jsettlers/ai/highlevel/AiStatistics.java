@@ -45,6 +45,7 @@ import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableAction;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
@@ -124,8 +125,8 @@ public class AiStatistics {
 		players = J8Arrays.stream(partitionsGrid.getPlayers()).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
-	public byte getFlatternEffortAtPositionForBuilding(final ShortPoint2D position, final EBuildingType buildingType) {
-		byte flattenEffort = constructionMarksGrid.calculateConstructionMarkValue(position.x, position.y, buildingType.getProtectedTiles());
+	public byte getFlatternEffortAtPositionForBuilding(final ShortPoint2D position, final EBuildingType buildingType, ECivilisation civilisation) {
+		byte flattenEffort = constructionMarksGrid.calculateConstructionMarkValue(position.x, position.y, buildingType.getProtectedTiles(civilisation));
 		if (flattenEffort == -1) {
 			return Byte.MAX_VALUE;
 		}
@@ -506,18 +507,18 @@ public class AiStatistics {
 		return playerStatistics[playerId].landToBuildOn;
 	}
 
-	public boolean blocksWorkingAreaOfOtherBuilding(int x, int y, byte playerId, EBuildingType buildingType) {
+	public boolean blocksWorkingAreaOfOtherBuilding(int x, int y, byte playerId, EBuildingType buildingType, ECivilisation civilisation) {
 		for (ShortPoint2D workAreaCenter : playerStatistics[playerId].wineGrowerWorkAreas) {
-			for (RelativePoint blockedPoint : buildingType.getBlockedTiles()) {
-				if (workAreaCenter.getOnGridDistTo(blockedPoint.calculatePoint(x, y)) <= EBuildingType.WINEGROWER.getWorkRadius()) {
+			for (RelativePoint blockedPoint : buildingType.getBlockedTiles(civilisation)) {
+				if (workAreaCenter.getOnGridDistTo(blockedPoint.calculatePoint(x, y)) <= EBuildingType.WINEGROWER.getWorkRadius(civilisation)) {
 					return true;
 				}
 			}
 		}
 
 		for (ShortPoint2D workAreaCenter : playerStatistics[playerId].farmWorkAreas) {
-			for (RelativePoint blockedPoint : buildingType.getBlockedTiles()) {
-				if (workAreaCenter.getOnGridDistTo(blockedPoint.calculatePoint(x, y)) <= EBuildingType.FARM.getWorkRadius()) {
+			for (RelativePoint blockedPoint : buildingType.getBlockedTiles(civilisation)) {
+				if (workAreaCenter.getOnGridDistTo(blockedPoint.calculatePoint(x, y)) <= EBuildingType.FARM.getWorkRadius(civilisation)) {
 					return true;
 				}
 			}

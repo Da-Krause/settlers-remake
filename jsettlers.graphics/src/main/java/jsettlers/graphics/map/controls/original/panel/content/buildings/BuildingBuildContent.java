@@ -21,6 +21,7 @@ import jsettlers.common.map.IGraphicsGrid;
 import jsettlers.common.map.partition.IBuildingCounts;
 import jsettlers.common.action.EActionType;
 import jsettlers.common.action.IAction;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.graphics.action.ActionFireable;
 import jsettlers.common.action.BuildAction;
@@ -41,22 +42,32 @@ public class BuildingBuildContent extends AbstractContentProvider {
 
 	private final ArrayList<BuildingButton> buttons = new ArrayList<>();
 	private EBuildingType activeBuilding;
+	private EBuildingsCategory buildingsCategory;
 
 	public BuildingBuildContent(EBuildingsCategory buildingsCategory) {
 		panel = new UIPanel();
+		this.buildingsCategory = buildingsCategory;
+	}
+
+	public void setCivilisation(ECivilisation civilisation) {
+		buttons.clear();
+		uiContentUpdater.clearListeners();
+		panel.removeAll();
 
 		float colWidth = 1f / COLUMNS;
 		float rowHeight = 1f / ROWS;
 
 		int i = 0;
 		for (EBuildingType buildingType : buildingsCategory.buildingTypes) {
-			BuildingButton button = new BuildingButton(buildingType);
-			int row = i / COLUMNS;
-			int col = i % COLUMNS;
-			panel.addChild(button, col * colWidth, 1 - (row + 1) * rowHeight, (col + 1) * colWidth, 1 - row * rowHeight);
-			buttons.add(button);
-			uiContentUpdater.addListener(button);
-			i++;
+			if(buildingType.requiredCivilisations.contains(civilisation)) {
+				BuildingButton button = new BuildingButton(buildingType, civilisation);
+				int row = i / COLUMNS;
+				int col = i % COLUMNS;
+				panel.addChild(button, col * colWidth, 1 - (row + 1) * rowHeight, (col + 1) * colWidth, 1 - row * rowHeight);
+				buttons.add(button);
+				uiContentUpdater.addListener(button);
+				i++;
+			}
 		}
 	}
 
@@ -96,7 +107,7 @@ public class BuildingBuildContent extends AbstractContentProvider {
 	@Override
 	public IAction catchAction(IAction action) {
 		if ((action.getActionType() == EActionType.MOVE_TO || action.getActionType() == EActionType.ABORT) && activeBuilding != null) {
-			action = new ShowConstructionMarksAction(null);
+			action = new ShowConstructionMarksAction(null, null);
 		}
 
 		if (action.getActionType() == EActionType.SHOW_CONSTRUCTION_MARK) {
@@ -123,7 +134,7 @@ public class BuildingBuildContent extends AbstractContentProvider {
 	public void contentHiding(ActionFireable actionFireable, AbstractContentProvider nextContent) {
 		uiContentUpdater.stop();
 		if (activeBuilding != null) {
-			actionFireable.fireAction(new ShowConstructionMarksAction(null));
+			actionFireable.fireAction(new ShowConstructionMarksAction(null, null));
 		}
 	}
 }

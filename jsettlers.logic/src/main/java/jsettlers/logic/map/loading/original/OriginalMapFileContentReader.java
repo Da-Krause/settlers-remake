@@ -723,14 +723,14 @@ class OriginalMapFileContentReader {
 			ShortPoint2D startPoint = mapData.getStartPoint(playerId);
 
 			// - add the start Tower for this player
-			mapData.setMapObject(startPoint.x, startPoint.y, new BuildingMapDataObject(EBuildingType.TOWER, playerId));
+			mapData.setMapObject(startPoint.x, startPoint.y, new BuildingMapDataObject(EBuildingType.TOWER, playerId, playerSettings[playerId].getCivilisation()));
 
 			// - list of all objects that have to be added for this player
 			List<MapDataObject> mapObjects = EMapStartResources.generateStackObjects(startResources);
 			mapObjects.addAll(EMapStartResources.generateMovableObjects(startResources, playerId));
 
 			// - blocking area of the tower
-			List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles());
+			List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles(playerSettings[playerId].getCivilisation()));
 
 			RelativePoint relativeMapObjectPoint = new RelativePoint(-3, 3);
 

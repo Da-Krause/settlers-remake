@@ -25,6 +25,7 @@ import java.util.List;
 
 import jsettlers.common.menu.IStartedGame;
 import jsettlers.common.menu.IStartingGame;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.resources.ResourceManager;
 import jsettlers.common.utils.mutables.MutableInt;
 import jsettlers.input.tasks.EGuiAction;
@@ -100,7 +101,7 @@ public class ReplayUtils {
 			final int targetGameTimeMs = targetGameTimesMs[i];
 
 			networkConnector.scheduleTaskAt(targetGameTimeMs / NetworkConstants.Client.LOCKSTEP_PERIOD,
-				new SimpleGuiTask(EGuiAction.QUICK_SAVE, (byte) 0)
+				new SimpleGuiTask(EGuiAction.QUICK_SAVE, (byte) 0, ECivilisation.ROMANS)
 			);
 			MatchConstants.clock().fastForwardTo(targetGameTimeMs + 1000);
 			savegames[i] = getNewestSavegame();

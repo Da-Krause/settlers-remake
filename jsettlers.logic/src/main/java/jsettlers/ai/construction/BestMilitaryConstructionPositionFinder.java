@@ -17,6 +17,7 @@ package jsettlers.ai.construction;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 import java.util.Collection;
@@ -29,13 +30,15 @@ import java.util.Collection;
 public class BestMilitaryConstructionPositionFinder implements IBestConstructionPositionFinder {
 
 	private final EBuildingType buildingType;
+	private final ECivilisation civilisation;
 
-	public BestMilitaryConstructionPositionFinder(EBuildingType buildingType) {
+	public BestMilitaryConstructionPositionFinder(EBuildingType buildingType, ECivilisation civilisation) {
 		this.buildingType = buildingType;
+		this.civilisation = civilisation;
 	}
 
 	@Override
-	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, final byte playerId) {
+	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, final byte playerId) {
 		Collection<ShortPoint2D> towerPositions = aiStatistics.getBuildingPositionsOfTypeForPlayer(EBuildingType.TOWER, playerId);
 		if (towerPositions.isEmpty()) {
 			return null;
@@ -43,6 +46,6 @@ public class BestMilitaryConstructionPositionFinder implements IBestConstruction
 
 		final AbstractConstructionMarkableMap constructionGrid = aiStatistics.getMainGrid().getConstructionMarksGrid();
 		return aiStatistics.getLandForPlayer(playerId).getNearestPoint(towerPositions.iterator().next(), Integer.MAX_VALUE,
-				(x, y) -> constructionGrid.canConstructAt((short) x, (short) y, buildingType, playerId));
+				(x, y) -> constructionGrid.canConstructAt((short) x, (short) y, buildingType, this.civilisation, playerId));
 	}
 }

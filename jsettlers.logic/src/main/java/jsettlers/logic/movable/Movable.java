@@ -33,6 +33,7 @@ import jsettlers.common.menu.messages.SimpleMessage;
 import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableAction;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.selectable.ESelectionType;
 import jsettlers.logic.buildings.military.IBuildingOccupyableMovable;
@@ -839,6 +840,8 @@ public final class Movable implements ILogicMovable {
 	public final Player getPlayer() {
 		return player;
 	}
+
+	public final ECivilisation getCivilisation(){return player.getCivilisation();}
 
 	@Override
 	public final boolean isSelected() {

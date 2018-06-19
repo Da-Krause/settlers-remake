@@ -14,7 +14,6 @@
  *******************************************************************************/
 package jsettlers.graphics.map.controls.original.panel.selection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import go.graphics.GLDrawContext;
@@ -324,7 +323,7 @@ public class BuildingSelectionContent extends AbstractSelectionContent {
 			root = createNormalBuildingContent(state);
 		}
 
-		ImageLink[] images = building.getBuildingType().getImages();
+		ImageLink[] images = building.getBuildingType().getImages(building.getCivilisation());
 		root.setImages(images);
 		rootPanel.addChild(root, 0, 0, 1, 1);
 	}
@@ -334,7 +333,7 @@ public class BuildingSelectionContent extends AbstractSelectionContent {
 
 		loadPriorityButton(layout.background, layout.priority, state);
 
-		if (building.getBuildingType().getWorkRadius() <= 0) {
+		if (building.getBuildingType().getWorkRadius(building.getCivilisation()) <= 0) {
 			layout.background.removeChild(layout.buttonWorkRadius);
 		}
 

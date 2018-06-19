@@ -67,7 +67,7 @@ public final class BuildingWorkerStrategy extends MovableStrategy implements IMa
 		if (currentJobName.equals("null")) {
 			currentJob = null;
 		} else {
-			currentJob = building.getBuildingType().getJobByName(currentJobName);
+			currentJob = building.getBuildingType().getJobByName(currentJobName, super.movable.getCivilisation());
 		}
 	}
 
@@ -386,7 +386,7 @@ public final class BuildingWorkerStrategy extends MovableStrategy implements IMa
 
 		ShortPoint2D workAreaCenter = building.getWorkAreaCenter();
 
-		boolean pathFound = super.preSearchPath(dijkstra, workAreaCenter.x, workAreaCenter.y, building.getBuildingType().getWorkRadius(),
+		boolean pathFound = super.preSearchPath(dijkstra, workAreaCenter.x, workAreaCenter.y, building.getBuildingType().getWorkRadius(super.movable.getCivilisation()),
 				currentJob.getSearchType());
 
 		if (pathFound) {
@@ -462,7 +462,7 @@ public final class BuildingWorkerStrategy extends MovableStrategy implements IMa
 	@Override
 	public void setWorkerJob(IWorkerRequestBuilding building) {
 		this.building = building;
-		this.currentJob = building.getBuildingType().getStartJob();
+		this.currentJob = building.getBuildingType().getStartJob(super.movable.getCivilisation());
 		super.enableNothingToDoAction(false);
 		this.done = false;
 		building.occupyBuilding(this);

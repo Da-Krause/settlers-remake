@@ -17,6 +17,7 @@ package jsettlers.ai.construction;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -32,11 +33,11 @@ public class BestTempleConstructionPositionFinder extends NearRequiredBuildingCo
 
 	@Override
 	public ShortPoint2D findBestConstructionPosition(
-			AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, byte playerId) {
+            AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, byte playerId) {
 		int availableWine = aiStatistics.getTotalWineCountForPlayer(playerId);
 		int usedWine = aiStatistics.getTotalNumberOfBuildingTypeForPlayer(EBuildingType.TEMPLE, playerId) * WINE_PER_TEMPLE;
 		if (availableWine - usedWine >= WINE_PER_TEMPLE) {
-			return super.findBestConstructionPosition(aiStatistics, constructionMap, playerId);
+			return super.findBestConstructionPosition(aiStatistics, constructionMap, civilisation, playerId);
 		} else {
 			// reject construction of temple - the wine is not grown yet
 			return null;

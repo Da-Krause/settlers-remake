@@ -15,6 +15,7 @@
 package jsettlers.ai.construction;
 
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.map.grid.MainGrid;
@@ -25,10 +26,10 @@ import jsettlers.logic.map.grid.MainGrid;
  * @author codingberlin
  */
 public class BestFarmConstructionPositionFinder extends BestPlantingBuildingConstructionPositionFinder {
-	static final RelativePoint[] FARM_WORK_AREA_POINTS;
+	private final RelativePoint[] farmWorkAreaPoints;
 
-	static {
-		FARM_WORK_AREA_POINTS = calculateMyRelativeWorkAreaPoints(EBuildingType.FARM);
+	BestFarmConstructionPositionFinder(ECivilisation civilisation){
+		farmWorkAreaPoints = calculateMyRelativeWorkAreaPoints(EBuildingType.FARM, civilisation);
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class BestFarmConstructionPositionFinder extends BestPlantingBuildingCons
 
 	@Override
 	protected RelativePoint[] myRelativeWorkAreaPoints() {
-		return FARM_WORK_AREA_POINTS;
+		return farmWorkAreaPoints;
 	}
 
 	@Override

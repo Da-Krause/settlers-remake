@@ -42,6 +42,12 @@ public abstract class UiContentUpdater<T> {
 		}
 	}
 
+	public void clearListeners() {
+		synchronized (listeners) {
+			listeners.clear();
+		}
+	}
+
 	public void addListeners(List<IUiContentReceiver<T>> listeners) {
 		synchronized (this.listeners) {
 			this.listeners.addAll(listeners);

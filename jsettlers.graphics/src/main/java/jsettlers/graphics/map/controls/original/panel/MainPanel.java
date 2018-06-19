@@ -134,6 +134,10 @@ public class MainPanel extends UIPanel {
 		this.actionFireable = actionFireable;
 		ContentType.WARRIORS.setPlayer(player);
 		ContentType.SETTLER_STATISTIC.setPlayer(player);
+		ContentType.BUILD_FOOD.setCivilisation(player.getCivilisation());
+		ContentType.BUILD_MILITARY.setCivilisation((player.getCivilisation()));
+		ContentType.BUILD_NORMAL.setCivilisation(player.getCivilisation());
+		ContentType.BUILD_SOCIAL.setCivilisation(player.getCivilisation());
 
 		layoutPanel(ControlPanelLayoutProperties.getLayoutPropertiesFor(480));
 	}

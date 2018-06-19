@@ -71,7 +71,7 @@ public class AiDifficultiesIT {
 	public void veryHardShouldProduceCertainAmountOfSoldiersWithin90Minutes() throws MapLoadException {
 		byte playerId = (byte) 0;
 		PlayerSetting[] playerSettings = getDefaultPlayerSettings(12);
-		playerSettings[playerId] = new PlayerSetting(EPlayerType.AI_VERY_HARD, ECivilisation.ROMAN, playerId);
+		playerSettings[playerId] = new PlayerSetting(EPlayerType.AI_VERY_HARD, ECivilisation.ROMANS, playerId);
 
 		JSettlersGame.GameRunner startingGame = createStartingGame(playerSettings);
 		IStartedGame startedGame = ReplayUtils.waitForGameStartup(startingGame);
@@ -92,8 +92,8 @@ public class AiDifficultiesIT {
 		byte expectedWinnerSlotId = 9;
 		byte expectedLooserSlotId = 7;
 		PlayerSetting[] playerSettings = getDefaultPlayerSettings(12);
-		playerSettings[expectedWinnerSlotId] = new PlayerSetting(expectedWinner, ECivilisation.ROMAN, (byte) 0);
-		playerSettings[expectedLooserSlotId] = new PlayerSetting(expectedLooser, ECivilisation.ROMAN, (byte) 1);
+		playerSettings[expectedWinnerSlotId] = new PlayerSetting(expectedWinner, ECivilisation.ROMANS, (byte) 0);
+		playerSettings[expectedLooserSlotId] = new PlayerSetting(expectedLooser, ECivilisation.ROMANS, (byte) 1);
 
 		JSettlersGame.GameRunner startingGame = createStartingGame(playerSettings);
 		IStartedGame startedGame = ReplayUtils.waitForGameStartup(startingGame);

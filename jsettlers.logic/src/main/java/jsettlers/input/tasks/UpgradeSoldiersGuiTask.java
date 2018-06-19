@@ -19,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import jsettlers.common.movable.ESoldierType;
+import jsettlers.common.player.ECivilisation;
 
 /**
  * @author codingberlin
@@ -31,8 +32,8 @@ public class UpgradeSoldiersGuiTask extends SimpleGuiTask {
 	public UpgradeSoldiersGuiTask() {
 	}
 
-	public UpgradeSoldiersGuiTask(byte playerId, ESoldierType soldierType) {
-		super(EGuiAction.UPGRADE_SOLDIERS, playerId);
+	public UpgradeSoldiersGuiTask(byte playerId, ESoldierType soldierType, ECivilisation civilisation) {
+		super(EGuiAction.UPGRADE_SOLDIERS, playerId, civilisation);
 		this.soldierType = soldierType;
 	}
 

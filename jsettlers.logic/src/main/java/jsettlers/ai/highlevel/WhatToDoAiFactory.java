@@ -20,7 +20,6 @@ import jsettlers.ai.economy.BuildingListEconomyMinister;
 import jsettlers.ai.economy.EconomyMinister;
 import jsettlers.common.ai.EPlayerType;
 import jsettlers.common.player.ECivilisation;
-import jsettlers.logic.buildings.IBuildingsGrid;
 import jsettlers.logic.map.grid.MainGrid;
 import jsettlers.logic.map.grid.movable.MovableGrid;
 import jsettlers.logic.player.Player;
@@ -34,7 +33,7 @@ class WhatToDoAiFactory {
 	IWhatToDoAi buildWhatToDoAi(EPlayerType type, ECivilisation civilisation, AiStatistics aiStatistics, Player player, MainGrid mainGrid, MovableGrid movableGrid, ITaskScheduler taskScheduler) {
 		ArmyGeneral general = determineArmyGeneral(type, civilisation, aiStatistics, player, movableGrid, taskScheduler);
 		EconomyMinister minister = determineMinister(type, civilisation, aiStatistics, player);
-		return new WhatToDoAi(player.playerId, aiStatistics, minister, general, mainGrid, taskScheduler);
+		return new WhatToDoAi(civilisation, player.playerId, aiStatistics, minister, general, mainGrid, taskScheduler);
 	}
 
 	private EconomyMinister determineMinister(EPlayerType type, ECivilisation civilisation, AiStatistics aiStatistics, Player player) {

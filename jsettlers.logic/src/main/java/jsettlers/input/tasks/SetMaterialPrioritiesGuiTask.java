@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -36,16 +37,17 @@ public class SetMaterialPrioritiesGuiTask extends SimpleGuiTask {
 
 	/**
 	 * Creates a new {@link SetMaterialPrioritiesGuiTask} to change the priorities of {@link EMaterialType}s.
-	 * 
-	 * @param playerId
+	 *  @param playerId
 	 *            Id of the player that sends the task.
+	 * @param civilisation
+	 *            The civilisation of the player that sends the task.
 	 * @param managerPosition
 	 *            The position of the manager whose settings shall be changed.
 	 * @param materialTypeForPriority
-	 *            An array of all droppable {@link EMaterialType}s. The first element has the highest priority, the last one hast the lowest.
+ *            An array of all droppable {@link EMaterialType}s. The first element has the highest priority, the last one hast the lowest.
 	 */
-	public SetMaterialPrioritiesGuiTask(byte playerId, ShortPoint2D managerPosition, EMaterialType[] materialTypeForPriority) {
-		super(EGuiAction.SET_MATERIAL_PRIORITIES, playerId);
+	public SetMaterialPrioritiesGuiTask(byte playerId, ECivilisation civilisation, ShortPoint2D managerPosition, EMaterialType[] materialTypeForPriority) {
+		super(EGuiAction.SET_MATERIAL_PRIORITIES, playerId, civilisation);
 
 		assert materialTypeForPriority.length == EMaterialType.NUMBER_OF_DROPPABLE_MATERIALS : "The given material types for priorities may only contain droppable materials";
 

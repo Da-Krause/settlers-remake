@@ -18,23 +18,26 @@ import java.util.Set;
 
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.mapcreator.data.objects.ProtectContainer;
 
 public class ProtectLandscapeConstraint extends ProtectContainer implements LandscapeConstraint {
 
 	private final EBuildingType buildingType;
+	private final ECivilisation civilisation;
 
-	public ProtectLandscapeConstraint(EBuildingType buildingType) {
+	public ProtectLandscapeConstraint(EBuildingType buildingType, ECivilisation civilisation) {
 		this.buildingType = buildingType;
+		this.civilisation = civilisation;
 	}
 
 	public Set<ELandscapeType> getAllowedLandscapes() {
-		return buildingType.getGroundTypes();
+		return buildingType.getGroundTypes(civilisation);
 	}
 
 	@Override
 	public boolean needsFlattenedGround() {
-		return buildingType.needsFlattenedGround();
+		return buildingType.needsFlattenedGround(civilisation);
 	}
 
 }

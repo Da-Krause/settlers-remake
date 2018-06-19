@@ -19,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -34,9 +35,9 @@ public class ChangeTradingRequestGuiTask extends SimpleBuildingGuiTask {
 	public ChangeTradingRequestGuiTask() {
 	}
 
-	public ChangeTradingRequestGuiTask(EGuiAction guiAction, byte playerId, ShortPoint2D bildingPos, EMaterialType material, int amount,
-			boolean relative) {
-		super(guiAction, playerId, bildingPos);
+	public ChangeTradingRequestGuiTask(EGuiAction guiAction, byte playerId, ECivilisation civilisation, ShortPoint2D bildingPos, EMaterialType material, int amount,
+									   boolean relative) {
+		super(guiAction, playerId, civilisation, bildingPos);
 		this.material = material;
 		this.amount = amount;
 		this.relative = relative;

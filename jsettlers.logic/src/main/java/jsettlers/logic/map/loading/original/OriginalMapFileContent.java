@@ -21,6 +21,7 @@ import jsettlers.algorithms.partitions.PartitionCalculatorAlgorithm;
 import jsettlers.common.landscape.ELandscapeType;
 import jsettlers.common.landscape.EResourceType;
 import jsettlers.common.logging.MilliStopWatch;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.loading.data.IMapData;
 import jsettlers.logic.map.loading.data.objects.BuildingMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
@@ -169,11 +170,10 @@ public class OriginalMapFileContent implements IMapData {
 			return;
 
 		EOriginalMapBuildingType mapBuildingType = EOriginalMapBuildingType.getTypeByInt(buildingType);
-
 		if (mapBuildingType == EOriginalMapBuildingType.NOT_A_BUILDING)
 			return;
 		if (mapBuildingType.getValue() != null) {
-			mapObject[pos] = new BuildingMapDataObject(mapBuildingType.getValue(), (byte) party);
+			mapObject[pos] = new BuildingMapDataObject(mapBuildingType.getValue(), (byte) party, ECivilisation.VALUES[mapPlayerInfos[party].nation.ordinal()]);
 		}
 	}
 

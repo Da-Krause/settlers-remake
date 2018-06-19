@@ -19,6 +19,7 @@ import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
 import jsettlers.common.CommonConstants;
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 import java.util.List;
@@ -34,12 +35,12 @@ public class BorderDefenceConstructionPositionFinder implements IBestConstructio
 	}
 
 	@Override
-	public ShortPoint2D findBestConstructionPosition(final AiStatistics aiStatistics, final AbstractConstructionMarkableMap constructionMap, final byte playerId) {
+	public ShortPoint2D findBestConstructionPosition(final AiStatistics aiStatistics, final AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, final byte playerId) {
 		AiPositions landToBuildOn = aiStatistics.getLandForPlayer(playerId);
 		for (ShortPoint2D threatenedBorder : threatenedBorders) {
 			ShortPoint2D constructionPosition = landToBuildOn.getNearestPoint(threatenedBorder, CommonConstants.TOWER_RADIUS,
-					(x, y) -> constructionMap.canConstructAt((short) x, (short) y, EBuildingType.TOWER, playerId)
-							&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(x, y, playerId, EBuildingType.TOWER));
+					(x, y) -> constructionMap.canConstructAt((short) x, (short) y, EBuildingType.TOWER, civilisation, playerId)
+							&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(x, y, playerId, EBuildingType.TOWER, civilisation));
 			if (constructionPosition != null) {
 				return constructionPosition;
 			}

@@ -24,6 +24,7 @@ import javax.swing.tree.TreePath;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
 import jsettlers.common.landscape.EResourceType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.loading.data.objects.DecorationMapDataObject;
 import jsettlers.logic.map.loading.data.objects.StoneMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapTreeObject;
@@ -220,45 +221,45 @@ public abstract class ToolSidebar extends JPanel implements IPlayerSetter {
 					}),
 			new ToolBox(EditorLabels.getLabel("tools.category.buildings"), new ToolNode[] {
 					new ToolBox(EditorLabels.getLabel("tools.category.resources"), new ToolNode[] {
-							new PlaceBuildingTool(EBuildingType.LUMBERJACK, this),
-							new PlaceBuildingTool(EBuildingType.SAWMILL, this),
-							new PlaceBuildingTool(EBuildingType.STONECUTTER, this),
-							new PlaceBuildingTool(EBuildingType.FORESTER, this),
-							new PlaceBuildingTool(EBuildingType.IRONMELT, this),
-							new PlaceBuildingTool(EBuildingType.IRONMINE, this),
-							new PlaceBuildingTool(EBuildingType.GOLDMELT, this),
-							new PlaceBuildingTool(EBuildingType.GOLDMINE, this),
-							new PlaceBuildingTool(EBuildingType.COALMINE, this),
-							new PlaceBuildingTool(EBuildingType.CHARCOAL_BURNER, this),
-							new PlaceBuildingTool(EBuildingType.TOOLSMITH, this)
+							new PlaceBuildingTool(EBuildingType.LUMBERJACK, ECivilisation.ROMANS, this), //todo: add toolbox for other civilisations
+							new PlaceBuildingTool(EBuildingType.SAWMILL, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.STONECUTTER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.FORESTER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.IRONMELT, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.IRONMINE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.GOLDMELT, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.GOLDMINE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.COALMINE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.CHARCOAL_BURNER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.TOOLSMITH, ECivilisation.ROMANS, this)
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.food"), new ToolNode[] {
-							new PlaceBuildingTool(EBuildingType.FARM, this),
-							new PlaceBuildingTool(EBuildingType.MILL, this),
-							new PlaceBuildingTool(EBuildingType.BAKER, this),
-							new PlaceBuildingTool(EBuildingType.WATERWORKS, this),
-							new PlaceBuildingTool(EBuildingType.PIG_FARM, this),
-							new PlaceBuildingTool(EBuildingType.SLAUGHTERHOUSE, this),
-							new PlaceBuildingTool(EBuildingType.FISHER, this),
-							new PlaceBuildingTool(EBuildingType.DONKEY_FARM, this),
-							new PlaceBuildingTool(EBuildingType.WINEGROWER, this)
+							new PlaceBuildingTool(EBuildingType.FARM, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.MILL, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.BAKER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.WATERWORKS, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.PIG_FARM, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.SLAUGHTERHOUSE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.FISHER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.DONKEY_FARM, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.WINEGROWER, ECivilisation.ROMANS, this)
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.military"), new ToolNode[] {
-							new PlaceBuildingTool(EBuildingType.TOWER, this),
-							new PlaceBuildingTool(EBuildingType.BIG_TOWER, this),
-							new PlaceBuildingTool(EBuildingType.CASTLE, this),
-							new PlaceBuildingTool(EBuildingType.WEAPONSMITH, this),
-							new PlaceBuildingTool(EBuildingType.DOCKYARD, this)
+							new PlaceBuildingTool(EBuildingType.TOWER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.BIG_TOWER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.CASTLE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.WEAPONSMITH, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.DOCKYARD, ECivilisation.ROMANS, this)
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.social"), new ToolNode[] {
-							new PlaceBuildingTool(EBuildingType.SMALL_LIVINGHOUSE, this),
-							new PlaceBuildingTool(EBuildingType.MEDIUM_LIVINGHOUSE, this),
-							new PlaceBuildingTool(EBuildingType.BIG_LIVINGHOUSE, this),
-							new PlaceBuildingTool(EBuildingType.TEMPLE, this),
-							new PlaceBuildingTool(EBuildingType.BIG_TEMPLE, this),
-							new PlaceBuildingTool(EBuildingType.STOCK, this),
-							new PlaceBuildingTool(EBuildingType.MARKET_PLACE, this),
-							new PlaceBuildingTool(EBuildingType.HARBOR, this)
+							new PlaceBuildingTool(EBuildingType.SMALL_LIVINGHOUSE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.MEDIUM_LIVINGHOUSE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.BIG_LIVINGHOUSE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.TEMPLE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.BIG_TEMPLE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.STOCK, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.MARKET_PLACE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.HARBOR, ECivilisation.ROMANS, this)
 							}),
 					}),
 					PRESETS,

@@ -52,6 +52,7 @@ import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.logic.player.Player;
 
@@ -75,6 +76,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 	private final boolean isHighGoodsGame;
 	private final boolean isMiddleGoodsGame;
 
+	private final ECivilisation civilisation;
 	private final IPlayer player;
 	private final byte playerId;
 
@@ -98,6 +100,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 		this.limitByWeakestEnemy = limitByWeakestEnemy;
 		this.player = player;
 		this.playerId = player.playerId;
+		this.civilisation = player.getCivilisation();
 		this.buildingsToBuild = new ArrayList<>();
 		this.weaponSmithFactor = weaponSmithFactor;
 		this.isHighGoodsGame = isHighGoodsGame();
@@ -107,7 +110,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 	@Override
 	public void update() {
 		buildingsToBuild.clear();
-		this.mapBuildingCounts = aiStatistics.getAiMapInformation().getBuildingCounts(player.getPlayerId());
+		this.mapBuildingCounts = aiStatistics.getAiMapInformation().getBuildingCounts(civilisation, player.getPlayerId());
 		addMinimalBuildingMaterialBuildings();
 		if (isVerySmallMap()) {
 			addSmallWeaponProduction();
@@ -129,7 +132,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 
 	@Override
 	public boolean isEndGame() {
-		double remainingGrass = aiStatistics.getAiMapInformation().getRemainingGrassTiles(aiStatistics, playerId)
+		double remainingGrass = aiStatistics.getAiMapInformation().getRemainingGrassTiles(aiStatistics, playerId, civilisation)
 				- aiStatistics.getTreesForPlayer(playerId).size()
 				- aiStatistics.getStonesForPlayer(playerId).size();
 		double availableGrass = aiStatistics.getAiMapInformation().getGrassTilesOf(playerId);

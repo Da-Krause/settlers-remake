@@ -18,6 +18,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ILocatable;
 import jsettlers.common.position.ShortPoint2D;
 
@@ -34,13 +35,13 @@ public class SimpleBuildingGuiTask extends SimpleGuiTask {
 	public SimpleBuildingGuiTask() {
 	}
 
-	public SimpleBuildingGuiTask(EGuiAction guiAction, byte playerId, ShortPoint2D buildingPos) {
-		super(guiAction, playerId);
+	public SimpleBuildingGuiTask(EGuiAction guiAction, byte playerId, ECivilisation civilisation, ShortPoint2D buildingPos) {
+		super(guiAction, playerId, civilisation);
 		this.buildingPos = buildingPos;
 	}
 
-	public SimpleBuildingGuiTask(EGuiAction guiAction, byte playerId, ILocatable building) {
-		this(guiAction, playerId, building.getPosition());
+	public SimpleBuildingGuiTask(EGuiAction guiAction, byte playerId, ECivilisation civilisation, ILocatable building) {
+		this(guiAction, playerId, civilisation, building.getPosition());
 	}
 
 	/**

@@ -16,6 +16,7 @@ package jsettlers.ai.construction;
 
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -26,5 +27,5 @@ import jsettlers.common.position.ShortPoint2D;
  */
 public interface IBestConstructionPositionFinder {
 
-	ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, byte playerId);
+	ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, byte playerId);
 }

@@ -15,6 +15,7 @@
 package jsettlers.ai.construction;
 
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.map.grid.MainGrid;
@@ -26,10 +27,10 @@ import jsettlers.logic.map.grid.MainGrid;
  */
 public class BestWinegrowerConstructionPositionFinder extends BestPlantingBuildingConstructionPositionFinder {
 
-	static final RelativePoint[] WINEGROWER_WORK_AREA_POINTS;
+	private static final RelativePoint[] WINEGROWER_WORK_AREA_POINTS;
 
 	static {
-		WINEGROWER_WORK_AREA_POINTS = calculateMyRelativeWorkAreaPoints(EBuildingType.WINEGROWER);
+		WINEGROWER_WORK_AREA_POINTS = calculateMyRelativeWorkAreaPoints(EBuildingType.WINEGROWER, ECivilisation.ROMANS);
 	}
 
 	@Override

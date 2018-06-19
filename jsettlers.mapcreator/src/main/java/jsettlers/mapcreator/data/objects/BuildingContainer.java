@@ -28,6 +28,7 @@ import jsettlers.common.mapobject.EMapObjectType;
 import jsettlers.common.mapobject.IMapObject;
 import jsettlers.common.material.EPriority;
 import jsettlers.common.movable.ESoldierClass;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
@@ -40,11 +41,13 @@ public class BuildingContainer implements ObjectContainer, IBuilding, LandscapeC
 	private final BuildingMapDataObject buildingObject;
 	private final ShortPoint2D position;
 	private final IPlayer player;
+	private final ECivilisation civilisation;
 
 	public BuildingContainer(BuildingMapDataObject buildingObject, ShortPoint2D position) {
 		this.buildingObject = buildingObject;
 		this.position = position;
 		this.player = new IPlayer.DummyPlayer(buildingObject.getPlayerId());
+		this.civilisation = buildingObject.getCivilisation();
 	}
 
 	@Override
@@ -54,7 +57,7 @@ public class BuildingContainer implements ObjectContainer, IBuilding, LandscapeC
 
 	@Override
 	public RelativePoint[] getProtectedArea() {
-		return buildingObject.getType().getProtectedTiles();
+		return buildingObject.getType().getProtectedTiles(civilisation);
 	}
 
 	@Override
@@ -97,13 +100,18 @@ public class BuildingContainer implements ObjectContainer, IBuilding, LandscapeC
 	}
 
 	@Override
+	public ECivilisation getCivilisation() {
+		return civilisation;
+	}
+
+	@Override
 	public Set<ELandscapeType> getAllowedLandscapes() {
-		return buildingObject.getType().getGroundTypes();
+		return buildingObject.getType().getGroundTypes(civilisation);
 	}
 
 	@Override
 	public boolean needsFlattenedGround() {
-		return buildingObject.getType().needsFlattenedGround();
+		return buildingObject.getType().needsFlattenedGround(civilisation);
 	}
 
 	@Override

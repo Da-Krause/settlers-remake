@@ -65,6 +65,7 @@ import jsettlers.common.menu.UIState;
 import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.position.MutablePoint2D;
 import jsettlers.common.position.RelativePoint;
@@ -1034,9 +1035,9 @@ public final class MainGrid implements Serializable {
 		}
 
 		@Override
-		public boolean canConstructAt(int x, int y, EBuildingType buildingType, byte playerId) {
-			RelativePoint[] buildingArea = buildingType.getBuildingArea();
-			BuildingAreaBitSet areaBitSet = buildingType.getBuildingAreaBitSet();
+		public boolean canConstructAt(int x, int y, EBuildingType buildingType, ECivilisation civilisation, byte playerId) {
+			RelativePoint[] buildingArea = buildingType.getBuildingArea(civilisation);
+			BuildingAreaBitSet areaBitSet = buildingType.getBuildingAreaBitSet(civilisation);
 			if (!isInBounds(areaBitSet.minX + x, areaBitSet.minY + y) || !isInBounds(areaBitSet.maxX + x, areaBitSet.maxY + y)) {
 				return false;
 			}
@@ -1050,11 +1051,11 @@ public final class MainGrid implements Serializable {
 				int currX = curr.calculateX(x);
 				int currY = curr.calculateY(y);
 
-				if (!canUsePositionForConstruction(currX, currY, buildingType.getRequiredGroundTypeAt(currX, currY), partitionId)) {
+				if (!canUsePositionForConstruction(currX, currY, buildingType.getRequiredGroundTypeAt(currX, currY, civilisation), partitionId)) {
 					return false;
 				}
 			}
-			return !buildingType.needsFlattenedGround() || calculateConstructionMarkValue(x, y, buildingArea) >= 0;
+			return !buildingType.needsFlattenedGround(civilisation) || calculateConstructionMarkValue(x, y, buildingArea) >= 0;
 		}
 
 		@Override
@@ -1587,7 +1588,7 @@ public final class MainGrid implements Serializable {
 		@Override
 		public final boolean setBuilding(ShortPoint2D position, Building newBuilding) {
 			if (MainGrid.this.isInBounds(position.x, position.y)) {
-				FreeMapArea protectedArea = new FreeMapArea(position, newBuilding.getBuildingType().getProtectedTiles());
+				FreeMapArea protectedArea = new FreeMapArea(position, newBuilding.getBuildingType().getProtectedTiles(newBuilding.getCivilisation()));
 
 				if (canConstructAt(protectedArea)) {
 					setProtectedState(protectedArea, true);
@@ -1623,7 +1624,7 @@ public final class MainGrid implements Serializable {
 			IBuilding building = (IBuilding) objectsGrid.getMapObjectAt(pos.x, pos.y, EMapObjectType.BUILDING);
 			mapObjectsManager.removeMapObjectType(pos.x, pos.y, EMapObjectType.BUILDING);
 
-			FreeMapArea area = new FreeMapArea(pos, building.getBuildingType().getProtectedTiles());
+			FreeMapArea area = new FreeMapArea(pos, building.getBuildingType().getProtectedTiles(building.getCivilisation()));
 			objectsGrid.setBuildingArea(area, null);
 
 			area.stream().filterBounds(width, height).forEach((x, y) -> {
@@ -1936,10 +1937,10 @@ public final class MainGrid implements Serializable {
 		}
 
 		@Override
-		public final Optional<ShortPoint2D> getConstructablePosition(ShortPoint2D pos, EBuildingType type, byte playerId) {
+		public final Optional<ShortPoint2D> getConstructablePosition(ShortPoint2D pos, EBuildingType type, ECivilisation civilisation, byte playerId) {
 			return MapCircle.stream(pos, Constants.BUILDING_PLACEMENT_MAX_SEARCH_RADIUS)
 							.filterBounds(width, height)
-							.filter((x, y) -> constructionMarksGrid.canConstructAt(x, y, type, playerId))
+							.filter((x, y) -> constructionMarksGrid.canConstructAt(x, y, type, civilisation, playerId))
 							.min((x, y) -> ShortPoint2D.getOnGridDist(pos.x, pos.y, x, y));
 		}
 
@@ -1959,8 +1960,8 @@ public final class MainGrid implements Serializable {
 		}
 
 		@Override
-		public void constructBuildingAt(ShortPoint2D position, EBuildingType type, byte playerId) {
-			if (constructionMarksGrid.canConstructAt(position.x, position.y, type, playerId)) {
+		public void constructBuildingAt(ShortPoint2D position, EBuildingType type, ECivilisation civilisation, byte playerId) {
+			if (constructionMarksGrid.canConstructAt(position.x, position.y, type, civilisation, playerId)) {
 				MainGrid.this.constructBuildingAt(position, type, partitionsGrid.getPlayerAt(position.x, position.y), false);
 			} else {
 				System.out.println("WARNING: TRIED TO CONSTRUCT BUILDING WHERE IT WASN'T POSSIBLE! Type: " + type + "  pos: " + position

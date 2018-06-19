@@ -83,7 +83,7 @@ public class OccupyingBuilding extends Building implements IBuilding.IOccupied, 
 	}
 
 	private void initSoldierRequests() {
-		final OccupierPlace[] occupierPlaces = super.getBuildingType().getOccupierPlaces();
+		final OccupierPlace[] occupierPlaces = super.getBuildingType().getOccupierPlaces(super.getCivilisation());
 		if (occupierPlaces.length > 0) {
 			emptyPlaces.addAll(Arrays.asList(occupierPlaces));
 			requestSoldier(ESoldierClass.INFANTRY);
@@ -137,7 +137,7 @@ public class OccupyingBuilding extends Building implements IBuilding.IOccupied, 
 	}
 
 	private FreeMapArea getGroundArea() {
-		return new FreeMapArea(super.pos, getBuildingType().getProtectedTiles());
+		return new FreeMapArea(super.pos, getBuildingType().getProtectedTiles(super.getCivilisation()));
 	}
 
 	private void resetSoldierSearch() {

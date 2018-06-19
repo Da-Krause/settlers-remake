@@ -20,6 +20,8 @@ import java.util.BitSet;
 import jsettlers.TestToolUtils;
 import jsettlers.common.Color;
 import jsettlers.common.CommonConstants;
+import jsettlers.common.action.Action;
+import jsettlers.common.action.EActionType;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
 import jsettlers.common.logging.MilliStopWatch;
@@ -32,11 +34,10 @@ import jsettlers.common.map.shapes.IMapArea;
 import jsettlers.common.map.shapes.MapCircle;
 import jsettlers.common.mapobject.IMapObject;
 import jsettlers.common.menu.IMapInterfaceConnector;
-import jsettlers.common.action.EActionType;
 import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
-import jsettlers.common.action.Action;
 import jsettlers.logic.player.PlayerSetting;
 import jsettlers.main.swing.lookandfeel.JSettlersLookAndFeelExecption;
 import jsettlers.main.swing.resources.SwingResourceLoader;
@@ -131,7 +132,7 @@ public class PartitionsGridTestingWnd {
 	}
 
 	private FreeMapArea getGroundArea(ShortPoint2D pos) {
-		return new FreeMapArea(pos, EBuildingType.TOWER.getProtectedTiles());
+		return new FreeMapArea(pos, EBuildingType.TOWER.getProtectedTiles(ECivilisation.ROMANS));
 	}
 
 	private void addTower(int playerId, int x, int y, int radius) {
@@ -140,7 +141,7 @@ public class PartitionsGridTestingWnd {
 	}
 
 	private IMapArea getTowerBlockArea(int x, int y) {
-		return new FreeMapArea(new ShortPoint2D(x, y), EBuildingType.TOWER.getBlockedTiles());
+		return new FreeMapArea(new ShortPoint2D(x, y), EBuildingType.TOWER.getBlockedTiles(ECivilisation.ROMANS));
 	}
 
 	private void blockArea(IMapArea area, boolean block) {

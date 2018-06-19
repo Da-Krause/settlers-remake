@@ -48,7 +48,7 @@ public class StockBuilding extends Building implements IBuilding.IStock {
 	protected List<? extends IRequestStack> createWorkStacks() {
 		MultiRequestStackSharedData sharedData = new MultiRequestStackSharedData(stockSettings);
 
-		List<MultiRequestAndOfferStack> newStacks = J8Arrays.stream(type.getRequestStacks())
+		List<MultiRequestAndOfferStack> newStacks = J8Arrays.stream(type.getRequestStacks(super.getCivilisation()))
 				.map(relativeStack -> relativeStack.calculatePoint(this.pos))
 				.map(position -> new MultiRequestAndOfferStack(grid.getRequestStackGrid(), position, type, super.getPriority(), sharedData))
 				.collect(Collectors.toList());

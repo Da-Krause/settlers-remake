@@ -19,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import jsettlers.common.movable.ESoldierType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -35,14 +36,14 @@ public class ChangeTowerSoldiersGuiTask extends SimpleBuildingGuiTask {
 	}
 
 	/**
-	 * 
-	 * @param playerId
+	 *  @param playerId
+	 * @param civilisation
 	 * @param buildingPosition
 	 * @param taskType
 	 * @param soldierType
 	 */
-	public ChangeTowerSoldiersGuiTask(byte playerId, ShortPoint2D buildingPosition, EChangeTowerSoldierTaskType taskType, ESoldierType soldierType) {
-		super(EGuiAction.CHANGE_TOWER_SOLDIERS, playerId, buildingPosition);
+	public ChangeTowerSoldiersGuiTask(byte playerId, ECivilisation civilisation, ShortPoint2D buildingPosition, EChangeTowerSoldierTaskType taskType, ESoldierType soldierType) {
+		super(EGuiAction.CHANGE_TOWER_SOLDIERS, playerId, civilisation, buildingPosition);
 		this.taskType = taskType;
 		this.soldierType = soldierType;
 	}

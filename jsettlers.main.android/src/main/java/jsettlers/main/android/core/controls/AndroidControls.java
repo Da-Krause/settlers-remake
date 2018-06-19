@@ -210,7 +210,7 @@ public class AndroidControls implements IControls, ActionFireable, TaskControls 
 		if (taskAction != null) {
 			switch (taskAction.getActionType()) {
 			case SHOW_CONSTRUCTION_MARK:
-				fireAction(new ShowConstructionMarksAction(null));
+				fireAction(new ShowConstructionMarksAction(null, null));
 				break;
 			default:
 				fireAction(new Action(EActionType.ABORT));

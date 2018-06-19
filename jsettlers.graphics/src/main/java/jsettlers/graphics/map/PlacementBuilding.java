@@ -22,6 +22,7 @@ import jsettlers.common.buildings.IBuildingMaterial;
 import jsettlers.common.mapobject.EMapObjectType;
 import jsettlers.common.mapobject.IMapObject;
 import jsettlers.common.material.EPriority;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.player.IPlayer.DummyPlayer;
 import jsettlers.common.position.ShortPoint2D;
@@ -36,15 +37,20 @@ import jsettlers.common.selectable.ESelectionType;
 public class PlacementBuilding implements IBuilding, IBuilding.IMill, IBuilding.ISoundRequestable {
 	private final DummyPlayer player = new DummyPlayer();
 	private final EBuildingType typeToPlace;
+	private final ECivilisation civilisation;
+
 
 	/**
 	 * Create a new, fake {@link PlacementBuilding}.
-	 * 
+	 *
 	 * @param type
 	 *            The type.
+	 * @param civilisation
+	 * 			The civilisation
 	 */
-	public PlacementBuilding(EBuildingType type) {
+	public PlacementBuilding(EBuildingType type, ECivilisation civilisation) {
 		this.typeToPlace = type;
+		this.civilisation = civilisation;
 	}
 
 	@Override
@@ -55,6 +61,11 @@ public class PlacementBuilding implements IBuilding, IBuilding.IMill, IBuilding.
 	@Override
 	public EBuildingType getBuildingType() {
 		return typeToPlace;
+	}
+
+	@Override
+	public ECivilisation getCivilisation() {
+		return civilisation;
 	}
 
 	@Override

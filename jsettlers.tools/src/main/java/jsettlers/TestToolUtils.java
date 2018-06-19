@@ -33,7 +33,7 @@ import java.io.IOException;
 
 public class TestToolUtils extends TestUtils {
 	public static IMapInterfaceConnector openTestWindow(final IGraphicsGrid map) throws JSettlersLookAndFeelExecption, IOException {
-		Player player = new Player((byte) 0, new Team((byte) 0), (byte) 42, EPlayerType.HUMAN, ECivilisation.ROMAN);
+		Player player = new Player((byte) 0, new Team((byte) 0), (byte) 42, EPlayerType.HUMAN, ECivilisation.ROMANS);
 		IStartedGame game = new FakeMapGame(map, player);
 		return openTestWindow(game);
 	}

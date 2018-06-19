@@ -21,6 +21,7 @@ import jsettlers.ai.highlevel.AiPositions;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -38,16 +39,16 @@ public class BestWaterWorksConstructionPositionFinder implements IBestConstructi
 	}
 
 	@Override
-	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, byte playerId) {
+	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, byte playerId) {
 		AiPositions rivers = aiStatistics.getRiversForPlayer(playerId);
 		if (rivers.size() == 0) {
 			return null;
 		}
 		List<ScoredConstructionPosition> scoredConstructionPositions = new ArrayList<>();
 		for (ShortPoint2D point : aiStatistics.getLandForPlayer(playerId)) {
-			if (constructionMap.canConstructAt(point.x, point.y, buildingType, playerId)
-					&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(point.x, point.y, playerId, buildingType)) {
-				ShortPoint2D nearestRiverPosition = rivers.getNearestPoint(point, buildingType.getWorkRadius(), null);
+			if (constructionMap.canConstructAt(point.x, point.y, buildingType, civilisation, playerId)
+					&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(point.x, point.y, playerId, buildingType, civilisation)) {
+				ShortPoint2D nearestRiverPosition = rivers.getNearestPoint(point, buildingType.getWorkRadius(civilisation), null);
 				if (nearestRiverPosition != null) {
 					int riverDistance = point.getOnGridDistTo(nearestRiverPosition);
 					scoredConstructionPositions.add(new ScoredConstructionPosition(point, riverDistance));

@@ -18,6 +18,7 @@ import jsettlers.common.buildings.BuildingAreaBitSet;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.map.shapes.IMapArea;
 import jsettlers.common.map.shapes.MapRectangle;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 
 import java.util.BitSet;
@@ -39,14 +40,14 @@ public final class NewConstructionMarksAlgorithm {
 		this.playerId = player;
 	}
 
-	public void calculateConstructMarks(final MapRectangle mapArea, EBuildingType buildingType) {
+	public void calculateConstructMarks(final MapRectangle mapArea, EBuildingType buildingType, ECivilisation civilisation) {
 		if (lastArea != null) {
 			removeConstructionMarks(lastArea, mapArea);
 		}
 
-		BuildingAreaBitSet buildingArea = buildingType.getBuildingAreaBitSet();
-		boolean binaryConstructionMarkValues = !buildingType.needsFlattenedGround();
-		RelativePoint[] positionsToBeFlattened = buildingType.getBuildingArea();
+		BuildingAreaBitSet buildingArea = buildingType.getBuildingAreaBitSet(civilisation);
+		boolean binaryConstructionMarkValues = !buildingType.needsFlattenedGround(civilisation);
+		RelativePoint[] positionsToBeFlattened = buildingType.getBuildingArea(civilisation);
 
 		// declare local variables
 		final short[] xJumps = buildingArea.xJumps;
@@ -100,7 +101,7 @@ public final class NewConstructionMarksAlgorithm {
 						// if the position must be free, but isn't
 						if (xJumps[index] != 0
 								&& !map.canUsePositionForConstruction(x + buildingPositionX, y + buildingPositionY,
-										buildingType.getRequiredGroundTypeAt(buildingPositionX, buildingPositionY), partitionId)) {
+										buildingType.getRequiredGroundTypeAt(buildingPositionX, buildingPositionY, civilisation), partitionId)) {
 
 							map.setConstructMarking(x, y, false, binaryConstructionMarkValues, null);
 

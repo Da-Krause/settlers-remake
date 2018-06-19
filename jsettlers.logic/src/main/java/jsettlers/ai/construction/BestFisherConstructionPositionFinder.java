@@ -20,6 +20,7 @@ import java.util.List;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -30,19 +31,21 @@ import jsettlers.common.position.ShortPoint2D;
 public class BestFisherConstructionPositionFinder implements IBestConstructionPositionFinder {
 
 	private EBuildingType buildingType;
+	private ECivilisation civilisation;
 
-	public BestFisherConstructionPositionFinder(EBuildingType buildingType) {
+	public BestFisherConstructionPositionFinder(EBuildingType buildingType, ECivilisation civilisation) {
 		this.buildingType = buildingType;
+		this.civilisation = civilisation;
 	}
 
 	@Override
-	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, byte playerId) {
+	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, byte playerId) {
 		List<ScoredConstructionPosition> scoredConstructionPositions = new ArrayList<>();
 
-		int fishDistance = buildingType.getWorkRadius();
+		int fishDistance = buildingType.getWorkRadius(this.civilisation);
 		for (ShortPoint2D point : aiStatistics.getLandForPlayer(playerId)) {
-			if (aiStatistics.wasFishNearByAtGameStart(point) && constructionMap.canConstructAt(point.x, point.y, buildingType, playerId)
-					&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(point.x, point.y, playerId, buildingType)) {
+			if (aiStatistics.wasFishNearByAtGameStart(point) && constructionMap.canConstructAt(point.x, point.y, buildingType, this.civilisation, playerId)
+					&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(point.x, point.y, playerId, buildingType, this.civilisation)) {
 				ShortPoint2D fishPosition = aiStatistics.getNearestFishPointForPlayer(point, playerId, fishDistance);
 				if (fishPosition != null) {
 					fishDistance = point.getOnGridDistTo(fishPosition);

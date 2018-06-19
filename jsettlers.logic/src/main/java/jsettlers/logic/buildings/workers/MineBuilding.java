@@ -64,7 +64,7 @@ public final class MineBuilding extends ResourceBuilding {
 
 	@Override
 	public boolean tryTakingResource() {
-		RelativePoint[] blockedPositions = super.getBuildingType().getBlockedTiles();
+		RelativePoint[] blockedPositions = super.getBuildingType().getBlockedTiles(super.getCivilisation());
 		int randomPositionIndex = MatchConstants.random().nextInt(blockedPositions.length);
 		ShortPoint2D randomPosition = blockedPositions[randomPositionIndex].calculatePoint(super.pos);
 
@@ -87,7 +87,7 @@ public final class MineBuilding extends ResourceBuilding {
 	}
 
 	@Override
-	protected boolean shouldBeFlatened() {
+	protected boolean shouldBeFlattened() {
 		return false;
 	}
 
@@ -95,7 +95,7 @@ public final class MineBuilding extends ResourceBuilding {
 	protected void placeAdditionalMapObjects(IBuildingsGrid grid, ShortPoint2D pos, boolean place) {
 		if (place) {
 			MapObjectsManager objectsManager = grid.getMapObjectsManager();
-			for (ShortPoint2D currPos : new FreeMapArea(pos, super.getBuildingType().getProtectedTiles())) {
+			for (ShortPoint2D currPos : new FreeMapArea(pos, super.getBuildingType().getProtectedTiles(super.getCivilisation()))) {
 				objectsManager.removeMapObjectType(currPos.x, currPos.y, EMapObjectType.FOUND_COAL);
 				objectsManager.removeMapObjectType(currPos.x, currPos.y, EMapObjectType.FOUND_GOLD);
 				objectsManager.removeMapObjectType(currPos.x, currPos.y, EMapObjectType.FOUND_IRON);
@@ -109,6 +109,6 @@ public final class MineBuilding extends ResourceBuilding {
 	@Override
 	public int getRemainingResourceAmount() {
 		return super.grid.getAmountOfResource(getProducedResource(),
-				new RelativeToRealPointIterable(super.getBuildingType().getBlockedTiles(), super.pos));
+				new RelativeToRealPointIterable(super.getBuildingType().getBlockedTiles(super.getCivilisation()), super.pos));
 	}
 }

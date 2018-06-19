@@ -120,7 +120,7 @@ public class BuildingSelectionFragment extends SelectionFragment {
 			features.add(new PriorityFeature(getView(), building, menuNavigator, actionControls, drawControls));
 		}
 
-		if (building.getBuildingType().getWorkRadius() > 0) {
+		if (building.getBuildingType().getWorkRadius(building.getCivilisation()) > 0) {
 			features.add(new WorkAreaFeature(getView(), building, menuNavigator, actionControls, taskControls));
 		}
 

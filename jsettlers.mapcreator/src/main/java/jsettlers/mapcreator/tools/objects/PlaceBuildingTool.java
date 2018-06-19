@@ -15,6 +15,7 @@
 package jsettlers.mapcreator.tools.objects;
 
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.loading.data.objects.BuildingMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
 import jsettlers.graphics.localization.Labels;
@@ -36,21 +37,25 @@ public class PlaceBuildingTool extends PlaceMapObjectTool {
 	private final EBuildingType type;
 
 	/**
+	 * Civilisation of the building to place
+	 */
+	private final ECivilisation civilisation;
+	/**
 	 * Interface to query which player owns the building
 	 */
 	private final IPlayerSetter player;
 
 	/**
 	 * Constructor
-	 * 
-	 * @param type
+	 *  @param type
 	 *            Type of the building to place
+	 * @param civilisation
 	 * @param player
-	 *            Interface to query which player owns the building
 	 */
-	public PlaceBuildingTool(EBuildingType type, IPlayerSetter player) {
+	public PlaceBuildingTool(EBuildingType type, ECivilisation civilisation, IPlayerSetter player) {
 		super(null);
 		this.type = type;
+		this.civilisation = civilisation;
 		this.player = player;
 		this.translatedName = String.format(Locale.ENGLISH, EditorLabels.getLabel("tool.building"), Labels.getName(type));
 	}
@@ -64,6 +69,6 @@ public class PlaceBuildingTool extends PlaceMapObjectTool {
 
 	@Override
 	public MapDataObject getObject() {
-		return new BuildingMapDataObject(type, (byte) player.getActivePlayer());
+		return new BuildingMapDataObject(type, (byte) player.getActivePlayer(), civilisation);
 	}
 }

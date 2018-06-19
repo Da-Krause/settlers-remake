@@ -22,6 +22,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.loading.data.objects.StackMapDataObject;
 import jsettlers.mapcreator.control.IPlayerSetter;
 import jsettlers.mapcreator.localization.EditorLabels;
@@ -99,7 +100,7 @@ public class PresetLoader {
 		List<TemplateObject> list = new ArrayList<>();
 
 		for (Building b : p.getBuilding()) {
-			list.add(new TemplateBuilding(b.getDx(), b.getDy(), b.getType()));
+			list.add(new TemplateBuilding(b.getDx(), b.getDy(), b.getType(), ECivilisation.ROMANS));
 		}
 
 		for (Moveable m : p.getMoveable()) {

@@ -19,6 +19,7 @@ import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.logging.MilliStopWatch;
 import jsettlers.common.logging.StopWatch;
 import jsettlers.common.map.shapes.MapRectangle;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.network.client.interfaces.IPausingSupplier;
 
 /**
@@ -33,7 +34,7 @@ public final class ConstructionMarksThread implements Runnable {
 	private final NewConstructionMarksAlgorithm algorithm;
 	private final IPausingSupplier pausingSupplier;
 	private final Thread thread;
-
+	private final ECivilisation civilisation;
 	private boolean canceled;
 
 	/**
@@ -42,10 +43,10 @@ public final class ConstructionMarksThread implements Runnable {
 	private MapRectangle mapArea = null;
 	private EBuildingType buildingType = null;
 
-	public ConstructionMarksThread(AbstractConstructionMarkableMap map, IPausingSupplier pausingSupplier, byte player) {
+	public ConstructionMarksThread(AbstractConstructionMarkableMap map, IPausingSupplier pausingSupplier, byte player, ECivilisation civilisation) {
 		this.algorithm = new NewConstructionMarksAlgorithm(map, player);
 		this.pausingSupplier = pausingSupplier;
-
+		this.civilisation = civilisation;
 		thread = new Thread(this, "ConstructionMarksThread");
 		thread.setDaemon(true);
 		thread.start();
@@ -68,7 +69,7 @@ public final class ConstructionMarksThread implements Runnable {
 
 						EBuildingType buildingType = this.buildingType;
 						if (buildingType != null && mapArea != null) { // if the task has already been canceled
-							algorithm.calculateConstructMarks(mapArea, buildingType);
+							algorithm.calculateConstructMarks(mapArea, buildingType, civilisation);
 						}
 
 						watch.stop("calculation of construction marks");

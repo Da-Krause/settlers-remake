@@ -69,16 +69,16 @@ public class MapData implements IMapData {
 	private final int width;
 	private final int height;
 
-	private final ELandscapeType[][]  landscapes;
-	private final byte[][]            heights;
+	private final ELandscapeType[][] landscapes;
+	private final byte[][] heights;
 	private final ObjectContainer[][] objects;
 
 	private final EResourceType[][] resources;
-	private final byte[][]          resourceAmount;
-	private final short[][]         blockedPartitions;
+	private final byte[][] resourceAmount;
+	private final short[][] blockedPartitions;
 
 	private MapDataDelta undoDelta;
-	private int          playerCount;
+	private int playerCount;
 
 	/**
 	 * Start position of all player, will be converted to a border in ValidatePlayerStartPosition
@@ -87,13 +87,13 @@ public class MapData implements IMapData {
 	 */
 	private ShortPoint2D[] playerStarts;
 
-	private       byte[][]    lastPlayers;
-	private       boolean[][] lastBorders;
+	private byte[][] lastPlayers;
+	private boolean[][] lastBorders;
 	private final boolean[][] doneBuffer;
-	private       boolean[][] failpoints;
+	private boolean[][] failpoints;
 
-	private final LandscapeFader              fader = new LandscapeFader();
-	private       IGraphicsBackgroundListener backgroundListener;
+	private final LandscapeFader fader = new LandscapeFader();
+	private IGraphicsBackgroundListener backgroundListener;
 
 	public MapData(int width, int height, int playerCount, ELandscapeType ground) {
 		if (width <= 0 || height <= 0) {
@@ -315,8 +315,8 @@ public class MapData implements IMapData {
 	private static class FadeTask {
 
 		private final ELandscapeType type;
-		private final int            y;
-		private final int            x;
+		private final int y;
+		private final int x;
 
 		/**
 		 * A task to set the landscape at a given point to the landscpae close to type.
@@ -382,9 +382,10 @@ public class MapData implements IMapData {
 		} else if (object instanceof StackMapDataObject) {
 			container = new StackContainer((StackMapDataObject) object);
 		} else if (object instanceof BuildingMapDataObject) {
+			BuildingMapDataObject buildingMapData = ((BuildingMapDataObject) object);
 			container = new BuildingContainer((BuildingMapDataObject) object, new ShortPoint2D(x, y));
-			landscapes = ((BuildingMapDataObject) object).getType().getGroundTypes();
-			protector = new ProtectLandscapeConstraint(((BuildingMapDataObject) object).getType());
+			landscapes = buildingMapData.getType().getGroundTypes(buildingMapData.getCivilisation());
+			protector = new ProtectLandscapeConstraint(buildingMapData.getType(), buildingMapData.getCivilisation());
 		} else if (object instanceof DecorationMapDataObject) {
 			container = new MapObjectContainer((DecorationMapDataObject) object);
 		} else {
@@ -395,9 +396,9 @@ public class MapData implements IMapData {
 		for (RelativePoint p : container.getProtectedArea()) {
 			ShortPoint2D abs = p.calculatePoint(start);
 			if (!contains(abs.x, abs.y)
-				|| objects[abs.x][abs.y] != null
-				|| (!isShip && !landscapeAllowsObjects(getLandscape(abs.x, abs.y)))
-				|| (landscapes != null && !landscapes.contains(getLandscape(abs.x, abs.y)))) {
+					|| objects[abs.x][abs.y] != null
+					|| (!isShip && !landscapeAllowsObjects(getLandscape(abs.x, abs.y)))
+					|| (landscapes != null && !landscapes.contains(getLandscape(abs.x, abs.y)))) {
 
 				return;
 			}
@@ -431,7 +432,7 @@ public class MapData implements IMapData {
 
 	private static boolean landscapeAllowsObjects(ELandscapeType type) {
 		return !type.isWater() && type != ELandscapeType.SNOW && type != ELandscapeType.RIVER1 && type != ELandscapeType.RIVER2
-			&& type != ELandscapeType.RIVER3 && type != ELandscapeType.RIVER4 && type != ELandscapeType.MOOR;
+				&& type != ELandscapeType.RIVER3 && type != ELandscapeType.RIVER4 && type != ELandscapeType.MOOR;
 	}
 
 	@Override
@@ -728,8 +729,7 @@ public class MapData implements IMapData {
 		}
 
 		PartitionCalculatorAlgorithm partitionCalculator = new PartitionCalculatorAlgorithm(0, 0, width, height, notBlockedSet,
-			IBlockingProvider.DEFAULT_IMPLEMENTATION
-		);
+				IBlockingProvider.DEFAULT_IMPLEMENTATION);
 		partitionCalculator.calculatePartitions();
 
 		for (short y = 0; y < height; y++) {

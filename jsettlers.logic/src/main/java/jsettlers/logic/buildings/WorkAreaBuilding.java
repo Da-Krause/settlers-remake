@@ -42,7 +42,7 @@ public abstract class WorkAreaBuilding extends Building {
 
 	@Override
 	protected void placedAtEvent(ShortPoint2D pos) {
-		this.workAreaCenter = getBuildingType().getDefaultWorkcenter().calculatePoint(pos);
+		this.workAreaCenter = getBuildingType().getDefaultWorkcenter(super.getCivilisation()).calculatePoint(pos);
 	}
 
 	public final ShortPoint2D getWorkAreaCenter() {
@@ -53,7 +53,7 @@ public abstract class WorkAreaBuilding extends Building {
 	public final void setWorkAreaCenter(ShortPoint2D newWorkAreaCenter) {
 		int distance = super.pos.getOnGridDistTo(newWorkAreaCenter);
 
-		if (distance < Constants.BUILDINGS_MAX_WORKRADIUS_FACTOR * super.getBuildingType().getWorkRadius()) {
+		if (distance < Constants.BUILDINGS_MAX_WORKRADIUS_FACTOR * super.getBuildingType().getWorkRadius(super.getCivilisation())) {
 			if (isSelected()) {
 				drawWorkAreaCircle(false);
 			}
@@ -84,13 +84,13 @@ public abstract class WorkAreaBuilding extends Building {
 	}
 
 	private void drawWorkAreaCircle(boolean draw) {
-		super.grid.drawWorkAreaCircle(super.pos, workAreaCenter, super.getBuildingType().getWorkRadius(), draw);
+		super.grid.drawWorkAreaCircle(super.pos, workAreaCenter, super.getBuildingType().getWorkRadius(super.getCivilisation()), draw);
 	}
 
 	@Override
 	public EPriority[] getSupportedPriorities() {
 		if (isConstructionFinished()) {
-			if (getBuildingType().getRequestStacks().length == 0) { // has no request stacks
+			if (getBuildingType().getRequestStacks(super.getCivilisation()).length == 0) { // has no request stacks
 				return SUPPORTED_PRIORITIES_FOR_NON_REQUESTERS;
 			} else {
 				return SUPPORTED_PRIORITIES_FOR_REQUESTERS;

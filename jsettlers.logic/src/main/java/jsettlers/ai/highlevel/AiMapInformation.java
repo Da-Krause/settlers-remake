@@ -35,6 +35,7 @@ import java.util.BitSet;
 import jsettlers.algorithms.distances.DistancesCalculationAlgorithm;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.EResourceType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.grid.landscape.LandscapeGrid;
 import jsettlers.logic.map.grid.partition.PartitionsGrid;
 
@@ -71,7 +72,7 @@ public class AiMapInformation {
 	private BitSet calculateIsFishNearBy(PartitionsGrid partitionsGrid, LandscapeGrid landscapeGrid) {
 		return DistancesCalculationAlgorithm.calculatePositionsInDistance(partitionsGrid.getWidth(), partitionsGrid.getHeight(),
 				(x, y) -> landscapeGrid.getResourceTypeAt(x, y) == EResourceType.FISH && landscapeGrid.getResourceAmountAt(x, y) > 0,
-				FISHER.getWorkRadius());
+				FISHER.getWorkRadius(ECivilisation.ROMANS));
 	}
 
 	public void clear() {
@@ -82,7 +83,7 @@ public class AiMapInformation {
 		}
 	}
 
-	public int[] getBuildingCounts(byte playerId) {
+	public int[] getBuildingCounts(ECivilisation civilisation, byte playerId) {
 		int numberOfPlayers = resourceAndGrassCount.length - 1;
 		int neverland = resourceAndGrassCount.length - 1;
 		long playersAndNeverlandFish = Math.round(resourceAndGrassCount[neverland][EResourceType.FISH.ordinal] / numberOfPlayers) + resourceAndGrassCount[playerId][EResourceType.FISH.ordinal];
@@ -102,10 +103,10 @@ public class AiMapInformation {
 		if (maxCoalMines > maxIronMines * COAL_MINE_TO_IRON_MINE_RATIO + 1)
 			maxCoalMines = (int) Math.ceil(maxIronMines * COAL_MINE_TO_IRON_MINE_RATIO + 1);
 		int maxSmiths = (int) Math.floor((float) maxCoalMines / COAL_MINE_TO_SMITH_RATIO);
-		return calculateBuildingCounts(maxSmiths, maxFishermen, maxGoldMelts, 3, 1, playersAndNeverlandGrass);
+		return calculateBuildingCounts(maxSmiths, maxFishermen, maxGoldMelts, 3, 1, playersAndNeverlandGrass, civilisation);
 	}
 
-	private int[] calculateBuildingCounts(int numberOfWeaponSmiths, int maxFishermen, int maxGoldMelts, int maxWineGrowers, int maxBigTemples, long grassTiles) {
+	private int[] calculateBuildingCounts(int numberOfWeaponSmiths, int maxFishermen, int maxGoldMelts, int maxWineGrowers, int maxBigTemples, long grassTiles, ECivilisation civilisation) {
 		int[] buildingCounts = new int[EBuildingType.NUMBER_OF_BUILDINGS];
 		for (int i = 0; i < buildingCounts.length; i++) {
 			buildingCounts[i] = 0;
@@ -152,35 +153,35 @@ public class AiMapInformation {
 			buildingCounts[EBuildingType.TEMPLE.ordinal] = maxWineGrowers;
 		}
 
-		if (isEnoughSpace(buildingCounts, grassTiles)) {
+		if (isEnoughSpace(buildingCounts, grassTiles, civilisation)) {
 			return buildingCounts;
 		} else if (numberOfWeaponSmiths > MIN_SMITHS_BEFORE_WINE_AND_GOLD_REDUCTION) {
-			return calculateBuildingCounts(numberOfWeaponSmiths - 1, maxFishermen, maxGoldMelts, maxWineGrowers, maxBigTemples, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths - 1, maxFishermen, maxGoldMelts, maxWineGrowers, maxBigTemples, grassTiles, civilisation);
 		} else if (maxWineGrowers > MIN_WINE_GROWER_BEFORE_GOLD_REDUCTION) {
-			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers - 1, maxBigTemples, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers - 1, maxBigTemples, grassTiles, civilisation);
 		} else if (maxGoldMelts > 1) {
-			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts - 1, maxWineGrowers, maxBigTemples, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts - 1, maxWineGrowers, maxBigTemples, grassTiles, civilisation);
 		} else if (maxWineGrowers > 1) {
-			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers - 1, maxBigTemples, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers - 1, maxBigTemples, grassTiles, civilisation);
 		} else if (maxBigTemples > 1) {
-			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers, 0, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers, 0, grassTiles, civilisation);
 		} else if (maxWineGrowers > 0) {
-			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers - 1, 0, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen, maxGoldMelts, maxWineGrowers - 1, 0, grassTiles, civilisation);
 		} else if (maxFishermen > 0) {
-			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen - 1, maxGoldMelts, maxWineGrowers, 0, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths, maxFishermen - 1, maxGoldMelts, maxWineGrowers, 0, grassTiles, civilisation);
 		} else if (numberOfWeaponSmiths > 0) {
-			return calculateBuildingCounts(numberOfWeaponSmiths - 1, maxFishermen, maxGoldMelts, maxWineGrowers, 0, grassTiles);
+			return calculateBuildingCounts(numberOfWeaponSmiths - 1, maxFishermen, maxGoldMelts, maxWineGrowers, 0, grassTiles, civilisation);
 		} else {
 			return new int[EBuildingType.NUMBER_OF_BUILDINGS];
 		}
 	}
 
-	private boolean isEnoughSpace(int[] buildingCounts, long grassTiles) {
+	private boolean isEnoughSpace(int[] buildingCounts, long grassTiles, ECivilisation civilisation) {
 		long grassTilesWithoutBuffer = Math.round(grassTiles / 3F);
 		for (int i = 0; i < buildingCounts.length; i++) {
 			EBuildingType buildingType = EBuildingType.VALUES[i];
-			if (!buildingType.isMine()) {
-				grassTilesWithoutBuffer -= EBuildingType.VALUES[i].getProtectedTiles().length * buildingCounts[i];
+			if (buildingType.requiredCivilisations.contains(civilisation) && !buildingType.isMine()) {
+				grassTilesWithoutBuffer -= EBuildingType.VALUES[i].getProtectedTiles(civilisation).length * buildingCounts[i];
 				if (grassTilesWithoutBuffer < 0) {
 					return false;
 				}
@@ -190,11 +191,11 @@ public class AiMapInformation {
 		return true;
 	}
 
-	public long getRemainingGrassTiles(AiStatistics aiStatistics, byte playerId) {
+	public long getRemainingGrassTiles(AiStatistics aiStatistics, byte playerId, ECivilisation civilisation) {
 		long remainingGrass = resourceAndGrassCount[playerId][GRASS_INDEX];
 		for (EBuildingType buildingType : EBuildingType.VALUES) {
-			if (!buildingType.isMine()) {
-				remainingGrass -= buildingType.getProtectedTiles().length * aiStatistics.getTotalNumberOfBuildingTypeForPlayer(buildingType, playerId);
+			if (buildingType.requiredCivilisations.contains(civilisation) && !buildingType.isMine()) {
+				remainingGrass -= buildingType.getProtectedTiles(civilisation).length * aiStatistics.getTotalNumberOfBuildingTypeForPlayer(buildingType, playerId);
 			}
 		}
 		return remainingGrass;

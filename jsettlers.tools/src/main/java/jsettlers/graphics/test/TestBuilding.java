@@ -23,6 +23,7 @@ import jsettlers.common.buildings.IBuildingMaterial;
 import jsettlers.common.mapobject.EMapObjectType;
 import jsettlers.common.mapobject.IMapObject;
 import jsettlers.common.material.EPriority;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.selectable.ESelectionType;
@@ -46,6 +47,11 @@ public class TestBuilding implements IBuilding {
 	@Override
 	public EBuildingType getBuildingType() {
 		return this.image;
+	}
+
+	@Override
+	public ECivilisation getCivilisation() {
+		return ECivilisation.ROMANS;
 	}
 
 	@Override

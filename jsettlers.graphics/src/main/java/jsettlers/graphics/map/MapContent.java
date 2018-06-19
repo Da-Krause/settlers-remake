@@ -52,6 +52,7 @@ import jsettlers.common.action.EActionType;
 import jsettlers.common.action.IAction;
 import jsettlers.common.menu.messages.IMessage;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.FloatRectangle;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.selectable.ISelectionSet;
@@ -929,7 +930,8 @@ public final class MapContent implements RegionContent, IMapInterfaceListener, A
 			break;
 		case SHOW_CONSTRUCTION_MARK:
 			EBuildingType buildingType = ((ShowConstructionMarksAction) action).getBuildingType();
-			placementBuilding = buildingType == null ? null : new PlacementBuilding(buildingType);
+			ECivilisation civilisation = ((ShowConstructionMarksAction) action).getCivilisation();
+			placementBuilding = buildingType == null ? null : new PlacementBuilding(buildingType, civilisation);
 			break;
 		default:
 			break;

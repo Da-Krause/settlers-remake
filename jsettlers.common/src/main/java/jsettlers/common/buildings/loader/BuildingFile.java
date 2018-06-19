@@ -41,6 +41,7 @@ import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.ESoldierClass;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 
 /**
@@ -104,9 +105,11 @@ public class BuildingFile implements BuildingJobDataProvider {
 	private ArrayList<OccupierPlace> occupyerplaces = new ArrayList<>();
 	private short viewdistance = 0;
 	private final String buildingName;
+	private final ECivilisation civilisation;
 
-	public BuildingFile(String buildingName) {
+	public BuildingFile(String buildingName, ECivilisation civilisation) {
 		this.buildingName = buildingName;
+		this.civilisation = civilisation;
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			xr.setContentHandler(new SaxHandler());
@@ -130,7 +133,7 @@ public class BuildingFile implements BuildingJobDataProvider {
 	private class SaxHandler extends DefaultHandler {
 
 		@Override
-		public void startElement(String uri, String localName, String tagName, Attributes attributes) throws SAXException {
+		public void startElement(String uri, String localName, String tagName, Attributes attributes) {
 			if (TAG_BUILDING.equals(tagName)) {
 				readAttributes(attributes);
 			} else if (TAG_JOB.equals(tagName)) {
@@ -324,13 +327,13 @@ public class BuildingFile implements BuildingJobDataProvider {
 				this.workerType = EMovableType.BEARER;
 			}
 		}
-		String workradius = attributes.getValue("workradius");
-		if (workradius != null && workradius.matches("\\d+")) {
-			this.workradius = Integer.parseInt(workradius);
+		String workRadius = attributes.getValue("workradius");
+		if (workRadius != null && workRadius.matches("\\d+")) {
+			this.workradius = Integer.parseInt(workRadius);
 		}
-		String viewdistance = attributes.getValue("viewdistance");
-		if (viewdistance != null && viewdistance.matches("\\d+")) {
-			this.viewdistance = Short.parseShort(viewdistance);
+		String viewDistance = attributes.getValue("viewdistance");
+		if (viewDistance != null && viewDistance.matches("\\d+")) {
+			this.viewdistance = Short.parseShort(viewDistance);
 		}
 
 		this.mine = Boolean.valueOf(attributes.getValue("mine"));
@@ -390,7 +393,7 @@ public class BuildingFile implements BuildingJobDataProvider {
 		return bricklayers.toArray(new RelativeBricklayer[bricklayers.size()]);
 	}
 
-	public short getWorkradius() {
+	public short getWorkRadius() {
 		return (short) workradius;
 	}
 
@@ -398,7 +401,7 @@ public class BuildingFile implements BuildingJobDataProvider {
 		return mine;
 	}
 
-	public RelativePoint getWorkcenter() {
+	public RelativePoint getWorkCenter() {
 		return workCenter;
 	}
 
@@ -418,19 +421,19 @@ public class BuildingFile implements BuildingJobDataProvider {
 		return guiimage;
 	}
 
-	public RelativePoint[] getBuildmarks() {
+	public RelativePoint[] getBuildMarks() {
 		return buildmarks.toArray(new RelativePoint[buildmarks.size()]);
 	}
 
-	public List<ELandscapeType> getGroundtypes() {
+	public List<ELandscapeType> getGroundTypes() {
 		return groundtypes;
 	}
 
-	public short getViewdistance() {
+	public short getViewDistance() {
 		return viewdistance;
 	}
 
-	public OccupierPlace[] getOccupyerPlaces() {
+	public OccupierPlace[] getOccupierPlaces() {
 		return occupyerplaces.toArray(new OccupierPlace[occupyerplaces.size()]);
 	}
 }

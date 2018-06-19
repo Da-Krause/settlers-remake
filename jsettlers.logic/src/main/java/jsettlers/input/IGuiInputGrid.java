@@ -21,6 +21,7 @@ import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.buildings.IBuilding;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.menu.UIState;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.FerryEntrance;
 import jsettlers.logic.map.grid.partition.manager.settings.MaterialProductionSettings;
@@ -54,11 +55,12 @@ public interface IGuiInputGrid {
 	 *            THe position
 	 * @param type
 	 *            The type of the building
+	 * @param civilisation
 	 * @param player
 	 *            The player that wants to construct the building.
 	 * @return <code>null</code> if no position was found, the position otherwise.
 	 */
-	Optional<ShortPoint2D> getConstructablePosition(ShortPoint2D position, EBuildingType type, byte player);
+	Optional<ShortPoint2D> getConstructablePosition(ShortPoint2D position, EBuildingType type, ECivilisation civilisation, byte player);
 
 	/**
 	 * Saves the map with the given {@link UIState}.
@@ -76,16 +78,15 @@ public interface IGuiInputGrid {
 
 	/**
 	 * Positions a new building of the given type at the given position.
-	 *
-	 * @param position
+	 *  @param position
 	 *            Position the new building will be placed. <br>
 	 *            NOTE: There will be no validation if this position is allowed! This must be done prior to this call.
 	 * @param type
 	 *            {@link EBuildingType} of the new building.
-	 * @param playerId
-	 *            The player constructing the building.
-	 */
-	void constructBuildingAt(ShortPoint2D position, EBuildingType type, byte playerId);
+     * @param civilisation
+     * @param playerId
+     */
+	void constructBuildingAt(ShortPoint2D position, EBuildingType type, ECivilisation civilisation, byte playerId);
 
 	/**
 	 * This method can be used to print debug output when the given position is clicked by the user.

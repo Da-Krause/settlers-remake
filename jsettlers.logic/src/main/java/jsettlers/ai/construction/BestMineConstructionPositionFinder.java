@@ -18,6 +18,7 @@ import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.EResourceType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.map.grid.landscape.LandscapeGrid;
@@ -35,20 +36,23 @@ public class BestMineConstructionPositionFinder implements IBestConstructionPosi
 
 	private final EBuildingType buildingType;
 	private final EResourceType resourceType;
+	private final ECivilisation civilisation;
 
-	public BestMineConstructionPositionFinder(EBuildingType buildingType, EResourceType resourceType) {
+
+	public BestMineConstructionPositionFinder(EBuildingType buildingType, EResourceType resourceType, ECivilisation civilisation) {
 		this.buildingType = buildingType;
 		this.resourceType = resourceType;
+		this.civilisation = civilisation;
 	}
 
 	@Override
-	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, byte playerId) {
+	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, byte playerId) {
 		List<ScoredConstructionPosition> scoredConstructionPositions = new ArrayList<>();
 		for (ShortPoint2D point : aiStatistics.getLandForPlayer(playerId)) {
-			if (constructionMap.canConstructAt(point.x, point.y, buildingType, playerId)) {
+			if (constructionMap.canConstructAt(point.x, point.y, buildingType, this.civilisation, playerId)) {
 				int resourceAmount = 0;
 				LandscapeGrid landscapeGrid = aiStatistics.getMainGrid().getLandscapeGrid();
-				for (RelativePoint relativePoint : buildingType.getBlockedTiles()) {
+				for (RelativePoint relativePoint : buildingType.getBlockedTiles(this.civilisation)) {
 					int x = point.x + relativePoint.getDx();
 					int y = point.y + relativePoint.getDy();
 					if (landscapeGrid.getResourceTypeAt(x, y) == resourceType) {

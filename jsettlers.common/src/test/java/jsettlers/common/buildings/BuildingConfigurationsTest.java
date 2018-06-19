@@ -28,6 +28,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import jsettlers.common.buildings.stacks.RelativeStack;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 
 @RunWith(Parameterized.class)
@@ -53,32 +54,40 @@ public class BuildingConfigurationsTest {
 		assumeTrue(EBuildingType.TEMPLE != buildingType); // temple uses door location for the wine bowl
 		assumeTrue(EBuildingType.MARKET_PLACE != buildingType); // market place does not use the door
 
-		assertFalse(isBlocked(buildingType.getDoorTile()));
-		assertTrue(isProtected(buildingType.getDoorTile()));
+		for (ECivilisation civilisation : ECivilisation.VALUES) {
+			if(buildingType.requiredCivilisations.contains(civilisation)) {
+				assertFalse(isBlocked(buildingType.getDoorTile(civilisation), civilisation));
+				assertTrue(isProtected(buildingType.getDoorTile(civilisation), civilisation));
+			}
+		}
 	}
 
 	@Test
 	public void testStacksAreNotBlockedButProtected() {
-		for (RelativeStack stack : buildingType.getConstructionStacks()) {
-			assertFalse(buildingType + "", isBlocked(stack));
-			assertTrue(buildingType + "", isProtected(stack));
-		}
-		for (RelativeStack stack : buildingType.getRequestStacks()) {
-			assertFalse(buildingType + "", isBlocked(stack));
-			assertTrue(buildingType + "", isProtected(stack));
-		}
-		for (RelativeStack stack : buildingType.getOfferStacks()) {
-			assertFalse(buildingType + "", isBlocked(stack));
-			assertTrue(buildingType + "", isProtected(stack));
+		for (ECivilisation civilisation : ECivilisation.VALUES) {
+			if(buildingType.requiredCivilisations.contains(civilisation)) {
+				for (RelativeStack stack : buildingType.getConstructionStacks(civilisation)) {
+					assertFalse(buildingType + "", isBlocked(stack, civilisation));
+					assertTrue(buildingType + "", isProtected(stack, civilisation));
+				}
+				for (RelativeStack stack : buildingType.getRequestStacks(civilisation)) {
+					assertFalse(buildingType + "", isBlocked(stack, civilisation));
+					assertTrue(buildingType + "", isProtected(stack, civilisation));
+				}
+				for (RelativeStack stack : buildingType.getOfferStacks(civilisation)) {
+					assertFalse(buildingType + "", isBlocked(stack, civilisation));
+					assertTrue(buildingType + "", isProtected(stack, civilisation));
+				}
+			}
 		}
 	}
 
-	private boolean isBlocked(RelativePoint position) {
-		return contains(buildingType.getBlockedTiles(), position);
+	private boolean isBlocked(RelativePoint position, ECivilisation civilisation) {
+		return contains(buildingType.getBlockedTiles(civilisation), position);
 	}
 
-	private boolean isProtected(RelativePoint position) {
-		return contains(buildingType.getProtectedTiles(), position);
+	private boolean isProtected(RelativePoint position, ECivilisation civilisation) {
+		return contains(buildingType.getProtectedTiles(civilisation), position);
 	}
 
 	private static boolean contains(RelativePoint[] positions, RelativePoint positionToCheck) {

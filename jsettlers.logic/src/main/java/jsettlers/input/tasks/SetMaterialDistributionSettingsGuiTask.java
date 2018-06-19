@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -36,8 +37,8 @@ public class SetMaterialDistributionSettingsGuiTask extends SimpleGuiTask {
 	public SetMaterialDistributionSettingsGuiTask() {
 	}
 
-	public SetMaterialDistributionSettingsGuiTask(byte playerId, ShortPoint2D managerPosition, EMaterialType materialType, EBuildingType buildingType, float ratio) {
-		super(EGuiAction.SET_MATERIAL_DISTRIBUTION_SETTINGS, playerId);
+	public SetMaterialDistributionSettingsGuiTask(byte playerId, ECivilisation civilisation, ShortPoint2D managerPosition, EMaterialType materialType, EBuildingType buildingType, float ratio) {
+		super(EGuiAction.SET_MATERIAL_DISTRIBUTION_SETTINGS, playerId, civilisation);
 		this.managerPosition = managerPosition;
 		this.materialType = materialType;
 		this.buildingType = buildingType;

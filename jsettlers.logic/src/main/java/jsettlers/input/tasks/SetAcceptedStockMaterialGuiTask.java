@@ -15,6 +15,7 @@
 package jsettlers.input.tasks;
 
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 import java.io.DataInputStream;
@@ -36,8 +37,8 @@ public class SetAcceptedStockMaterialGuiTask extends SimpleGuiTask {
 	public SetAcceptedStockMaterialGuiTask() {
 	}
 
-	public SetAcceptedStockMaterialGuiTask(byte playerId, ShortPoint2D position, EMaterialType materialType, boolean accepted, boolean local) {
-		super(EGuiAction.SET_ACCEPTED_STOCK_MATERIAL, playerId);
+	public SetAcceptedStockMaterialGuiTask(byte playerId, ShortPoint2D position, ECivilisation civilisation, EMaterialType materialType, boolean accepted, boolean local) {
+		super(EGuiAction.SET_ACCEPTED_STOCK_MATERIAL, playerId, civilisation);
 		this.position = position;
 		this.materialType = materialType;
 		this.accepted = accepted;

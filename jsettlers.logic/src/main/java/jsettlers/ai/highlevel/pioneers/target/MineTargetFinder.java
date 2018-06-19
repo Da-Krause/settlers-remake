@@ -18,6 +18,7 @@ import jsettlers.ai.highlevel.AiPositions;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.EResourceType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -27,13 +28,15 @@ public class MineTargetFinder extends AbstractPioneerTargetFinder {
 
 	private final EResourceType resourceType;
 	private final EBuildingType mineBuildingType;
+	private final ECivilisation civilisation;
 	private final AiPositions.AiPositionFilter mineFilters;
 
 	public MineTargetFinder(final AiStatistics aiStatistics, final byte playerId, final int searchDistance, final EResourceType resourceType,
-			final EBuildingType mineBuildingType) {
+							final EBuildingType mineBuildingType, final ECivilisation civilisation) {
 		super(aiStatistics, playerId, searchDistance);
 		this.resourceType = resourceType;
 		this.mineBuildingType = mineBuildingType;
+		this.civilisation = civilisation;
 		AiPositions.AiPositionFilter firstFilter = new SameBlockedPartitionLikePlayerFilter(this.aiStatistics, playerId);
 		SurroundedByResourcesFilter secondFilter = new SurroundedByResourcesFilter(aiStatistics.getMainGrid(),
 				aiStatistics.getMainGrid().getLandscapeGrid(), resourceType);
@@ -46,7 +49,7 @@ public class MineTargetFinder extends AbstractPioneerTargetFinder {
 			return null;
 
 		int buildingCount = aiStatistics.getTotalNumberOfBuildingTypeForPlayer(mineBuildingType, playerId) + 1;
-		int tiles = mineBuildingType.getProtectedTiles().length * 2;
+		int tiles = mineBuildingType.getProtectedTiles(civilisation).length * 2;
 
 		if (aiStatistics.resourceCountOfPlayer(resourceType, playerId) > tiles * buildingCount)
 			return null;

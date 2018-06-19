@@ -14,31 +14,39 @@
  *******************************************************************************/
 package jsettlers.buildingcreator.editor.map;
 
+import java.util.Collections;
+import java.util.List;
+
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.buildings.IBuilding;
 import jsettlers.common.buildings.IBuildingMaterial;
 import jsettlers.common.mapobject.EMapObjectType;
 import jsettlers.common.mapobject.IMapObject;
 import jsettlers.common.material.EPriority;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.selectable.ESelectionType;
 
-import java.util.Collections;
-import java.util.List;
-
 public class PseudoBuilding implements IBuilding, IBuilding.IMill {
 	private final EBuildingType type;
+	private final ECivilisation civilisation;
 	private final ShortPoint2D pos;
 
-	PseudoBuilding(EBuildingType type, ShortPoint2D pos) {
+	PseudoBuilding(EBuildingType type, ShortPoint2D pos, ECivilisation civilisation) {
 		this.type = type;
 		this.pos = pos;
+		this.civilisation = civilisation;
 	}
 
 	@Override
 	public EBuildingType getBuildingType() {
 		return type;
+	}
+
+	@Override
+	public ECivilisation getCivilisation() {
+		return civilisation;
 	}
 
 	@Override

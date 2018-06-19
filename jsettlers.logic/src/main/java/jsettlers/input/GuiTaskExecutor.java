@@ -97,7 +97,7 @@ class GuiTaskExecutor implements ITaskExecutor {
 
 			case BUILD: {
 				ConstructBuildingTask task = (ConstructBuildingTask) guiTask;
-				grid.constructBuildingAt(task.getPosition(), task.getType(), task.getPlayerId());
+				grid.constructBuildingAt(task.getPosition(), task.getType(), task.getCivilisation(), task.getPlayerId());
 				break;
 			}
 

@@ -14,6 +14,13 @@
  *******************************************************************************/
 package jsettlers.graphics.test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import jsettlers.common.CommonConstants;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
@@ -29,13 +36,6 @@ import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
 import jsettlers.common.position.ShortPoint2D;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class TestMap implements IGraphicsGrid {
 	private static final int HEIGHT = 150;
@@ -378,7 +378,7 @@ public class TestMap implements IGraphicsGrid {
 			TestTile toTest = this.getTile(dir.getNextHexPoint(tile.getPosition()));
 			if (toTest != null
 					&& (toTest.getLandscapeType() == ELandscapeType.RIVER1 || toTest.getLandscapeType() == ELandscapeType.RIVER2
-					|| toTest.getLandscapeType() == ELandscapeType.RIVER3 || toTest.getLandscapeType() == ELandscapeType.RIVER4)) {
+							|| toTest.getLandscapeType() == ELandscapeType.RIVER3 || toTest.getLandscapeType() == ELandscapeType.RIVER4)) {
 				rivers++;
 			}
 		}

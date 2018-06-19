@@ -26,6 +26,7 @@ import jsettlers.ai.highlevel.pioneers.target.StoneCutterTargetFinder;
 import jsettlers.ai.highlevel.pioneers.target.TreesForLumberJackTargetFinder;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.EResourceType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.constants.MatchConstants;
 
@@ -40,7 +41,7 @@ public class PioneerAi {
 	private final AbstractPioneerTargetFinder[] targetFinders;
 	private ShortPoint2D lastResourceTarget;
 
-	public PioneerAi(AiStatistics aiStatistics, byte playerId) {
+	public PioneerAi(AiStatistics aiStatistics, byte playerId, ECivilisation civilisation) {
 		this.aiStatistics = aiStatistics;
 		this.playerId = playerId;
 		this.searchDistance = aiStatistics.getMainGrid().getWidth() / 2;
@@ -51,10 +52,10 @@ public class PioneerAi {
 				new NearStonesTargetFinder(aiStatistics, playerId, searchDistance),
 				new StoneCutterTargetFinder(aiStatistics, playerId, searchDistance, 6),
 				new ConnectPartitionsTargetFinder(aiStatistics, playerId, searchDistance),
-				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.COAL, EBuildingType.COALMINE),
-				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.IRONORE, EBuildingType.IRONMINE),
+				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.COAL, EBuildingType.COALMINE, civilisation),
+				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.IRONORE, EBuildingType.IRONMINE, civilisation),
 				new RiverTargetFinder(aiStatistics, playerId, searchDistance),
-				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.GOLDORE, EBuildingType.GOLDMINE),
+				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.GOLDORE, EBuildingType.GOLDMINE, civilisation),
 				new FishTargetFinder(aiStatistics, playerId, searchDistance)
 		};
 	}

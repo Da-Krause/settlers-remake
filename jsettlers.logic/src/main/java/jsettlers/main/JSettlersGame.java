@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-import java8.util.Optional;
 import jsettlers.ai.highlevel.AiExecutor;
 import jsettlers.common.CommonConstants;
 import jsettlers.common.map.IGraphicsGrid;
@@ -36,6 +35,7 @@ import jsettlers.common.menu.IMapInterfaceConnector;
 import jsettlers.common.menu.IStartedGame;
 import jsettlers.common.menu.IStartingGame;
 import jsettlers.common.menu.IStartingGameListener;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IInGamePlayer;
 import jsettlers.common.resources.ResourceManager;
 import jsettlers.common.statistics.IGameTimeProvider;
@@ -72,6 +72,7 @@ public class JSettlersGame {
 	private final IGameCreator mapCreator;
 	private final long randomSeed;
 	private final byte playerId;
+	private final ECivilisation civilisation;
 	private final PlayerSetting[] playerSettings;
 	private final INetworkConnector networkConnector;
 	private final boolean multiplayer;
@@ -104,6 +105,7 @@ public class JSettlersGame {
 		this.randomSeed = randomSeed;
 		this.networkConnector = networkConnector;
 		this.playerId = playerId;
+		this.civilisation = playerSettings[playerId].getCivilisation();
 		this.playerSettings = playerSettings;
 		this.multiplayer = multiplayer;
 		this.replayFileInputStream = replayFileInputStream;
@@ -244,7 +246,7 @@ public class JSettlersGame {
 
 				final IMapInterfaceConnector connector = startingGameListener.preLoadFinished(this);
 				GuiInterface guiInterface = new GuiInterface(connector, MatchConstants.clock(), networkConnector.getTaskScheduler(),
-						mainGrid.getGuiInputGrid(), this, playerId, multiplayer);
+						mainGrid.getGuiInputGrid(), this, playerId, civilisation, multiplayer);
 				connector.loadUIState(playerState.getUiState()); // This is required after the GuiInterface instantiation so that
 				// ConstructionMarksThread has it's mapArea variable initialized via the EActionType.SCREEN_CHANGE event.
 

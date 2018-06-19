@@ -15,6 +15,7 @@
 package jsettlers.input.tasks;
 
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.action.SetMaterialProductionAction;
 
@@ -34,9 +35,9 @@ public class SetMaterialProductionGuiTask extends SimpleGuiTask {
 
 	public SetMaterialProductionGuiTask() {}
 
-	public SetMaterialProductionGuiTask(byte playerId, ShortPoint2D position, EMaterialType materialType, SetMaterialProductionAction
+	public SetMaterialProductionGuiTask(byte playerId, ECivilisation civilisation, ShortPoint2D position, EMaterialType materialType, SetMaterialProductionAction
 			.EMaterialProductionType productionType, float ratio) {
-		super(EGuiAction.SET_MATERIAL_PRODUCTION, playerId);
+		super(EGuiAction.SET_MATERIAL_PRODUCTION, playerId, civilisation);
 		this.ratio = ratio;
 		this.productionType = productionType;
 		this.materialType = materialType;

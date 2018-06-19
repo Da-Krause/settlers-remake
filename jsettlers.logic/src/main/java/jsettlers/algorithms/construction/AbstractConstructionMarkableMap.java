@@ -16,6 +16,7 @@ package jsettlers.algorithms.construction;
 
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 
 import java.util.Set;
@@ -77,7 +78,7 @@ public abstract class AbstractConstructionMarkableMap {
 
 	public abstract boolean isInBounds(int x, int y);
 
-	public abstract boolean canConstructAt(int x, int y, EBuildingType type, byte playerId);
+	public abstract boolean canConstructAt(int x, int y, EBuildingType type, ECivilisation civilisation, byte playerId);
 
 	public abstract byte calculateConstructionMarkValue(int mapX, int mapY, final RelativePoint[] flattenPositions);
 }

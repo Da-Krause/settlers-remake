@@ -19,6 +19,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.buildings.IDockBuilding;
 
@@ -31,8 +32,8 @@ public class SetDockGuiTask extends SimpleBuildingGuiTask {
 	public SetDockGuiTask(){
 	}
 
-	public SetDockGuiTask(byte playerId, IDockBuilding building, ShortPoint2D requestedDockPosition) {
-		super(EGuiAction.SET_DOCK, playerId, building);
+	public SetDockGuiTask(byte playerId, ECivilisation civilisation, IDockBuilding building, ShortPoint2D requestedDockPosition) {
+		super(EGuiAction.SET_DOCK, playerId, civilisation, building);
 		this.requestedDockPosition = requestedDockPosition;
 	}
 

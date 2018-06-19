@@ -26,6 +26,7 @@ import jsettlers.common.Color;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.images.ImageLink;
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.graphics.image.Image;
 import jsettlers.graphics.image.SingleImage;
 import jsettlers.graphics.map.draw.ImageProvider;
@@ -41,8 +42,8 @@ public class OriginalImageProvider {
 	private ImageLoaderThread imageLoadThread;
 	private final LinkedBlockingQueue<ImageReference> toLoad = new LinkedBlockingQueue<>();
 
-	public static ImageReference get(EBuildingType building) {
-		return INSTANCE.create(building.getGuiImage());
+	public static ImageReference get(EBuildingType building, ECivilisation civilisation) {
+		return INSTANCE.create(building.getGuiImage(civilisation));
 	}
 
 	public static ImageReference get(EMaterialType material) {

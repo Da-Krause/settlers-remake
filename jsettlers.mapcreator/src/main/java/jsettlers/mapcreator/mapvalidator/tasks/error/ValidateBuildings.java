@@ -16,6 +16,7 @@ package jsettlers.mapcreator.mapvalidator.tasks.error;
 
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.loading.data.objects.BuildingMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
 import jsettlers.common.position.RelativePoint;
@@ -69,15 +70,16 @@ public class ValidateBuildings extends AbstractValidationTask {
 	 */
 	private void testBuilding(int x, int y, BuildingMapDataObject buildingObject) {
 		EBuildingType type = buildingObject.getType();
+		ECivilisation civilisation = buildingObject.getCivilisation();
 		int height = data.getLandscapeHeight(x, y);
 		ShortPoint2D start = new ShortPoint2D(x, y);
 
-		for (RelativePoint p : type.getProtectedTiles()) {
+		for (RelativePoint p : type.getProtectedTiles(civilisation)) {
 			ShortPoint2D pos = p.calculatePoint(start);
 			if (!data.contains(pos.x, pos.y)) {
 				addErrorMessage("building.outside-map", pos, Labels.getName(type));
 				fix.addInvalidObject(pos);
-			} else if (!type.getGroundTypes().contains(data.getLandscape(pos.x, pos.y))) {
+			} else if (!type.getGroundTypes(civilisation).contains(data.getLandscape(pos.x, pos.y))) {
 				ELandscapeType landscape = data.getLandscape(pos.x, pos.y);
 				String landscapeName = EditorLabels.getLabel("landscape." + landscape.name());
 				addErrorMessage("building.wrong-landscape", pos, Labels.getName(type), landscapeName);
@@ -85,7 +87,7 @@ public class ValidateBuildings extends AbstractValidationTask {
 			} else if (players[pos.x][pos.y] != buildingObject.getPlayerId()) {
 				addErrorMessage("building.wrong-land", pos, Labels.getName(type), buildingObject.getPlayerId(), players[x][y]);
 				fix.addInvalidObject(pos);
-			} else if (type.needsFlattenedGround() && data.getLandscapeHeight(pos.x, pos.y) != height) {
+			} else if (type.needsFlattenedGround(civilisation) && data.getLandscapeHeight(pos.x, pos.y) != height) {
 				addErrorMessage("building.flat-ground", pos, Labels.getName(type), buildingObject.getPlayerId());
 				fix.addInvalidObject(pos);
 			}

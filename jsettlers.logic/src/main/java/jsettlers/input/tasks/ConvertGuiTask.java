@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 
 /**
  * 
@@ -32,8 +33,8 @@ public class ConvertGuiTask extends MovableGuiTask {
 	public ConvertGuiTask() {
 	}
 
-	public ConvertGuiTask(byte playerId, List<Integer> selection, EMovableType targetType) {
-		super(EGuiAction.CONVERT, playerId, selection);
+	public ConvertGuiTask(byte playerId, ECivilisation civilisation, List<Integer> selection, EMovableType targetType) {
+		super(EGuiAction.CONVERT, playerId, civilisation, selection);
 		this.targetType = targetType;
 	}
 

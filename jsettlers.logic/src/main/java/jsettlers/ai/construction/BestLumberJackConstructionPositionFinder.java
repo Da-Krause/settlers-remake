@@ -17,6 +17,7 @@ package jsettlers.ai.construction;
 import jsettlers.ai.highlevel.AiPositions;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 
 /**
  * Assumptions: trees are placed as groups or as a single tree on the map
@@ -28,8 +29,8 @@ import jsettlers.common.buildings.EBuildingType;
  */
 public class BestLumberJackConstructionPositionFinder extends BestWorkareaConstructionPositionFinder {
 
-	public BestLumberJackConstructionPositionFinder(EBuildingType buildingType) {
-		super(buildingType);
+	public BestLumberJackConstructionPositionFinder(EBuildingType buildingType, ECivilisation civilisation) {
+		super(buildingType, civilisation);
 	}
 
 	@Override

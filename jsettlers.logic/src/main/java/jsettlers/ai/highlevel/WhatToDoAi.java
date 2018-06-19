@@ -35,6 +35,7 @@ import jsettlers.common.landscape.EResourceType;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.input.tasks.ConstructBuildingTask;
 import jsettlers.input.tasks.ConvertGuiTask;
@@ -88,7 +89,6 @@ import static jsettlers.common.buildings.EBuildingType.WATERWORKS;
 import static jsettlers.common.buildings.EBuildingType.WEAPONSMITH;
 import static jsettlers.common.buildings.EBuildingType.WINEGROWER;
 import static jsettlers.common.material.EMaterialType.GOLD;
-import static jsettlers.logic.constants.Constants.TOWER_ATTACKABLE_SEARCH_RADIUS;
 import static jsettlers.logic.constants.Constants.TOWER_SEARCH_SOLDIERS_RADIUS;
 
 /**
@@ -117,6 +117,7 @@ class WhatToDoAi implements IWhatToDoAi {
 	private final MainGrid mainGrid;
 	private final MovableGrid movableGrid;
 	private final byte playerId;
+	private final ECivilisation civilisation;
 	private final ITaskScheduler taskScheduler;
 	private final AiStatistics aiStatistics;
 	private final ArmyGeneral armyGeneral;
@@ -129,7 +130,8 @@ class WhatToDoAi implements IWhatToDoAi {
 	private PioneerGroup broadenerPioneers;
 	private AiPositions.AiPositionFilter[] geologistFilters = new AiPositions.AiPositionFilter[EResourceType.values().length];
 
-	WhatToDoAi(byte playerId, AiStatistics aiStatistics, EconomyMinister economyMinister, ArmyGeneral armyGeneral, MainGrid mainGrid, ITaskScheduler taskScheduler) {
+	WhatToDoAi(ECivilisation civilisation, byte playerId, AiStatistics aiStatistics, EconomyMinister economyMinister, ArmyGeneral armyGeneral, MainGrid mainGrid, ITaskScheduler taskScheduler) {
+		this.civilisation = civilisation;
 		this.playerId = playerId;
 		this.mainGrid = mainGrid;
 		this.movableGrid = mainGrid.getMovableGrid();
@@ -137,7 +139,7 @@ class WhatToDoAi implements IWhatToDoAi {
 		this.aiStatistics = aiStatistics;
 		this.armyGeneral = armyGeneral;
 		this.economyMinister = economyMinister;
-		this.pioneerAi = new PioneerAi(aiStatistics, playerId);
+		this.pioneerAi = new PioneerAi(aiStatistics, playerId, civilisation);
 		bestConstructionPositionFinderFactory = new BestConstructionPositionFinderFactory();
 		resourcePioneers = new PioneerGroup(RESOURCE_PIONEER_GROUP_COUNT);
 		broadenerPioneers = new PioneerGroup(BROADEN_PIONEER_GROUP_COUNT);
@@ -187,7 +189,7 @@ class WhatToDoAi implements IWhatToDoAi {
 			targetGeologists.add(coalGeologist.getID());
 			targetGeologists.add(ironGeologist.getID());
 			targetGeologists.add(goldGeologist.getID());
-			taskScheduler.scheduleTask(new ConvertGuiTask(playerId, targetGeologists, EMovableType.GEOLOGIST));
+			taskScheduler.scheduleTask(new ConvertGuiTask(playerId, civilisation, targetGeologists, EMovableType.GEOLOGIST));
 
 			sendGeologistToNearest(coalGeologist, EResourceType.COAL);
 			sendGeologistToNearest(ironGeologist, EResourceType.IRONORE);
@@ -232,7 +234,7 @@ class WhatToDoAi implements IWhatToDoAi {
 
 	private void sendMovableTo(IMovable movable, ShortPoint2D target) {
 		if (movable != null) {
-			taskScheduler.scheduleTask(new MoveToGuiTask(playerId, target, Collections.singletonList(movable.getID())));
+			taskScheduler.scheduleTask(new MoveToGuiTask(playerId, civilisation, target, Collections.singletonList(movable.getID())));
 		}
 	}
 
@@ -243,11 +245,11 @@ class WhatToDoAi implements IWhatToDoAi {
 				int numberOfStoneCutters = aiStatistics.getNumberOfBuildingTypeForPlayer(STONECUTTER, playerId);
 
 				ShortPoint2D nearestStone = aiStatistics.getStonesForPlayer(playerId)
-						.getNearestPoint(stoneCutterPosition, STONECUTTER.getWorkRadius() * MAXIMUM_STONECUTTER_WORK_RADIUS_FACTOR, null);
+						.getNearestPoint(stoneCutterPosition, STONECUTTER.getWorkRadius(civilisation) * MAXIMUM_STONECUTTER_WORK_RADIUS_FACTOR, null);
 				if (nearestStone != null && numberOfStoneCutters < economyMinister.getMidGameNumberOfStoneCutters()) {
-					taskScheduler.scheduleTask(new WorkAreaGuiTask(EGuiAction.SET_WORK_AREA, playerId, nearestStone, stoneCutterPosition));
+					taskScheduler.scheduleTask(new WorkAreaGuiTask(EGuiAction.SET_WORK_AREA, playerId, civilisation, nearestStone, stoneCutterPosition));
 				} else {
-					taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, stoneCutterPosition));
+					taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, civilisation, stoneCutterPosition));
 					break; // destroy only one stone cutter
 				}
 			}
@@ -274,20 +276,20 @@ class WhatToDoAi implements IWhatToDoAi {
 			List<ShortPoint2D> foresters = aiStatistics.getBuildingPositionsOfTypeForPlayer(FORESTER, playerId);
 			if (foresters.size() > 1) {
 				for (int i = 1; i < foresters.size(); i++) {
-					taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, foresters.get(i)));
+					taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, civilisation, foresters.get(i)));
 				}
 			}
 
 			stream(aiStatistics.getBuildingPositionsOfTypeForPlayer(LUMBERJACK, playerId))
 					.filter(lumberJackPosition -> aiStatistics.getBuildingAt(lumberJackPosition).cannotWork())
-					.forEach(lumberJackPosition -> taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, lumberJackPosition)));
+					.forEach(lumberJackPosition -> taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, civilisation, lumberJackPosition)));
 
 			if ((aiStatistics.getNumberOfBuildingTypeForPlayer(SAWMILL, playerId) * 3 - 2) > aiStatistics.getNumberOfBuildingTypeForPlayer(LUMBERJACK, playerId)) {
-				taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, aiStatistics.getBuildingPositionsOfTypeForPlayer(SAWMILL, playerId).get(0)));
+				taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, civilisation, aiStatistics.getBuildingPositionsOfTypeForPlayer(SAWMILL, playerId).get(0)));
 			}
 
 			for (ShortPoint2D bigTemple : aiStatistics.getBuildingPositionsOfTypeForPlayer(BIG_TEMPLE, playerId)) {
-				taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, bigTemple));
+				taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, civilisation, bigTemple));
 			}
 		}
 	}
@@ -295,7 +297,7 @@ class WhatToDoAi implements IWhatToDoAi {
 	private boolean destroyLivingHouse(EBuildingType livingHouseType) {
 		for (ShortPoint2D livingHousePosition : aiStatistics.getBuildingPositionsOfTypeForPlayer(livingHouseType, playerId)) {
 			if (aiStatistics.getBuildingAt(livingHousePosition).cannotWork()) {
-				taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, livingHousePosition));
+				taskScheduler.scheduleTask(new SimpleBuildingGuiTask(EGuiAction.DESTROY_BUILDING, playerId, civilisation, livingHousePosition));
 				return true;
 			}
 		}
@@ -340,9 +342,9 @@ class WhatToDoAi implements IWhatToDoAi {
 
 		ShortPoint2D position = bestConstructionPositionFinderFactory
 				.getBorderDefenceConstructionPosition(threatenedBorder)
-				.findBestConstructionPosition(aiStatistics, mainGrid.getConstructionMarksGrid(), playerId);
+				.findBestConstructionPosition(aiStatistics, mainGrid.getConstructionMarksGrid(), civilisation, playerId);
 		if (position != null) {
-			taskScheduler.scheduleTask(new ConstructBuildingTask(EGuiAction.BUILD, playerId, position, TOWER));
+			taskScheduler.scheduleTask(new ConstructBuildingTask(EGuiAction.BUILD, playerId, civilisation, position, TOWER));
 			sendSwordsmenToTower(position);
 			return true;
 		}
@@ -451,10 +453,10 @@ class WhatToDoAi implements IWhatToDoAi {
 					.limit(numberOfPioneers)
 					.map(pioneerPosition -> mainGrid.getMovableGrid().getMovableAt(pioneerPosition.x, pioneerPosition.y).getID())
 					.collect(Collectors.toList());
-			taskScheduler.scheduleTask(new ConvertGuiTask(playerId, pioneerIds, EMovableType.BEARER));
+			taskScheduler.scheduleTask(new ConvertGuiTask(playerId, civilisation, pioneerIds, EMovableType.BEARER));
 			if (numberOfPioneers == Integer.MAX_VALUE) {
 				// pioneers which can not be converted shall walk into player's land to be converted the next tic
-				taskScheduler.scheduleTask(new MoveToGuiTask(playerId, aiStatistics.getPositionOfPartition(playerId), pioneerIds));
+				taskScheduler.scheduleTask(new MoveToGuiTask(playerId, civilisation, aiStatistics.getPositionOfPartition(playerId), pioneerIds));
 			}
 		}
 	}
@@ -477,7 +479,7 @@ class WhatToDoAi implements IWhatToDoAi {
 			PioneerGroup pioneersWithNoAction = broadenerPioneers.getPioneersWithNoAction();
 			ShortPoint2D broadenTarget = pioneerAi.findBroadenTarget();
 			if (broadenTarget != null) {
-				taskScheduler.scheduleTask(new MoveToGuiTask(playerId, broadenTarget, pioneersWithNoAction.getPioneerIds()));
+				taskScheduler.scheduleTask(new MoveToGuiTask(playerId, civilisation, broadenTarget, pioneersWithNoAction.getPioneerIds()));
 			}
 		}
 	}
@@ -486,7 +488,7 @@ class WhatToDoAi implements IWhatToDoAi {
 		if (resourcePioneers.isNotEmpty()) {
 			ShortPoint2D resourceTarget = pioneerAi.findResourceTarget();
 			if (resourceTarget != null) {
-				taskScheduler.scheduleTask(new MoveToGuiTask(playerId, resourceTarget, resourcePioneers.getPioneerIds()));
+				taskScheduler.scheduleTask(new MoveToGuiTask(playerId, civilisation, resourceTarget, resourcePioneers.getPioneerIds()));
 			}
 		}
 	}
@@ -499,7 +501,7 @@ class WhatToDoAi implements IWhatToDoAi {
 		int maxNewPioneersCount = Math.min(numberOfBearers - MINIMUM_NUMBER_OF_BEARERS, numberOfJoblessBearers - minRequiredJoblessBearers);
 
 		if (maxNewPioneersCount > 0) {
-			pioneerGroup.fill(taskScheduler, aiStatistics, playerId, maxNewPioneersCount);
+			pioneerGroup.fill(taskScheduler, aiStatistics, playerId, civilisation, maxNewPioneersCount);
 		}
 	}
 
@@ -528,10 +530,10 @@ class WhatToDoAi implements IWhatToDoAi {
 			return false;
 		}
 		ShortPoint2D position = bestConstructionPositionFinderFactory
-				.getBestConstructionPositionFinderFor(type)
-				.findBestConstructionPosition(aiStatistics, mainGrid.getConstructionMarksGrid(), playerId);
+				.getBestConstructionPositionFinderFor(type, civilisation)
+				.findBestConstructionPosition(aiStatistics, mainGrid.getConstructionMarksGrid(), civilisation, playerId);
 		if (position != null) {
-			taskScheduler.scheduleTask(new ConstructBuildingTask(EGuiAction.BUILD, playerId, position, type));
+			taskScheduler.scheduleTask(new ConstructBuildingTask(EGuiAction.BUILD, playerId, civilisation, position, type));
 			if (type.isMilitaryBuilding()) {
 				sendSwordsmenToTower(position);
 			}

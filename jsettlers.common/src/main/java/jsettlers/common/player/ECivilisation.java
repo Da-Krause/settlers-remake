@@ -18,5 +18,13 @@ package jsettlers.common.player;
  * @author codingberlin
  */
 public enum ECivilisation {
-	ROMAN,
+	ROMANS,
+	EGYPTIANS,
+	ASIANS,
+	AMAZONS;
+	/**
+	 * A copy of values(). Do not modify this array. This is intended for quicker access to this value.
+	 */
+	public static final ECivilisation[] VALUES = ECivilisation.values();
+
 }

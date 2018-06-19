@@ -26,6 +26,7 @@ import jsettlers.common.buildings.stacks.ConstructionStack;
 import jsettlers.common.buildings.stacks.RelativeStack;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EDirection;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 
 /**
@@ -35,6 +36,7 @@ import jsettlers.common.position.RelativePoint;
  */
 public class BuildingDefinition {
 	private final EBuildingType type;
+	private final ECivilisation civilisation;
 
 	/**
 	 * A table of known actions and their names.
@@ -54,26 +56,31 @@ public class BuildingDefinition {
 	private RelativePoint door = new RelativePoint(0, 0);
 	private RelativePoint flag = new RelativePoint(0, 0);
 
-	public BuildingDefinition(EBuildingType type) {
+	public BuildingDefinition(EBuildingType type, ECivilisation civilisation) {
 		this.type = type;
-		for (RelativePoint pos : type.getBlockedTiles()) {
+		this.civilisation = civilisation;
+		for (RelativePoint pos : type.getBlockedTiles(civilisation)) {
 			blocked.add(pos);
 		}
-		for (RelativePoint pos : type.getProtectedTiles()) {
+		for (RelativePoint pos : type.getProtectedTiles(civilisation)) {
 			if (!blocked.contains(pos)) {
 				justProtected.add(pos);
 			}
 		}
 
-		buildmarks.addAll(Arrays.asList(type.getBuildMarks()));
-		bricklayers.addAll(Arrays.asList(type.getBricklayers()));
+		buildmarks.addAll(Arrays.asList(type.getBuildMarks(civilisation)));
+		bricklayers.addAll(Arrays.asList(type.getBricklayers(civilisation)));
 
-		door = type.getDoorTile();
-		flag = type.getFlag();
+		door = type.getDoorTile(civilisation);
+		flag = type.getFlag(civilisation);
 
-		constructionStacks.addAll(Arrays.asList(type.getConstructionStacks()));
-		requestStacks.addAll(Arrays.asList(type.getRequestStacks()));
-		offerStacks.addAll(Arrays.asList(type.getOfferStacks()));
+		constructionStacks.addAll(Arrays.asList(type.getConstructionStacks(civilisation)));
+		requestStacks.addAll(Arrays.asList(type.getRequestStacks(civilisation)));
+		offerStacks.addAll(Arrays.asList(type.getOfferStacks(civilisation)));
+	}
+
+	public ECivilisation getCivilisation() {
+		return civilisation;
 	}
 
 	public Set<String> getActionNames() {

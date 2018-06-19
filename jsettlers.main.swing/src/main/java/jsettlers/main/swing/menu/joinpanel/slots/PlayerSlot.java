@@ -33,6 +33,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * @author codingberlin
@@ -170,7 +171,10 @@ public class PlayerSlot {
 
 	private void initializeComboBoxes() {
 		civilisationComboBox.addItem(new CivilisationUiWrapper());
-		civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.ROMAN));
+		civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.ROMANS));
+		civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.EGYPTIANS));
+		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.ASIANS));
+		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.AMAZONS));
 	}
 
 	public void setPlayerName(String playerName) {
@@ -229,7 +233,11 @@ public class PlayerSlot {
 	}
 
 	public ECivilisation getCivilisation() {
-		return ((CivilisationUiWrapper) civilisationComboBox.getSelectedItem()).getCivilisation();
+		ECivilisation civilisation = ((CivilisationUiWrapper) civilisationComboBox.getSelectedItem()).getCivilisation();
+		if (civilisation != null)
+			return civilisation;
+		return ECivilisation.ROMANS;
+		//return ECivilisation.VALUES[new Random().nextInt( ECivilisation.VALUES.length)];
 	}
 
 	public void setSlotListener(ISlotListener slotListener) {

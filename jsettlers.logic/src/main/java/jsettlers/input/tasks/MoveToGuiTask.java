@@ -19,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -32,8 +33,8 @@ public class MoveToGuiTask extends MovableGuiTask {
 	public MoveToGuiTask() {
 	}
 
-	public MoveToGuiTask(byte playerId, ShortPoint2D pos, List<Integer> selection) {
-		super(EGuiAction.MOVE_TO, playerId, selection);
+	public MoveToGuiTask(byte playerId, ECivilisation civilisation, ShortPoint2D pos, List<Integer> selection) {
+		super(EGuiAction.MOVE_TO, playerId, civilisation, selection);
 		this.position = pos;
 	}
 

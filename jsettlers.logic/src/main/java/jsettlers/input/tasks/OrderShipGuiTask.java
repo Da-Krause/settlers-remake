@@ -20,6 +20,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import jsettlers.common.movable.EShipType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.buildings.IDockBuilding;
 
 /**
@@ -31,8 +32,8 @@ public class OrderShipGuiTask extends SimpleBuildingGuiTask {
 	public OrderShipGuiTask() {
 	}
 
-	public OrderShipGuiTask(byte playerId, IDockBuilding building, EShipType shipType) {
-		super(EGuiAction.ORDER_SHIP, playerId, building);
+	public OrderShipGuiTask(byte playerId, ECivilisation civilisation, IDockBuilding building, EShipType shipType) {
+		super(EGuiAction.ORDER_SHIP, playerId, civilisation, building);
 		this.shipType = shipType;
 	}
 

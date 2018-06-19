@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jsettlers.common.player.ECivilisation;
+
 /**
  * 
  * @author Andreas Eberle
@@ -31,8 +33,8 @@ public class MovableGuiTask extends SimpleGuiTask {
 	public MovableGuiTask() {
 	}
 
-	public MovableGuiTask(EGuiAction action, byte playerId, List<Integer> selection) {
-		super(action, playerId);
+	public MovableGuiTask(EGuiAction action, byte playerId, ECivilisation civilisation, List<Integer> selection) {
+		super(action, playerId, civilisation);
 		this.selection = selection;
 	}
 

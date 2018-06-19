@@ -22,6 +22,7 @@ import jsettlers.common.images.EImageLinkType;
 import jsettlers.common.images.ImageLink;
 import jsettlers.common.images.OriginalImageLink;
 import jsettlers.common.map.partition.IBuildingCounts;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.FloatRectangle;
 import jsettlers.common.action.ShowConstructionMarksAction;
 import jsettlers.graphics.image.Image;
@@ -57,10 +58,10 @@ public class BuildingButton extends Button implements UiContentUpdater.IUiConten
 	private float iconBottom;
 	private final Label constructedLabel = new Label("", EFontSize.SMALL, EHorizontalAlignment.RIGHT, EVerticalAlignment.TOP);
 
-	public BuildingButton(EBuildingType buildingType) {
-		super(new ShowConstructionMarksAction(buildingType), null, null, Labels.getName(buildingType));
+	public BuildingButton(EBuildingType buildingType, ECivilisation civilisation) {
+		super(new ShowConstructionMarksAction(buildingType, civilisation), null, null, Labels.getName(buildingType));
 		this.buildingType = buildingType;
-		buildingImageLink = buildingType.getGuiImage();
+		buildingImageLink = buildingType.getGuiImage(civilisation);
 		addChild(constructedLabel, 0.05f, 0.05f, .95f, .95f);
 	}
 

@@ -20,6 +20,7 @@ import java.util.List;
 import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.algorithms.construction.AbstractConstructionMarkableMap;
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.map.grid.MainGrid;
@@ -30,13 +31,13 @@ import jsettlers.logic.map.grid.MainGrid;
 abstract public class BestPlantingBuildingConstructionPositionFinder implements IBestConstructionPositionFinder {
 
 	@Override
-	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, byte playerId) {
+	public ShortPoint2D findBestConstructionPosition(AiStatistics aiStatistics, AbstractConstructionMarkableMap constructionMap, ECivilisation civilisation, byte playerId) {
 
 		List<ScoredConstructionPosition> scoredConstructionPositions = new ArrayList<>();
 
 		for (ShortPoint2D point : aiStatistics.getLandForPlayer(playerId)) {
-			if (constructionMap.canConstructAt(point.x, point.y, myBuildingType(), playerId)
-					&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(point.x, point.y, playerId, myBuildingType())) {
+			if (constructionMap.canConstructAt(point.x, point.y, myBuildingType(), civilisation, playerId)
+					&& !aiStatistics.blocksWorkingAreaOfOtherBuilding(point.x, point.y, playerId, myBuildingType(), civilisation)) {
 				int score = calculateScoreFor(point, aiStatistics.getMainGrid(), playerId);
 				if (score > 0) {
 					scoredConstructionPositions.add(new ScoredConstructionPosition(point, -score));
@@ -60,10 +61,10 @@ abstract public class BestPlantingBuildingConstructionPositionFinder implements 
 		return score;
 	}
 
-	protected static RelativePoint[] calculateMyRelativeWorkAreaPoints(EBuildingType myBuildingType) {
+	protected static RelativePoint[] calculateMyRelativeWorkAreaPoints(EBuildingType myBuildingType, ECivilisation civilisation) {
 		List<RelativePoint> workAreaPoints = new ArrayList<>();
-		RelativePoint center = myBuildingType.getDefaultWorkcenter();
-		short workRadius = myBuildingType.getWorkRadius();
+		RelativePoint center = myBuildingType.getDefaultWorkcenter(civilisation);
+		short workRadius = myBuildingType.getWorkRadius(civilisation);
 		for (short x = (short) -workRadius; x < workRadius; x++) {
 			for (short y = (short) -workRadius; y < workRadius; y++) {
 				if (Math.sqrt(x * x + y * y) <= workRadius) {

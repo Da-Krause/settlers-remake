@@ -19,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import jsettlers.common.material.EPriority;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -33,8 +34,8 @@ public class SetBuildingPriorityGuiTask extends SimpleBuildingGuiTask {
 	public SetBuildingPriorityGuiTask() {
 	}
 
-	public SetBuildingPriorityGuiTask(byte playerId, ShortPoint2D buildingPosition, EPriority newPriority) {
-		super(EGuiAction.SET_BUILDING_PRIORITY, playerId, buildingPosition);
+	public SetBuildingPriorityGuiTask(byte playerId, ECivilisation civilisation, ShortPoint2D buildingPosition, EPriority newPriority) {
+		super(EGuiAction.SET_BUILDING_PRIORITY, playerId, civilisation, buildingPosition);
 		this.newPriority = newPriority;
 	}
 

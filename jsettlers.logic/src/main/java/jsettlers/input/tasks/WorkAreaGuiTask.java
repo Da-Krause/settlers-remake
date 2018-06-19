@@ -18,6 +18,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 /**
@@ -32,14 +33,14 @@ public class WorkAreaGuiTask extends SimpleBuildingGuiTask {
 	}
 
 	/**
-	 * 
-	 * @param guiAction
+	 *  @param guiAction
 	 * @param playerId
+	 * @param civilisation
 	 * @param workAreaPosition
 	 * @param buildingPos
 	 */
-	public WorkAreaGuiTask(EGuiAction guiAction, byte playerId, ShortPoint2D workAreaPosition, ShortPoint2D buildingPos) {
-		super(guiAction, playerId, buildingPos);
+	public WorkAreaGuiTask(EGuiAction guiAction, byte playerId, ECivilisation civilisation, ShortPoint2D workAreaPosition, ShortPoint2D buildingPos) {
+		super(guiAction, playerId, civilisation, buildingPos);
 		this.workAreaPosition = workAreaPosition;
 	}
 

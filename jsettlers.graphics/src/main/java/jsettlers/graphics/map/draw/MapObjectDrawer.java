@@ -42,6 +42,7 @@ import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.ESoldierClass;
 import jsettlers.common.movable.IMovable;
 import jsettlers.common.movable.IShipInConstruction;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayerable;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.sound.ISoundable;
@@ -1252,7 +1253,7 @@ public class MapObjectDrawer {
 				playSound(building, SOUND_MILL, x, y);
 
 			} else {
-				ImageLink[] images = type.getImages();
+				ImageLink[] images = type.getImages(building.getCivilisation());
 				if (images.length > 0) {
 					Image image = imageProvider.getImage(images[0]);
 					draw(image, x, y, color, building.getBuildingType() == EBuildingType.MARKET_PLACE);
@@ -1268,7 +1269,7 @@ public class MapObjectDrawer {
 				}
 			}
 		} else if (state >= .01f) {
-			drawBuildingConstruction(x, y, color, type, state);
+			drawBuildingConstruction(x, y, color, type, building.getCivilisation(), state);
 		}
 
 		if (building.isSelected()) {
@@ -1276,20 +1277,20 @@ public class MapObjectDrawer {
 		}
 	}
 
-	private void drawBuildingConstruction(int x, int y, float color, EBuildingType type, float state) {
-		boolean hasTwoConstructionPhases = type.getBuildImages().length > 0;
+	private void drawBuildingConstruction(int x, int y, float color, EBuildingType type, ECivilisation civilisation, float state) {
+		boolean hasTwoConstructionPhases = type.getBuildImages(civilisation).length > 0;
 
 		boolean isInBuildPhase = hasTwoConstructionPhases && state < .5f;
 
 		if (!isInBuildPhase && hasTwoConstructionPhases) {
 			// draw the base build image
-			for (ImageLink link : type.getBuildImages()) {
+			for (ImageLink link : type.getBuildImages(civilisation)) {
 				Image image = imageProvider.getImage(link);
 				draw(image, x, y, color);
 			}
 		}
 
-		ImageLink[] constructionImages = isInBuildPhase ? type.getBuildImages() : type.getImages();
+		ImageLink[] constructionImages = isInBuildPhase ? type.getBuildImages(civilisation) : type.getImages(civilisation);
 
 		float maskState = hasTwoConstructionPhases ? (state * 2) % 1 : state;
 		for (ImageLink link : constructionImages) {

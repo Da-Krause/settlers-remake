@@ -15,6 +15,7 @@
 package jsettlers.common.action;
 
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 
 /**
  * Instructs the logic to compute and display the constructions mark for the given building.
@@ -24,11 +25,12 @@ import jsettlers.common.buildings.EBuildingType;
  */
 public class ShowConstructionMarksAction extends Action {
 	private EBuildingType buildingType;
+	private ECivilisation civilisation;
 
-	public ShowConstructionMarksAction(EBuildingType buildingType) {
+	public ShowConstructionMarksAction(EBuildingType buildingType, ECivilisation civilisation) {
 		super(EActionType.SHOW_CONSTRUCTION_MARK);
 		this.buildingType = buildingType;
-
+		this.civilisation = civilisation;
 	}
 
 	/**
@@ -38,5 +40,14 @@ public class ShowConstructionMarksAction extends Action {
 	 */
 	public EBuildingType getBuildingType() {
 		return buildingType;
+	}
+
+	/**
+	 * Get the civilisation of the building to show the construction marks for.
+	 *
+	 * @return The civilisation or <code>null</code> if none should be displayed.
+	 */
+	public ECivilisation getCivilisation() {
+		return civilisation;
 	}
 }

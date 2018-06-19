@@ -15,15 +15,22 @@
 package jsettlers.logic.map.loading.data.objects;
 
 import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.player.ECivilisation;
 
 public class BuildingMapDataObject implements MapDataObject, IPlayerIdProvider {
 
 	private final EBuildingType type;
 	private final byte playerId;
+	private final ECivilisation civilisation;
 
-	public BuildingMapDataObject(EBuildingType type, byte playerId) {
+	public BuildingMapDataObject(EBuildingType type, byte playerId, ECivilisation civilisation) {
 		this.type = type;
 		this.playerId = playerId;
+		this.civilisation = civilisation;
+	}
+
+	public ECivilisation getCivilisation() {
+		return civilisation;
 	}
 
 	public EBuildingType getType() {

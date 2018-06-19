@@ -14,7 +14,23 @@
  *******************************************************************************/
 package jsettlers.buildingcreator.editor;
 
-import java8.util.Comparators;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
 import jsettlers.buildingcreator.editor.map.BuildingtestMap;
 import jsettlers.buildingcreator.editor.map.PseudoTile;
 import jsettlers.common.Color;
@@ -31,26 +47,13 @@ import jsettlers.common.menu.FakeMapGame;
 import jsettlers.common.menu.IMapInterfaceConnector;
 import jsettlers.common.menu.IMapInterfaceListener;
 import jsettlers.common.movable.EDirection;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.main.swing.SwingManagedJSettlers;
 import jsettlers.main.swing.lookandfeel.JSettlersLookAndFeelExecption;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java8.util.Comparators;
 
 /**
  * This is the main building creator class.
@@ -69,8 +72,9 @@ public class BuildingCreatorApp implements IMapInterfaceListener, Runnable {
 	public void run() {
 		try {
 			EBuildingType type = askType();
+			ECivilisation civilisation = askCivilisation();
 
-			definition = new BuildingDefinition(type);
+			definition = new BuildingDefinition(type, civilisation);
 			map = new BuildingtestMap(definition);
 			for (int x = 0; x < map.getWidth(); x++) {
 				for (int y = 0; y < map.getHeight(); y++) {
@@ -135,6 +139,10 @@ public class BuildingCreatorApp implements IMapInterfaceListener, Runnable {
 		EBuildingType[] buildingTypes = EBuildingType.values();
 		Arrays.sort(buildingTypes, Comparators.comparing(EBuildingType::name));
 		return (EBuildingType) JOptionPane.showInputDialog(null, "Select building type", "Building Type", JOptionPane.QUESTION_MESSAGE, null, buildingTypes, null);
+	}
+
+	private ECivilisation askCivilisation() {
+		return (ECivilisation) JOptionPane.showInputDialog(null, "Select building type", "Building Type", JOptionPane.QUESTION_MESSAGE, null, ECivilisation.VALUES, null);
 	}
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException, IOException {

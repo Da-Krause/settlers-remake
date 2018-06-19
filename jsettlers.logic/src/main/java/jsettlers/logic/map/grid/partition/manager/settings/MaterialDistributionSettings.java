@@ -33,7 +33,7 @@ public final class MaterialDistributionSettings implements IMaterialDistribution
 
 	private final EMaterialType materialType;
 	private final RelativeSettings<EBuildingType> distributionSettings = new RelativeSettings<>(EBuildingType.NUMBER_OF_BUILDINGS, index -> EBuildingType.VALUES[index], false);
-	private float requestValueSum = 0f;
+	private float requestValueSum;
 	/**
 	 * Creates a new object of {@link MaterialDistributionSettings} holding the settings for the given {@link EMaterialType}.
 	 *

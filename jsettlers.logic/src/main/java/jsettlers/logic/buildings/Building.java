@@ -25,6 +25,7 @@ import jsettlers.common.map.shapes.FreeMapArea;
 import jsettlers.common.mapobject.EMapObjectType;
 import jsettlers.common.material.EPriority;
 import jsettlers.common.movable.EDirection;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayerable;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
@@ -88,6 +89,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	protected final ShortPoint2D pos;
 	protected final IBuildingsGrid grid;
 
+	private final ECivilisation civilisation;
 	private Player player;
 	private EBuildingState state = EBuildingState.CREATED;
 	private EPriority priority = EPriority.DEFAULT;
@@ -105,6 +107,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 		this.player = player;
 		this.pos = position;
 		this.grid = buildingsGrid;
+		civilisation = player.getCivilisation();
 
 		allBuildings.add(this);
 	}
@@ -182,7 +185,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	private List<IRequestStack> createConstructionStacks() {
 		List<IRequestStack> result = new LinkedList<>();
 
-		for (ConstructionStack stack : type.getConstructionStacks()) {
+		for (ConstructionStack stack : type.getConstructionStacks(civilisation)) {
 			result.add(new RequestStack(grid.getRequestStackGrid(), stack.calculatePoint(this.pos), stack.getMaterialType(), type, priority,
 					stack.requiredForBuild()));
 		}
@@ -197,7 +200,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	protected List<? extends IRequestStack> createWorkStacks() {
 		List<RequestStack> newStacks = new LinkedList<>();
 
-		for (RelativeStack stack : type.getRequestStacks()) {
+		for (RelativeStack stack : type.getRequestStacks(civilisation)) {
 			newStacks.add(new RequestStack(grid.getRequestStackGrid(), stack.calculatePoint(this.pos), stack.getMaterialType(), type, priority));
 		}
 
@@ -211,7 +214,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 			grid.getMapObjectsManager().removeMapObjectType(pos.x, pos.y, EMapObjectType.BUILDINGSITE_SIGN);
 		}
 
-		for (RelativePoint curr : type.getBuildMarks()) {
+		for (RelativePoint curr : type.getBuildMarks(civilisation)) {
 			if (place) {
 				grid.getMapObjectsManager().addSimpleMapObject(curr.calculatePoint(pos), EMapObjectType.BUILDINGSITE_POST, false, null);
 			} else {
@@ -228,7 +231,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	 * 		specifies whether the flag should appear or not.
 	 */
 	protected void showFlag(boolean place) {
-		ShortPoint2D flagPosition = type.getFlag().calculatePoint(pos);
+		ShortPoint2D flagPosition = type.getFlag(civilisation).calculatePoint(pos);
 
 		if (place) {
 			grid.getMapObjectsManager().addSimpleMapObject(flagPosition, getFlagType(), false, player);
@@ -238,7 +241,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	}
 
 	private void requestDiggers() {
-		if (shouldBeFlatened()) {
+		if (shouldBeFlattened()) {
 			RelativePoint[] protectedTiles = getFlattenTiles();
 			int heightSum = 0;
 
@@ -255,18 +258,18 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	}
 
 	private void requestBricklayers() {
-		RelativeBricklayer[] bricklayers = type.getBricklayers();
+		RelativeBricklayer[] bricklayers = type.getBricklayers(civilisation);
 		for (RelativeBricklayer curr : bricklayers) {
 			grid.requestBricklayer(this, curr.calculatePoint(pos), curr.getDirection());
 		}
 	}
 
-	protected boolean shouldBeFlatened() {
+	protected boolean shouldBeFlattened() {
 		return true;
 	}
 
-	private boolean isFlatened() {
-		if (shouldBeFlatened()) {
+	private boolean isFlattened() {
+		if (shouldBeFlattened()) {
 			return grid.isAreaFlattenedAtHeight(pos, getFlattenTiles(), heightAvg);
 		} else {
 			return true;
@@ -285,7 +288,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 			}
 
 		case IN_FLATTERNING:
-			if (!isFlatened()) {
+			if (!isFlattened()) {
 				return IS_FLATTENED_RECHECK_PERIOD;
 			} else {
 				placeAdditionalMapObjects(grid, pos, false);
@@ -340,6 +343,11 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 		return type;
 	}
 
+	@Override
+	public final ECivilisation getCivilisation() {
+		return civilisation;
+	}
+
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
@@ -356,7 +364,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 		}
 
 		remainingMaterialActions--;
-		constructionProgress += 1f / (Constants.BRICKLAYER_ACTIONS_PER_MATERIAL * getBuildingType().getNumberOfConstructionMaterials());
+		constructionProgress += 1f / (Constants.BRICKLAYER_ACTIONS_PER_MATERIAL * getBuildingType().getNumberOfConstructionMaterials(civilisation));
 		if (remainingMaterialActions > 0) {
 			return true;
 		} else {
@@ -438,7 +446,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	protected abstract EMapObjectType getFlagType();
 
 	public final ShortPoint2D getDoor() {
-		return getBuildingType().getDoorTile().calculatePoint(pos);
+		return getBuildingType().getDoorTile(civilisation).calculatePoint(pos);
 	}
 
 	@Override
@@ -468,10 +476,10 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 
 	private void placeReusableMaterials() {
 		int posIdx = 0;
-		FreeMapArea buildingArea = new FreeMapArea(this.pos, type.getBlockedTiles());
+		FreeMapArea buildingArea = new FreeMapArea(this.pos, type.getBlockedTiles(civilisation));
 
 		if (isConstructionFinished()) {
-			for (ConstructionStack curr : type.getConstructionStacks()) {
+			for (ConstructionStack curr : type.getConstructionStacks(civilisation)) {
 				byte paybackAmount = (byte) (curr.requiredForBuild() * Constants.BUILDINGS_DESTRUCTION_MATERIALS_PAYBACK_FACTOR);
 				while (paybackAmount > 0) {
 					byte paybackForStack = (byte) Math.min(Constants.STACK_SIZE, paybackAmount);
@@ -552,7 +560,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	}
 
 	protected FreeMapArea getBuildingArea() {
-		return new FreeMapArea(this.pos, type.getBlockedTiles());
+		return new FreeMapArea(this.pos, type.getBlockedTiles(civilisation));
 	}
 
 	@Override
@@ -580,7 +588,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	public final short getViewDistance() {
 		if (isConstructionFinished()) {
 			if (isOccupied()) {
-				return type.getViewDistance();
+				return type.getViewDistance(civilisation);
 			} else {
 				return UNOCCUPIED_VIEW_DISTANCE;
 			}
@@ -607,7 +615,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 		}
 
 		if (state == EBuildingState.CONSTRUCTED) {
-			for (RelativeStack offerStack : type.getOfferStacks()) {
+			for (RelativeStack offerStack : type.getOfferStacks(civilisation)) {
 				byte stackSize = grid.getRequestStackGrid().getStackSize(offerStack.calculatePoint(pos), offerStack.getMaterialType());
 				materials.add(new BuildingMaterial(offerStack.getMaterialType(), stackSize, true));
 			}
@@ -639,8 +647,8 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	}
 
 	public final RelativePoint[] getFlattenTiles() {
-		if (shouldBeFlatened()) {
-			return type.getProtectedTiles();
+		if (shouldBeFlattened()) {
+			return type.getProtectedTiles(civilisation);
 		} else {
 			return new RelativePoint[0];
 		}

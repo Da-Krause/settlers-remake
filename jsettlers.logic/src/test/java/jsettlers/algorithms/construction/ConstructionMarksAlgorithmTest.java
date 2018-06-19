@@ -25,6 +25,7 @@ import jsettlers.common.buildings.BuildingAreaBitSet;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
 import jsettlers.common.map.shapes.MapRectangle;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.RelativePoint;
 
 /**
@@ -52,11 +53,11 @@ public class ConstructionMarksAlgorithmTest {
 
 		MapRectangle mapArea = new MapRectangle(-15, -15, 30, 30);
 
-		BuildingAreaBitSet buildingSet = new BuildingAreaBitSet(EBuildingType.TOWER.getBuildingArea());
+		BuildingAreaBitSet buildingSet = new BuildingAreaBitSet(EBuildingType.TOWER.getBuildingArea(ECivilisation.ROMANS));
 
 		TestMap map = new TestMap(blocked);
 		NewConstructionMarksAlgorithm algorithm = new NewConstructionMarksAlgorithm(map, (byte) 0);
-		algorithm.calculateConstructMarks(mapArea, EBuildingType.TOWER);
+		algorithm.calculateConstructMarks(mapArea, EBuildingType.TOWER, ECivilisation.ROMANS);
 
 		// print(map, blocked, buildingSet);
 
@@ -196,7 +197,7 @@ public class ConstructionMarksAlgorithmTest {
 		}
 
 		@Override
-		public boolean canConstructAt(int x, int y, EBuildingType type, byte playerId) {
+		public boolean canConstructAt(int x, int y, EBuildingType type, ECivilisation civilisation, byte playerId) {
 			throw new UnsupportedOperationException("not mocked");
 		}
 

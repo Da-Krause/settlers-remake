@@ -18,6 +18,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.action.SetTradingWaypointAction.EWaypointType;
 
@@ -29,8 +30,8 @@ public class SetTradingWaypointGuiTask extends SimpleBuildingGuiTask {
 	public SetTradingWaypointGuiTask() {
 	}
 
-	public SetTradingWaypointGuiTask(EGuiAction guiAction, byte playerId, ShortPoint2D buildingPos, EWaypointType waypointType, ShortPoint2D position) {
-		super(guiAction, playerId, buildingPos);
+	public SetTradingWaypointGuiTask(EGuiAction guiAction, byte playerId, ECivilisation civilisation, ShortPoint2D buildingPos, EWaypointType waypointType, ShortPoint2D position) {
+		super(guiAction, playerId, civilisation, buildingPos);
 		this.waypointType = waypointType;
 		this.position = position;
 	}
