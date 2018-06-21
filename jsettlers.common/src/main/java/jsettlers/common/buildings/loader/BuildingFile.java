@@ -14,6 +14,7 @@
  *******************************************************************************/
 package jsettlers.common.buildings.loader;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -22,7 +23,6 @@ import java.util.Locale;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -105,11 +105,9 @@ public class BuildingFile implements BuildingJobDataProvider {
 	private ArrayList<OccupierPlace> occupyerplaces = new ArrayList<>();
 	private short viewdistance = 0;
 	private final String buildingName;
-	private final ECivilisation civilisation;
 
 	public BuildingFile(String buildingName, ECivilisation civilisation) {
 		this.buildingName = buildingName;
-		this.civilisation = civilisation;
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			xr.setContentHandler(new SaxHandler());
@@ -121,7 +119,7 @@ public class BuildingFile implements BuildingJobDataProvider {
 				}
 			});
 
-			String buildingFileName = buildingName.toLowerCase(Locale.ENGLISH) + ".xml";
+			String buildingFileName = civilisation.toString().toLowerCase(Locale.ENGLISH) + File.separator + buildingName.toLowerCase(Locale.ENGLISH) + ".xml";
 			InputStream stream = EBuildingType.class.getResourceAsStream(buildingFileName);
 			xr.parse(new InputSource(stream));
 		} catch (Exception e) {

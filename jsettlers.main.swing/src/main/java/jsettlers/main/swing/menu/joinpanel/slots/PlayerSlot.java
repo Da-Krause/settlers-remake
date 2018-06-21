@@ -172,7 +172,7 @@ public class PlayerSlot {
 	private void initializeComboBoxes() {
 		civilisationComboBox.addItem(new CivilisationUiWrapper());
 		civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.ROMANS));
-		civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.EGYPTIANS));
+		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.EGYPTIANS));
 		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.ASIANS));
 		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.AMAZONS));
 	}
