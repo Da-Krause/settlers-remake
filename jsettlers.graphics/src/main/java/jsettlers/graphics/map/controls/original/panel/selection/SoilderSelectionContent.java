@@ -14,10 +14,11 @@
  *******************************************************************************/
 package jsettlers.graphics.map.controls.original.panel.selection;
 
+import jsettlers.common.action.Action;
 import jsettlers.common.action.EActionType;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.selectable.ISelectionSet;
-import jsettlers.common.action.Action;
 import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.ui.LabeledButton;
 import jsettlers.graphics.ui.UIPanel;
@@ -39,14 +40,14 @@ public class SoilderSelectionContent extends AbstractSelectionContent {
 	/**
 	 * Rows of selectables
 	 */
-	public static int ROWS = 10;
+	private static int ROWS = 10;
 
 	private final UIPanel panel;
 
 	public SoilderSelectionContent(ISelectionSet selection) {
 		panel = new UIPanel();
 
-		addRowsToPanel(panel, selection, soildertypes);
+		addRowsToPanel(panel, selection, soildertypes, ECivilisation.ROMANS); // fixme: use the civilisation from the selected movables
 
 		UIPanel kill = new LabeledButton(Labels.getString("kill"), new Action(EActionType.DESTROY));
 		UIPanel stop = new LabeledButton(Labels.getString("stop"), new Action(EActionType.STOP_WORKING));
@@ -56,16 +57,15 @@ public class SoilderSelectionContent extends AbstractSelectionContent {
 	}
 
 	public static void addRowsToPanel(UIPanel panel, ISelectionSet selection,
-			EMovableType[] types) {
+			EMovableType[] types, ECivilisation civilisation) {
 		float rowHeight = 1f / ROWS;
 
 		int rowi = ROWS - 1; // from bottom
-		for (int i = 0; i < types.length; i++) {
-			EMovableType type = types[i];
+		for (EMovableType type : types) {
 			int count = selection.getMovableCount(type);
 
 			if (count > 0) {
-				SelectionRow row = new SelectionRow(type, count);
+				SelectionRow row = new SelectionRow(type, count, civilisation);
 				panel.addChild(row, 0.1f, rowHeight * (rowi - 1), .9f,
 						rowHeight * (rowi));
 				rowi--;

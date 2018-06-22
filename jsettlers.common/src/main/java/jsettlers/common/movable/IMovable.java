@@ -18,6 +18,7 @@ import java.util.List;
 
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayerable;
 import jsettlers.common.position.ILocatable;
 import jsettlers.common.selectable.ISelectable;
@@ -106,4 +107,11 @@ public interface IMovable extends IPlayerable, ISelectable, ILocatable, ISoundab
 	 * @return EBuildingType of the building the worker is garrisoned in or null if the worker is not garrisoned.
 	 */
 	EBuildingType getGarrisonedBuildingType();
+
+	/**
+	 * This method returns the civilisation the movable belongs to.
+	 *
+	 * @return ECivilisation the movable belongs to.
+	 */
+	ECivilisation getCivilisation();
 }

@@ -17,6 +17,7 @@ package jsettlers.graphics.map.controls.original.panel.selection;
 import jsettlers.common.action.Action;
 import jsettlers.common.action.EActionType;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.selectable.ISelectionSet;
 import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.ui.LabeledButton;
@@ -24,7 +25,7 @@ import jsettlers.graphics.ui.UIPanel;
 
 public class ShipSelectionContent extends AbstractSelectionContent {
 
-	private static final EMovableType[] shiptypes = new EMovableType[] {
+	private static final EMovableType[] SHIP_TYPES = new EMovableType[] {
 			EMovableType.FERRY,
 			EMovableType.CARGO_SHIP,
 	};
@@ -39,7 +40,7 @@ public class ShipSelectionContent extends AbstractSelectionContent {
 	public ShipSelectionContent(ISelectionSet selection) {
 		panel = new UIPanel();
 
-		addRowsToPanel(panel, selection, shiptypes);
+		addRowsToPanel(panel, selection, SHIP_TYPES, ECivilisation.ROMANS); // fixme: use the civilisation from the selected movables
 
 		UIPanel kill = new LabeledButton(Labels.getString("kill"), new Action(EActionType.DESTROY));
 		UIPanel unload = new LabeledButton(Labels.getString("unload"), new Action(EActionType.UNLOAD_FERRIES));
@@ -48,16 +49,15 @@ public class ShipSelectionContent extends AbstractSelectionContent {
 		panel.addChild(unload, .1f, .1f, .9f, .2f);
 	}
 
-	public static void addRowsToPanel(UIPanel panel, ISelectionSet selection, EMovableType[] types) {
+	public static void addRowsToPanel(UIPanel panel, ISelectionSet selection, EMovableType[] types, ECivilisation civilisation) {
 		float rowHeight = 1f / ROWS;
 
 		int rowi = ROWS - 1; // from bottom
-		for (int i = 0; i < types.length; i++) {
-			EMovableType type = types[i];
+		for (EMovableType type : types) {
 			int count = selection.getMovableCount(type);
 
 			if (count > 0) {
-				SelectionRow row = new SelectionRow(type, count);
+				SelectionRow row = new SelectionRow(type, count, civilisation);
 				panel.addChild(row, 0.1f, rowHeight * (rowi - 1), .9f,
 						rowHeight * (rowi));
 				rowi--;

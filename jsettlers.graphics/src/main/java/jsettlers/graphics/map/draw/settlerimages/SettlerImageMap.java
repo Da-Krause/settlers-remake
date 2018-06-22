@@ -15,9 +15,11 @@
 package jsettlers.graphics.map.draw.settlerimages;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,13 +28,14 @@ import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableAction;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.graphics.image.Image;
 import jsettlers.graphics.map.draw.ImageProvider;
 
 /**
- * This is a settler image map that mapps the state of a settler to the sequence that is to be played.
+ * This is a settler image map that maps the state of a settler to the sequence that is to be played.
  * <p>
- * The mapping is a function: (type, material, direction) => (file, sequence index, start, duration)
+ * The mapping is a function: (civilisation, type, material, direction) => (file, sequence index, start, duration)
  *
  * @author michael
  */
@@ -44,12 +47,14 @@ public final class SettlerImageMap {
 
 	private final ImageProvider imageProvider = ImageProvider.getInstance();
 
-	private final SettlerImageMapItem[][][][] map;
+	private final SettlerImageMapItem[][][][][] map;
 
 	private final Pattern linePattern = Pattern.compile("\\s*([\\w\\*]+)\\s*,"
 			+ "\\s*([\\w\\*]+)\\s*," + "\\s*([\\w\\*]+)\\s*,"
 			+ "\\s*([\\w\\*]+)\\s*" + "=\\s*(\\d+)\\s*," + "\\s*(\\d+)\\s*,"
 			+ "\\s*(\\d+)\\s*," + "\\s*(-?\\d+)\\s*");
+
+	private final int civilisations;
 
 	private final int types;
 
@@ -63,15 +68,18 @@ public final class SettlerImageMap {
 	 * Creates a new settler image map.
 	 */
 	private SettlerImageMap() {
+		this.civilisations = ECivilisation.VALUES.length;
 		this.types = EMovableType.NUMBER_OF_MOVABLETYPES;
 		this.actions = EMovableAction.values().length;
 		this.materials = EMaterialType.NUMBER_OF_MATERIALS;
 		this.directions = EDirection.VALUES.length;
-		this.map = new SettlerImageMapItem[this.types][this.actions][this.materials][this.directions];
+		this.map = new SettlerImageMapItem[civilisations][types][actions][materials][directions];
 
 		try {
-			InputStream file = getClass().getResourceAsStream("movables.txt");
-			readFromFile(file);
+			for (int i = 0; i < civilisations; ++i) {
+				InputStream file = getClass().getResourceAsStream(ECivilisation.VALUES[i].name().toLowerCase(Locale.ENGLISH) + File.separator + "movables.txt");
+				readFromFile(file, i);
+			}
 		} catch (IOException e) {
 			System.err.println("Error reading image file. "
 					+ "Settler images might not work.");
@@ -82,25 +90,25 @@ public final class SettlerImageMap {
 	 * Reads the map from the given file.
 	 *
 	 * @param file
-	 * 		The file to read from.
+	 *            The file to read from.
 	 */
-	private void readFromFile(InputStream file) throws IOException {
+	private void readFromFile(InputStream file, int civilisationIndex) throws IOException {
 		int[][][][] priorities = new int[this.types][this.actions][this.materials][this.directions];
 
 		// add pseudo entry.
-		addEntryToMap(priorities, null, null, null, null, DEFAULT_ITEM, -1);
+		addEntryToMap(priorities, null, null, null, null, DEFAULT_ITEM, -1, civilisationIndex);
 
-		readFromFile(file, priorities);
+		readFromFile(file, priorities, civilisationIndex);
 	}
 
-	private void readFromFile(InputStream file, int[][][][] priorities) throws IOException {
+	private void readFromFile(InputStream file, int[][][][] priorities, int civilisationIndex) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(file));
 
 		String line = reader.readLine();
 		while (line != null) {
 			if (!line.isEmpty() && !line.startsWith("#")) {
 				try {
-					addByLine(priorities, line);
+					addByLine(priorities, line, civilisationIndex);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}
@@ -114,13 +122,13 @@ public final class SettlerImageMap {
 	 * Adds a line to the map
 	 *
 	 * @param priorities
-	 * 		The priority table to use.
+	 *            The priority table to use.
 	 * @param line
-	 * 		The line.
+	 *            The line.
 	 * @throws IllegalArgumentException
-	 * 		if the line is not correct.
+	 *             if the line is not correct.
 	 */
-	private void addByLine(int[][][][] priorities, String line) {
+	private void addByLine(int[][][][] priorities, String line, int civilisationIndex) {
 		final Matcher matcher = parseLine(line);
 		final String typeString = matcher.group(1);
 		final String actionString = matcher.group(2);
@@ -139,7 +147,9 @@ public final class SettlerImageMap {
 		final int start = Integer.parseInt(matcher.group(7));
 		final int duration = Integer.parseInt(matcher.group(8));
 
-		addEntryToMap(priorities, type, action, material, direction, new SettlerImageMapItem(fileIndex, sequence, start, duration), priority);
+		addEntryToMap(priorities, type, action, material, direction,
+				new SettlerImageMapItem(fileIndex, sequence, start, duration),
+				priority, civilisationIndex);
 	}
 
 	private EMovableType parseType(final String typeString) {
@@ -182,7 +192,8 @@ public final class SettlerImageMap {
 		return direction;
 	}
 
-	private int calculatePriority(EMovableType type, EMovableAction action, EMaterialType material, EDirection direction) {
+	private int calculatePriority(EMovableType type, EMovableAction action,
+			EMaterialType material, EDirection direction) {
 		int priority = 1;// more than 0.
 		if (type != null) {
 			priority += 10;
@@ -203,10 +214,10 @@ public final class SettlerImageMap {
 	 * Parses a line.
 	 *
 	 * @param line
-	 * 		The line.
+	 *            The line.
 	 * @return The line matched against the line pattern.
 	 * @throws IllegalArgumentException
-	 * 		if the line is not correct.
+	 *             if the line is not correct.
 	 */
 	private Matcher parseLine(String line) {
 		final Matcher matcher = this.linePattern.matcher(line);
@@ -221,7 +232,7 @@ public final class SettlerImageMap {
 	 * Adds an entry to the map. Overrides cells with lower priorities.
 	 *
 	 * @param priorities
-	 * 		The priority table to use.
+	 *            The priority table to use.
 	 * @param type
 	 * @param action
 	 * @param material
@@ -229,7 +240,9 @@ public final class SettlerImageMap {
 	 * @param item
 	 * @param priority
 	 */
-	private void addEntryToMap(int[][][][] priorities, EMovableType type, EMovableAction action, EMaterialType material, EDirection direction, SettlerImageMapItem item, int priority) {
+	private void addEntryToMap(int[][][][] priorities, EMovableType type,
+			EMovableAction action, EMaterialType material, EDirection direction,
+			SettlerImageMapItem item, int priority, int civilisationIndex) {
 		int minType, maxType;
 		if (type == null) {
 			minType = 0;
@@ -271,7 +284,7 @@ public final class SettlerImageMap {
 				for (int materialIndex = minMaterial; materialIndex < maxMaterial; materialIndex++) {
 					for (int direcitonIndex = minDirection; direcitonIndex < maxDirection; direcitonIndex++) {
 						if (priorities[typeIndex][actionIndex][materialIndex][direcitonIndex] < priority) {
-							this.map[typeIndex][actionIndex][materialIndex][direcitonIndex] = item;
+							this.map[civilisationIndex][typeIndex][actionIndex][materialIndex][direcitonIndex] = item;
 							priorities[typeIndex][actionIndex][materialIndex][direcitonIndex] = priority;
 						}
 					}
@@ -284,9 +297,9 @@ public final class SettlerImageMap {
 	 * Gets an image for a given settler.
 	 *
 	 * @param movable
-	 * 		The settler to get the image for
+	 *            The settler to get the image for
 	 * @return The image or an null-image.
-	 * @see SettlerImageMap#getImageForSettler(EMovableType, EMovableAction, EMaterialType, EDirection, float)
+	 * @see SettlerImageMap#getImageForSettler(EMovableType, EMovableAction, EMaterialType, EDirection, ECivilisation, float)
 	 */
 	public Image getImageForSettler(IMovable movable, float progress) {
 		if (movable.getAction() == EMovableAction.WALKING) {
@@ -297,26 +310,27 @@ public final class SettlerImageMap {
 		}
 		return getImageForSettler(movable.getMovableType(),
 				movable.getAction(), movable.getMaterial(),
-				movable.getDirection(), progress);
+				movable.getDirection(), movable.getCivilisation(), progress);
 	}
 
 	/**
 	 * Gets an image for a given settler.
 	 *
 	 * @param movableType
-	 * 		The type of the settler.
+	 *            The type of the settler.
 	 * @param action
-	 * 		The action the settler is doing.
+	 *            The action the settler is doing.
 	 * @param material
-	 * 		The material that is assigned to the settler.
+	 *            The material that is assigned to the settler.
 	 * @param direction
-	 * 		Its direction.
+	 *            Its direction.
 	 * @param progress
-	 * 		The progress.
+	 *            The progress.
 	 * @return The image.
 	 */
-	public Image getImageForSettler(EMovableType movableType, EMovableAction action, EMaterialType material, EDirection direction, float progress) {
-		SettlerImageMapItem item = getMapItem(movableType, action, material, direction);
+	public Image getImageForSettler(EMovableType movableType, EMovableAction action,
+			EMaterialType material, EDirection direction, ECivilisation civilisation, float progress) {
+		SettlerImageMapItem item = getMapItem(movableType, action, material, direction, civilisation);
 
 		int duration = item.getDuration();
 		int imageIndex;
@@ -335,11 +349,11 @@ public final class SettlerImageMap {
 	 * @param action
 	 * @param material
 	 * @param direction
-	 * @param progress
 	 * @return The item of the map at the given position. Is not null.
 	 */
-	private SettlerImageMapItem getMapItem(EMovableType movableType, EMovableAction action, EMaterialType material, EDirection direction) {
-		SettlerImageMapItem item = this.map[movableType.ordinal()][action.ordinal()][material.ordinal][direction.ordinal];
+	private SettlerImageMapItem getMapItem(EMovableType movableType,
+			EMovableAction action, EMaterialType material, EDirection direction, ECivilisation civilisation) {
+		SettlerImageMapItem item = this.map[civilisation.ordinal()][movableType.ordinal()][action.ordinal()][material.ordinal][direction.ordinal];
 		if (item == null) {
 			return DEFAULT_ITEM;
 		} else {

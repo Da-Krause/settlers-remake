@@ -100,11 +100,11 @@ public class PresetLoader {
 		List<TemplateObject> list = new ArrayList<>();
 
 		for (Building b : p.getBuilding()) {
-			list.add(new TemplateBuilding(b.getDx(), b.getDy(), b.getType(), ECivilisation.ROMANS));
+			list.add(new TemplateBuilding(b.getDx(), b.getDy(), b.getType(), ECivilisation.ROMANS)); // todo: use all civilisations
 		}
 
 		for (Moveable m : p.getMoveable()) {
-			list.add(new TemplateMovable(m.getDx(), m.getDy(), m.getType()));
+			list.add(new TemplateMovable(m.getDx(), m.getDy(), m.getType(), ECivilisation.ROMANS)); // todo: use all civilisations
 		}
 
 		for (Object o : p.getObject()) {

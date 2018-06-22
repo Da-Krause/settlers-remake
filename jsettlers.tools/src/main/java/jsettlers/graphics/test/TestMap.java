@@ -35,6 +35,7 @@ import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 
 public class TestMap implements IGraphicsGrid {
@@ -183,7 +184,7 @@ public class TestMap implements IGraphicsGrid {
 			TestTile tile = getTile(cx, cy);
 
 			EMovableType type = getRandomSettlerType();
-			TestSettler settler = new TestSettler(getRandomDirection(), type, tile, (byte) (Math.random() * 8));
+			TestSettler settler = new TestSettler(getRandomDirection(), type, ECivilisation.ROMANS, tile, (byte) (Math.random() * 8));
 			if (type == EMovableType.BEARER) {
 				settler.setMaterial(getRandomMaterial());
 			}

@@ -42,25 +42,24 @@ import javax.swing.SwingUtilities;
 import go.graphics.area.Area;
 import go.graphics.region.Region;
 import go.graphics.swing.AreaContainer;
-import go.graphics.swing.contextcreator.BackendSelector;
 import go.graphics.swing.sound.SwingSoundPlayer;
 
 import jsettlers.common.CommonConstants;
-import jsettlers.common.buildings.EBuildingType;
-import jsettlers.common.landscape.ELandscapeType;
-import jsettlers.logic.map.loading.MapLoadException;
-import jsettlers.common.menu.FakeMapGame;
-import jsettlers.common.menu.IMapInterfaceListener;
 import jsettlers.common.action.EActionType;
 import jsettlers.common.action.IAction;
+import jsettlers.common.action.PointAction;
+import jsettlers.common.buildings.EBuildingType;
+import jsettlers.common.landscape.ELandscapeType;
+import jsettlers.common.menu.FakeMapGame;
+import jsettlers.common.menu.IMapInterfaceListener;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.resources.ResourceManager;
 import jsettlers.exceptionhandler.ExceptionHandler;
 import jsettlers.graphics.action.ActionFireable;
-import jsettlers.common.action.PointAction;
 import jsettlers.graphics.map.ETextDrawPosition;
 import jsettlers.graphics.map.MapContent;
 import jsettlers.graphics.map.MapInterfaceConnector;
+import jsettlers.logic.map.loading.MapLoadException;
 import jsettlers.logic.map.loading.MapLoader;
 import jsettlers.logic.map.loading.list.MapList;
 import jsettlers.logic.map.loading.newmap.MapFileHeader;
@@ -731,7 +730,6 @@ public class EditorControl extends EditorControlBase implements IMapInterfaceLis
 			if (tool instanceof PlaceBuildingTool) {
 				PlaceBuildingTool pbt = (PlaceBuildingTool) tool;
 				EBuildingType type = pbt.getType();
-
 
 				// display resources for Mines and Fisher
 				if (type.isMine() || type == EBuildingType.FISHER) {

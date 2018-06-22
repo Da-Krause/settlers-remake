@@ -14,22 +14,22 @@
  *******************************************************************************/
 package jsettlers.mapcreator.data.objects;
 
+import java.util.Collections;
+import java.util.List;
+
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableAction;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.selectable.ESelectionType;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
 import jsettlers.logic.map.loading.data.objects.MovableObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class MovableObjectContainer implements ObjectContainer, IMovable {
 
@@ -89,6 +89,11 @@ public class MovableObjectContainer implements ObjectContainer, IMovable {
 	@Override
 	public EBuildingType getGarrisonedBuildingType() {
 		return null;
+	}
+
+	@Override
+	public ECivilisation getCivilisation() {
+		return movableObject.getCivilisation();
 	}
 
 	@Override

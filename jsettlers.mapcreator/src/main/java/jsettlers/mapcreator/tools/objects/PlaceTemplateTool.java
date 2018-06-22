@@ -95,15 +95,17 @@ public class PlaceTemplateTool extends AbstractTool {
 
 	public static class TemplateMovable extends TemplateObject {
 		private final EMovableType type;
+		private final ECivilisation civilisation;
 
-		public TemplateMovable(int dx, int dy, EMovableType type) {
+		public TemplateMovable(int dx, int dy, EMovableType type, ECivilisation civilisation) {
 			super(dx, dy, null);
 			this.type = type;
+			this.civilisation = civilisation;
 		}
 
 		@Override
 		public MapDataObject getObject(byte player) {
-			return new MovableObject(type, player);
+			return new MovableObject(type, civilisation, player);
 		}
 	}
 

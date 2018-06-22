@@ -23,17 +23,17 @@ import java.io.OutputStream;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
 import jsettlers.common.landscape.EResourceType;
+import jsettlers.common.material.EMaterialType;
+import jsettlers.common.movable.EMovableType;
 import jsettlers.common.player.ECivilisation;
+import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.map.loading.data.IMapData;
 import jsettlers.logic.map.loading.data.objects.BuildingMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
-import jsettlers.logic.map.loading.data.objects.StoneMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapTreeObject;
 import jsettlers.logic.map.loading.data.objects.MovableObject;
 import jsettlers.logic.map.loading.data.objects.StackMapDataObject;
-import jsettlers.common.material.EMaterialType;
-import jsettlers.common.movable.EMovableType;
-import jsettlers.common.position.ShortPoint2D;
+import jsettlers.logic.map.loading.data.objects.StoneMapDataObject;
 
 /**
  * Serializes the map data to a byte stream.
@@ -134,7 +134,7 @@ public class FreshMapSerializer {
 					writeObject(stream, x, y, TYPE_BUILDING, ((BuildingMapDataObject) object).getType() + "," + player + "," + ((BuildingMapDataObject) object).getCivilisation());
 				} else if (object instanceof MovableObject) {
 					int player = ((MovableObject) object).getPlayerId();
-					writeObject(stream, x, y, TYPE_MOVABLE, ((MovableObject) object).getType() + "," + player);
+					writeObject(stream, x, y, TYPE_MOVABLE, ((MovableObject) object).getType() + "," + ((MovableObject) object).getCivilisation() + "," + player);
 				} else if (object instanceof StackMapDataObject) {
 					int capacity = ((StackMapDataObject) object).getCount();
 					writeObject(stream, x, y, TYPE_STACK, ((StackMapDataObject) object).getType() + "," + capacity);
@@ -159,7 +159,7 @@ public class FreshMapSerializer {
 	 * @param in
 	 *            The stream to read from.
 	 * @throws IOException
-	 *             If an error occured during deserialization.
+	 *             If an error occurred during deserialization.
 	 */
 	public static void deserialize(IMapDataReceiver data, InputStream in) throws IOException {
 		try {
@@ -242,12 +242,16 @@ public class FreshMapSerializer {
 
 		case TYPE_MOVABLE: {
 			String[] parts = string.split(",");
-			return new MovableObject(EMovableType.valueOf(parts[0]), Byte.valueOf(parts[1]));
+			if (version >= VERSION_WITH_CIVILISATION)
+				return new MovableObject(EMovableType.valueOf(parts[0]), ECivilisation.valueOf(parts[1]), Byte.valueOf(parts[2]));
+			else
+				return new MovableObject(EMovableType.valueOf(parts[0]), ECivilisation.ROMANS, Byte.valueOf(parts[1]));
+
 		}
 
 		case TYPE_BUILDING: {
 			String[] parts = string.split(",");
-			if(version >= VERSION_WITH_CIVILISATION)
+			if (version >= VERSION_WITH_CIVILISATION)
 				return new BuildingMapDataObject(EBuildingType.valueOf(parts[0]), Byte.valueOf(parts[1]), ECivilisation.valueOf(parts[2]));
 			else
 				return new BuildingMapDataObject(EBuildingType.valueOf(parts[0]), Byte.valueOf(parts[1]), ECivilisation.ROMANS);

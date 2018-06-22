@@ -32,8 +32,6 @@ public class ChangeTowerSoldiersGuiTask extends SimpleBuildingGuiTask {
 	private EChangeTowerSoldierTaskType taskType;
 	private ESoldierType soldierType;
 
-	public ChangeTowerSoldiersGuiTask() {
-	}
 
 	/**
 	 *  @param playerId

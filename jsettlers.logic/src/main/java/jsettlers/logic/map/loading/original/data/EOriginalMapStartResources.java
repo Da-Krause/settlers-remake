@@ -19,6 +19,7 @@ import java.util.List;
 
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
 import jsettlers.logic.map.loading.data.objects.MovableObject;
 import jsettlers.logic.map.loading.data.objects.StackMapDataObject;
@@ -126,67 +127,67 @@ public enum EOriginalMapStartResources {
 		return goods;
 	}
 
-	public static List<MapDataObject> generateMovableObjects(EOriginalMapStartResources mapStartResources, byte playerId) {
+	public static List<MapDataObject> generateMovableObjects(EOriginalMapStartResources mapStartResources, byte playerId, ECivilisation civilisation) {
 		List<MapDataObject> movables = new ArrayList<>();
 		switch (mapStartResources) {
 		case LOW_GOODS:
 			for (byte i = 0; i < 2; i++) {
-				movables.add(new MovableObject(EMovableType.MINER, playerId));
+				movables.add(new MovableObject(EMovableType.MINER, civilisation, playerId));
 			}
-			movables.add(new MovableObject(EMovableType.SMITH, playerId));
-			movables.add(new MovableObject(EMovableType.BOWMAN_L1, playerId));
-			movables.add(new MovableObject(EMovableType.PIKEMAN_L1, playerId));
+			movables.add(new MovableObject(EMovableType.SMITH, civilisation, playerId));
+			movables.add(new MovableObject(EMovableType.BOWMAN_L1, civilisation, playerId));
+			movables.add(new MovableObject(EMovableType.PIKEMAN_L1, civilisation, playerId));
 			for (byte i = 0; i < 6; i++) {
-				movables.add(new MovableObject(EMovableType.SWORDSMAN_L1, playerId));
+				movables.add(new MovableObject(EMovableType.SWORDSMAN_L1, civilisation, playerId));
 			}
 			for (byte i = 0; i < 16; i++) {
-				movables.add(new MovableObject(EMovableType.BEARER, playerId));
+				movables.add(new MovableObject(EMovableType.BEARER, civilisation, playerId));
 			}
 			break;
 		case MEDIUM_GOODS:
 			for (byte i = 0; i < 4; i++) {
-				movables.add(new MovableObject(EMovableType.MINER, playerId));
+				movables.add(new MovableObject(EMovableType.MINER, civilisation, playerId));
 			}
 			for (byte i = 0; i < 2; i++) {
-				movables.add(new MovableObject(EMovableType.SMITH, playerId));
+				movables.add(new MovableObject(EMovableType.SMITH, civilisation, playerId));
 			}
 			for (byte i = 0; i < 2; i++) {
-				movables.add(new MovableObject(EMovableType.BOWMAN_L1, playerId));
+				movables.add(new MovableObject(EMovableType.BOWMAN_L1, civilisation, playerId));
 			}
 			for (byte i = 0; i < 2; i++) {
-				movables.add(new MovableObject(EMovableType.PIKEMAN_L1, playerId));
+				movables.add(new MovableObject(EMovableType.PIKEMAN_L1, civilisation, playerId));
 			}
 			for (byte i = 0; i < 10; i++) {
-				movables.add(new MovableObject(EMovableType.SWORDSMAN_L1, playerId));
+				movables.add(new MovableObject(EMovableType.SWORDSMAN_L1, civilisation, playerId));
 			}
 			for (byte i = 0; i < 32; i++) {
-				movables.add(new MovableObject(EMovableType.BEARER, playerId));
+				movables.add(new MovableObject(EMovableType.BEARER, civilisation, playerId));
 			}
 			for (byte i = 0; i < 4; i++) {
-				movables.add(new MovableObject(EMovableType.DONKEY, playerId));
+				movables.add(new MovableObject(EMovableType.DONKEY, civilisation, playerId));
 			}
 			break;
 		default:
 			for (byte i = 0; i < 6; i++) {
-				movables.add(new MovableObject(EMovableType.MINER, playerId));
+				movables.add(new MovableObject(EMovableType.MINER, civilisation, playerId));
 			}
 			for (byte i = 0; i < 3; i++) {
-				movables.add(new MovableObject(EMovableType.SMITH, playerId));
+				movables.add(new MovableObject(EMovableType.SMITH, civilisation, playerId));
 			}
 			for (byte i = 0; i < 4; i++) {
-				movables.add(new MovableObject(EMovableType.BOWMAN_L1, playerId));
+				movables.add(new MovableObject(EMovableType.BOWMAN_L1, civilisation, playerId));
 			}
 			for (byte i = 0; i < 4; i++) {
-				movables.add(new MovableObject(EMovableType.PIKEMAN_L1, playerId));
+				movables.add(new MovableObject(EMovableType.PIKEMAN_L1, civilisation, playerId));
 			}
 			for (byte i = 0; i < 12; i++) {
-				movables.add(new MovableObject(EMovableType.SWORDSMAN_L1, playerId));
+				movables.add(new MovableObject(EMovableType.SWORDSMAN_L1, civilisation, playerId));
 			}
 			for (byte i = 0; i < 50; i++) {
-				movables.add(new MovableObject(EMovableType.BEARER, playerId));
+				movables.add(new MovableObject(EMovableType.BEARER, civilisation, playerId));
 			}
 			for (byte i = 0; i < 6; i++) {
-				movables.add(new MovableObject(EMovableType.DONKEY, playerId));
+				movables.add(new MovableObject(EMovableType.DONKEY, civilisation, playerId));
 			}
 			break;
 		}

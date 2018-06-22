@@ -28,6 +28,7 @@ import jsettlers.common.material.EPriority;
 import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableAction;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.buildings.workers.DockyardBuilding;
 import jsettlers.common.menu.messages.SimpleMessage;
@@ -64,10 +65,11 @@ public final class BuildingWorkerStrategy extends MovableStrategy implements IMa
 	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
 		ois.defaultReadObject();
 		String currentJobName = ois.readUTF();
+		ECivilisation civilisation = ECivilisation.VALUES[ois.readInt()];
 		if (currentJobName.equals("null")) {
 			currentJob = null;
 		} else {
-			currentJob = building.getBuildingType().getJobByName(currentJobName, super.movable.getCivilisation());
+			currentJob = building.getBuildingType().getJobByName(currentJobName, civilisation);
 		}
 	}
 
@@ -78,6 +80,7 @@ public final class BuildingWorkerStrategy extends MovableStrategy implements IMa
 		} else {
 			oos.writeUTF("null");
 		}
+		oos.writeInt(super.movable.getCivilisation().ordinal());
 	}
 
 	@Override

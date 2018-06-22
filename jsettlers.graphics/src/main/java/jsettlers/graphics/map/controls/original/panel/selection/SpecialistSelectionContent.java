@@ -14,11 +14,12 @@
  *******************************************************************************/
 package jsettlers.graphics.map.controls.original.panel.selection;
 
-import jsettlers.common.action.EActionType;
-import jsettlers.common.movable.EMovableType;
-import jsettlers.common.selectable.ISelectionSet;
 import jsettlers.common.action.Action;
 import jsettlers.common.action.ConvertAction;
+import jsettlers.common.action.EActionType;
+import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
+import jsettlers.common.selectable.ISelectionSet;
 import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.ui.LabeledButton;
 import jsettlers.graphics.ui.UIPanel;
@@ -39,7 +40,7 @@ public class SpecialistSelectionContent extends AbstractSelectionContent {
 	public SpecialistSelectionContent(ISelectionSet selection) {
 		panel = new UIPanel();
 
-		SoilderSelectionContent.addRowsToPanel(panel, selection, specialists);
+		SoilderSelectionContent.addRowsToPanel(panel, selection, specialists, ECivilisation.ROMANS); // fixme: use the civilisation from the selected movables
 
 		UIPanel stop = new LabeledButton(Labels.getString("stop"),
 				new Action(EActionType.STOP_WORKING));

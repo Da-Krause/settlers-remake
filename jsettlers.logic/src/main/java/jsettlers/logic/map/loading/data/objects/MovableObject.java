@@ -15,14 +15,17 @@
 package jsettlers.logic.map.loading.data.objects;
 
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 
 public class MovableObject implements MapDataObject, IPlayerIdProvider {
 
 	private final EMovableType type;
+	private final ECivilisation civilisation;
 	private final byte playerId;
 
-	public MovableObject(EMovableType type, byte playerId) {
+	public MovableObject(EMovableType type, ECivilisation civilisation, byte playerId) {
 		this.type = type;
+		this.civilisation = civilisation;
 		this.playerId = playerId;
 	}
 
@@ -33,5 +36,9 @@ public class MovableObject implements MapDataObject, IPlayerIdProvider {
 	@Override
 	public byte getPlayerId() {
 		return playerId;
+	}
+
+	public ECivilisation getCivilisation() {
+		return civilisation;
 	}
 }

@@ -24,14 +24,14 @@ import javax.swing.tree.TreePath;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.landscape.ELandscapeType;
 import jsettlers.common.landscape.EResourceType;
-import jsettlers.common.player.ECivilisation;
-import jsettlers.logic.map.loading.data.objects.DecorationMapDataObject;
-import jsettlers.logic.map.loading.data.objects.StoneMapDataObject;
-import jsettlers.logic.map.loading.data.objects.MapTreeObject;
 import jsettlers.common.mapobject.EMapObjectType;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.exceptionhandler.ExceptionHandler;
+import jsettlers.logic.map.loading.data.objects.DecorationMapDataObject;
+import jsettlers.logic.map.loading.data.objects.MapTreeObject;
+import jsettlers.logic.map.loading.data.objects.StoneMapDataObject;
 import jsettlers.mapcreator.control.IPlayerSetter;
 import jsettlers.mapcreator.localization.EditorLabels;
 import jsettlers.mapcreator.main.tools.PlaceStackToolbox;
@@ -138,46 +138,46 @@ public abstract class ToolSidebar extends JPanel implements IPlayerSetter {
 					}),
 			new ToolBox(EditorLabels.getLabel("tools.category.settlers"), new ToolNode[] {
 					new ToolBox(EditorLabels.getLabel("tools.category.worker"), new ToolNode[] {
-							new PlaceMovableTool(EMovableType.BEARER, this),
-							new PlaceMovableTool(EMovableType.BRICKLAYER, this),
-							new PlaceMovableTool(EMovableType.DIGGER, this),
-							new PlaceMovableTool(EMovableType.BAKER, this),
-							new PlaceMovableTool(EMovableType.CHARCOAL_BURNER, this),
-							new PlaceMovableTool(EMovableType.FARMER, this),
-							new PlaceMovableTool(EMovableType.FISHERMAN, this),
-							new PlaceMovableTool(EMovableType.FORESTER, this),
-							new PlaceMovableTool(EMovableType.LUMBERJACK, this),
-							new PlaceMovableTool(EMovableType.MELTER, this),
-							new PlaceMovableTool(EMovableType.MILLER, this),
-							new PlaceMovableTool(EMovableType.MINER, this),
-							new PlaceMovableTool(EMovableType.PIG_FARMER, this),
-							new PlaceMovableTool(EMovableType.SAWMILLER, this),
-							new PlaceMovableTool(EMovableType.SLAUGHTERER, this),
-							new PlaceMovableTool(EMovableType.SMITH, this),
-							new PlaceMovableTool(EMovableType.STONECUTTER, this),
-							new PlaceMovableTool(EMovableType.WATERWORKER, this),
-							new PlaceMovableTool(EMovableType.DOCKWORKER, this),
+							new PlaceMovableTool(EMovableType.BEARER, this, ECivilisation.ROMANS), //todo: use all civilisation
+							new PlaceMovableTool(EMovableType.BRICKLAYER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.DIGGER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.BAKER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.CHARCOAL_BURNER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.FARMER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.FISHERMAN, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.FORESTER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.LUMBERJACK, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.MELTER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.MILLER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.MINER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.PIG_FARMER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.SAWMILLER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.SLAUGHTERER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.SMITH, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.STONECUTTER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.WATERWORKER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.DOCKWORKER, this, ECivilisation.ROMANS),
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.specialist"), new ToolNode[] {
-							new PlaceMovableTool(EMovableType.GEOLOGIST, this),
-							new PlaceMovableTool(EMovableType.PIONEER, this),
-							new PlaceMovableTool(EMovableType.THIEF, this),
-							new PlaceMovableTool(EMovableType.DONKEY, this)
+							new PlaceMovableTool(EMovableType.GEOLOGIST, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.PIONEER, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.THIEF, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.DONKEY, this, ECivilisation.ROMANS)
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.ships"), new ToolNode[] {
-							new PlaceMovableTool(EMovableType.FERRY, this),
-							new PlaceMovableTool(EMovableType.CARGO_SHIP, this),
+							new PlaceMovableTool(EMovableType.FERRY, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.CARGO_SHIP, this, ECivilisation.ROMANS),
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.soldier"), new ToolNode[] {
-							new PlaceMovableTool(EMovableType.SWORDSMAN_L1, this),
-							new PlaceMovableTool(EMovableType.SWORDSMAN_L2, this),
-							new PlaceMovableTool(EMovableType.SWORDSMAN_L3, this),
-							new PlaceMovableTool(EMovableType.BOWMAN_L1, this),
-							new PlaceMovableTool(EMovableType.BOWMAN_L2, this),
-							new PlaceMovableTool(EMovableType.BOWMAN_L3, this),
-							new PlaceMovableTool(EMovableType.PIKEMAN_L1, this),
-							new PlaceMovableTool(EMovableType.PIKEMAN_L2, this),
-							new PlaceMovableTool(EMovableType.PIKEMAN_L3, this)
+							new PlaceMovableTool(EMovableType.SWORDSMAN_L1, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.SWORDSMAN_L2, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.SWORDSMAN_L3, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.BOWMAN_L1, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.BOWMAN_L2, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.BOWMAN_L3, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.PIKEMAN_L1, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.PIKEMAN_L2, this, ECivilisation.ROMANS),
+							new PlaceMovableTool(EMovableType.PIKEMAN_L3, this, ECivilisation.ROMANS)
 							}),
 					}),
 			new ToolBox(EditorLabels.getLabel("tools.category.materials"), new ToolNode[] {

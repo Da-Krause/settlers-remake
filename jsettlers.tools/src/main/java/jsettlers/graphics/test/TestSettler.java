@@ -22,6 +22,7 @@ import jsettlers.common.movable.EDirection;
 import jsettlers.common.movable.EMovableAction;
 import jsettlers.common.movable.EMovableType;
 import jsettlers.common.movable.IMovable;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.player.IPlayer;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.common.selectable.ESelectionType;
@@ -30,13 +31,15 @@ public class TestSettler implements IMovable {
 
 	private final IPlayer      player;
 	private final EMovableType type;
+	private final ECivilisation civilisation;
 	
 	private EDirection    direction;
 	private TestTile      position;
 	private short         progress = 0;
 	private EMaterialType material = EMaterialType.NO_MATERIAL;
 
-	TestSettler(EDirection direction, EMovableType type, TestTile tile, byte player) {
+	TestSettler(EDirection direction, EMovableType type, ECivilisation civilisation, TestTile tile, byte player) {
+		this.civilisation = civilisation;
 		this.type = type;
 		this.setDirection(direction);
 		this.setPosition(tile);
@@ -141,6 +144,11 @@ public class TestSettler implements IMovable {
 	@Override
 	public EBuildingType getGarrisonedBuildingType() {
 		return null;
+	}
+
+	@Override
+	public ECivilisation getCivilisation() {
+		return civilisation;
 	}
 
 	@Override

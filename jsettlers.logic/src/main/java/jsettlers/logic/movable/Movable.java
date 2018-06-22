@@ -17,6 +17,7 @@ package jsettlers.logic.movable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,7 @@ public final class Movable implements ILogicMovable {
 	protected final AbstractMovableGrid grid;
 	private final   int                 id;
 	private final   Player              player;
+	private final   ECivilisation       civilisation;
 
 	private EMovableState state = EMovableState.DOING_NOTHING;
 
@@ -101,6 +103,7 @@ public final class Movable implements ILogicMovable {
 		this.grid = grid;
 		this.position = position;
 		this.player = player;
+		this.civilisation = player.getCivilisation();
 		this.strategy = MovableStrategy.getStrategy(this, movableType);
 		this.movableType = movableType;
 		this.health = movableType.getHealth();
@@ -837,11 +840,13 @@ public final class Movable implements ILogicMovable {
 	 *
 	 * @return The player object of this movable.
 	 */
+	@Override
 	public final Player getPlayer() {
 		return player;
 	}
 
-	public final ECivilisation getCivilisation(){return player.getCivilisation();}
+	@Override
+	public final ECivilisation getCivilisation(){return civilisation;}
 
 	@Override
 	public final boolean isSelected() {

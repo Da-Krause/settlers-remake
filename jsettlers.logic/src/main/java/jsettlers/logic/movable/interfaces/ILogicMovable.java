@@ -20,6 +20,7 @@ import jsettlers.algorithms.fogofwar.IViewDistancable;
 import jsettlers.algorithms.path.IPathCalculatable;
 import jsettlers.algorithms.path.Path;
 import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.input.IGuiMovable;
 import jsettlers.logic.buildings.military.IBuildingOccupyableMovable;
@@ -49,6 +50,8 @@ public interface ILogicMovable extends IScheduledTimerable, IPathCalculatable, I
 	void convertTo(EMovableType newMovableType);
 
 	Player getPlayer();
+
+	ECivilisation getCivilisation();
 
 	IBuildingOccupyableMovable setOccupyableBuilding(IOccupyableBuilding building);
 

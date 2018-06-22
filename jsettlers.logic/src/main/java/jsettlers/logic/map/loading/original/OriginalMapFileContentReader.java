@@ -727,7 +727,7 @@ class OriginalMapFileContentReader {
 
 			// - list of all objects that have to be added for this player
 			List<MapDataObject> mapObjects = EMapStartResources.generateStackObjects(startResources);
-			mapObjects.addAll(EMapStartResources.generateMovableObjects(startResources, playerId));
+			mapObjects.addAll(EMapStartResources.generateMovableObjects(startResources, playerId, playerSettings[playerId].getCivilisation()));
 
 			// - blocking area of the tower
 			List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles(playerSettings[playerId].getCivilisation()));

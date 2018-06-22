@@ -22,19 +22,19 @@ import jsettlers.common.landscape.ELandscapeType;
 import jsettlers.common.landscape.EResourceType;
 import jsettlers.common.logging.MilliStopWatch;
 import jsettlers.common.player.ECivilisation;
+import jsettlers.common.position.ShortPoint2D;
 import jsettlers.logic.map.loading.data.IMapData;
 import jsettlers.logic.map.loading.data.objects.BuildingMapDataObject;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
 import jsettlers.logic.map.loading.data.objects.MovableObject;
 import jsettlers.logic.map.loading.data.objects.StackMapDataObject;
+import jsettlers.logic.map.loading.original.data.EOriginalLandscapeType;
 import jsettlers.logic.map.loading.original.data.EOriginalMapBuildingType;
 import jsettlers.logic.map.loading.original.data.EOriginalMapCivilizations;
+import jsettlers.logic.map.loading.original.data.EOriginalMapObjectType;
 import jsettlers.logic.map.loading.original.data.EOriginalMapResources;
 import jsettlers.logic.map.loading.original.data.EOriginalMapSettlersType;
 import jsettlers.logic.map.loading.original.data.EOriginalMapStackType;
-import jsettlers.logic.map.loading.original.data.EOriginalMapObjectType;
-import jsettlers.logic.map.loading.original.data.EOriginalLandscapeType;
-import jsettlers.common.position.ShortPoint2D;
 
 /**
  * @author Thomas Zeugner
@@ -188,7 +188,7 @@ public class OriginalMapFileContent implements IMapData {
 		if (mapSettlerType == EOriginalMapSettlersType.NOT_A_SETTLER)
 			return;
 		if (mapSettlerType.value != null) {
-			mapObject[pos] = new MovableObject(mapSettlerType.value, (byte) party);
+			mapObject[pos] = new MovableObject(mapSettlerType.value, ECivilisation.VALUES[mapPlayerInfos[party].nation.ordinal()], (byte) party);
 		}
 	}
 

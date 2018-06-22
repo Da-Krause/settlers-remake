@@ -14,29 +14,32 @@
  *******************************************************************************/
 package jsettlers.mapcreator.tools.objects;
 
+import java.util.Locale;
+
+import jsettlers.common.movable.EMovableType;
+import jsettlers.common.player.ECivilisation;
+import jsettlers.graphics.localization.Labels;
 import jsettlers.logic.map.loading.data.objects.MapDataObject;
 import jsettlers.logic.map.loading.data.objects.MovableObject;
-import jsettlers.common.movable.EMovableType;
-import jsettlers.graphics.localization.Labels;
 import jsettlers.mapcreator.control.IPlayerSetter;
 import jsettlers.mapcreator.localization.EditorLabels;
-
-import java.util.Locale;
 
 public class PlaceMovableTool extends PlaceMapObjectTool {
 
 	private final EMovableType type;
 	private final IPlayerSetter player;
+	private final ECivilisation civilisation;
 
-	public PlaceMovableTool(EMovableType type, IPlayerSetter player) {
+	public PlaceMovableTool(EMovableType type, IPlayerSetter player, ECivilisation civilisation) {
 		super(null);
 		this.type = type;
 		this.player = player;
+		this.civilisation = civilisation;
 		this.translatedName = String.format(Locale.ENGLISH, EditorLabels.getLabel("tool.place"), Labels.getName(type));
 	}
 
 	@Override
 	public MapDataObject getObject() {
-		return new MovableObject(type, (byte) player.getActivePlayer());
+		return new MovableObject(type, civilisation, (byte) player.getActivePlayer());
 	}
 }
