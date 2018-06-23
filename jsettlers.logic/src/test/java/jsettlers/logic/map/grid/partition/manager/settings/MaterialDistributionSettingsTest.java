@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class MaterialDistributionSettingsTest {
 
     private static final EMaterialType TEST_MATERIAL = EMaterialType.IRON;
-    private static final EBuildingType TEST_BUILDING_TYPE = EBuildingType.WEAPONSMITH;
+    private static final EBuildingType TEST_BUILDING_TYPE = EBuildingType.WEAPON_SMITH;
 
     @Test
     public void testGetUserConfiguredDistributionValue() {
@@ -28,7 +28,7 @@ public class MaterialDistributionSettingsTest {
     public void testGetDistributionProbability() {
         MaterialDistributionSettings settings = new MaterialDistributionSettings(TEST_MATERIAL);
         settings.setUserConfiguredDistributionValue(TEST_BUILDING_TYPE, 1f);
-        settings.setUserConfiguredDistributionValue(EBuildingType.TOOLSMITH, 0.7f);
+        settings.setUserConfiguredDistributionValue(EBuildingType.TOOL_SMITH, 0.7f);
         settings.setUserConfiguredDistributionValue(EBuildingType.DOCKYARD, 0.3f);
 
         float result = settings.getDistributionProbability(TEST_BUILDING_TYPE);

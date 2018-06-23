@@ -14,7 +14,7 @@
  *******************************************************************************/
 package jsettlers.ai.construction;
 
-import static jsettlers.common.buildings.EBuildingType.STONECUTTER;
+import static jsettlers.common.buildings.EBuildingType.STONE_CUTTER;
 
 import jsettlers.ai.highlevel.AiPositions;
 import jsettlers.ai.highlevel.AiStatistics;
@@ -58,21 +58,21 @@ public class BestStoneCutterConstructionPositionFinder implements IBestConstruct
 
 		@Override
 		public int rate(int x, int y, int currentBestRating) {
-			if (!constructionMap.canConstructAt((short) x, (short) y, STONECUTTER, civilisation, playerId)) {
+			if (!constructionMap.canConstructAt((short) x, (short) y, STONE_CUTTER, civilisation, playerId)) {
 				return RATE_INVALID;
 			} else {
 				int score = 0;
 				ShortPoint2D p = new ShortPoint2D(x, y);
 
-				if (aiStatistics.blocksWorkingAreaOfOtherBuilding(p.x, p.y, playerId, STONECUTTER, civilisation)) {
+				if (aiStatistics.blocksWorkingAreaOfOtherBuilding(p.x, p.y, playerId, STONE_CUTTER, civilisation)) {
 					score += BLOCKS_WORK_AREA_MALUS;
 				}
 				if (score >= currentBestRating) {
 					return RATE_INVALID;
 				}
 
-				short workradius = STONECUTTER.getWorkRadius(civilisation);
-				for (ShortPoint2D otherStoneCutterPositions : aiStatistics.getBuildingPositionsOfTypeForPlayer(STONECUTTER, playerId)) {
+				short workradius = STONE_CUTTER.getWorkRadius(civilisation);
+				for (ShortPoint2D otherStoneCutterPositions : aiStatistics.getBuildingPositionsOfTypeForPlayer(STONE_CUTTER, playerId)) {
 					if (otherStoneCutterPositions.getOnGridDistTo(p) <= workradius) {
 						score += NEAR_OTHER_STONE_CUTTER_MALUS;
 						break;

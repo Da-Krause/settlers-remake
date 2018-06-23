@@ -677,14 +677,14 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 		case DONKEY_FARM:
 		case FARM:
 		case FORESTER:
-		case GOLDMELT:
-		case IRONMELT:
+		case GOLD_MELT:
+		case IRON_MELT:
 		case LUMBERJACK:
 		case PIG_FARM:
 		case SAWMILL:
-		case STONECUTTER:
-		case TOOLSMITH:
-		case WEAPONSMITH:
+		case STONE_CUTTER:
+		case TOOL_SMITH:
+		case WEAPON_SMITH:
 		case WATERWORKS:
 		case WINEGROWER:
 			return new WorkerBuilding(type, player, position, buildingsGrid);
@@ -706,7 +706,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 		case BARRACK:
 			return new Barrack(player, position, buildingsGrid);
 
-		case IRONMINE:
+		case IRON_MINE:
 		case GOLDMINE:
 		case COALMINE:
 			return new MineBuilding(type, player, position, buildingsGrid);

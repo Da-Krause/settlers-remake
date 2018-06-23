@@ -15,14 +15,14 @@
 package jsettlers.ai.construction;
 
 import static jsettlers.common.buildings.EBuildingType.FARM;
-import static jsettlers.common.buildings.EBuildingType.GOLDMELT;
+import static jsettlers.common.buildings.EBuildingType.GOLD_MELT;
 import static jsettlers.common.buildings.EBuildingType.GOLDMINE;
-import static jsettlers.common.buildings.EBuildingType.IRONMELT;
-import static jsettlers.common.buildings.EBuildingType.IRONMINE;
+import static jsettlers.common.buildings.EBuildingType.IRON_MELT;
+import static jsettlers.common.buildings.EBuildingType.IRON_MINE;
 import static jsettlers.common.buildings.EBuildingType.LUMBERJACK;
 import static jsettlers.common.buildings.EBuildingType.MILL;
 import static jsettlers.common.buildings.EBuildingType.PIG_FARM;
-import static jsettlers.common.buildings.EBuildingType.WEAPONSMITH;
+import static jsettlers.common.buildings.EBuildingType.WEAPON_SMITH;
 import static jsettlers.common.landscape.EResourceType.COAL;
 import static jsettlers.common.landscape.EResourceType.GOLDORE;
 import static jsettlers.common.landscape.EResourceType.IRONORE;
@@ -36,7 +36,7 @@ public class BestConstructionPositionFinderFactory {
 
 	public final IBestConstructionPositionFinder getBestConstructionPositionFinderFor(EBuildingType type, ECivilisation civilisation) {
 		switch (type) {
-		case STONECUTTER:
+		case STONE_CUTTER:
 			return new BestStoneCutterConstructionPositionFinder(civilisation);
 		case LUMBERJACK:
 			return new BestLumberJackConstructionPositionFinder(type, civilisation);
@@ -54,20 +54,20 @@ public class BestConstructionPositionFinderFactory {
 			return new BestWinegrowerConstructionPositionFinder();
 		case COALMINE:
 			return new BestMineConstructionPositionFinder(type, COAL, civilisation);
-		case IRONMINE:
+		case IRON_MINE:
 			return new BestMineConstructionPositionFinder(type, IRONORE, civilisation);
 		case GOLDMINE:
 			return new BestMineConstructionPositionFinder(type, GOLDORE, civilisation);
 		case WATERWORKS:
 			return new BestWaterWorksConstructionPositionFinder(type);
-		case IRONMELT:
-			return new NearRequiredBuildingConstructionPositionFinder(type, IRONMINE);
-		case WEAPONSMITH:
-			return new NearRequiredBuildingConstructionPositionFinder(type, IRONMELT);
-		case TOOLSMITH:
-			return new NearRequiredBuildingConstructionPositionFinder(type, IRONMELT);
+		case IRON_MELT:
+			return new NearRequiredBuildingConstructionPositionFinder(type, IRON_MINE);
+		case WEAPON_SMITH:
+			return new NearRequiredBuildingConstructionPositionFinder(type, IRON_MELT);
+		case TOOL_SMITH:
+			return new NearRequiredBuildingConstructionPositionFinder(type, IRON_MELT);
 		case BARRACK:
-			return new NearRequiredBuildingConstructionPositionFinder(type, WEAPONSMITH);
+			return new NearRequiredBuildingConstructionPositionFinder(type, WEAPON_SMITH);
 		case MILL:
 			return new NearRequiredBuildingConstructionPositionFinder(type, FARM);
 		case BAKER:
@@ -80,12 +80,12 @@ public class BestConstructionPositionFinderFactory {
 			return new BestTempleConstructionPositionFinder();
 		case BIG_TEMPLE:
 			return new BestBigTempleConstructionPositionFinder(civilisation);
-		case GOLDMELT:
+		case GOLD_MELT:
 			return new NearRequiredBuildingConstructionPositionFinder(type, GOLDMINE);
 		case FISHER:
 			return new BestFisherConstructionPositionFinder(type, civilisation);
 		case STOCK:
-			return new NearRequiredBuildingConstructionPositionFinder(type, GOLDMELT);
+			return new NearRequiredBuildingConstructionPositionFinder(type, GOLD_MELT);
 		default:
 			return new NearDiggersConstructionPositionFinder(type, civilisation);
 		}

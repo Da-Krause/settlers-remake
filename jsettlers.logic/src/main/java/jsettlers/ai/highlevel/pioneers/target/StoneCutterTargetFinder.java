@@ -27,7 +27,7 @@ public class StoneCutterTargetFinder extends CuttingBuildingTargetFinder {
 
 	public StoneCutterTargetFinder(
 			AiStatistics aiStatistics, byte playerId, int searchDistance, int cuttableObjectsPerBuilding)  {
-		super(aiStatistics, playerId, searchDistance, EBuildingType.STONECUTTER, cuttableObjectsPerBuilding, EMapObjectType.STONE);
+		super(aiStatistics, playerId, searchDistance, EBuildingType.STONE_CUTTER, cuttableObjectsPerBuilding, EMapObjectType.STONE);
 	}
 
 	@Override

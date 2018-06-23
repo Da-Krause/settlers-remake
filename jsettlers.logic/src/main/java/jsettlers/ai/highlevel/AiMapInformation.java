@@ -113,11 +113,11 @@ public class AiMapInformation {
 		}
 		buildingCounts[EBuildingType.COALMINE.ordinal] = numberOfWeaponSmiths;
 
-		buildingCounts[EBuildingType.IRONMINE.ordinal] = Math.round(numberOfWeaponSmiths / COAL_MINE_TO_IRON_MINE_RATIO + 1);
-		buildingCounts[EBuildingType.IRONMELT.ordinal] = numberOfWeaponSmiths;
-		buildingCounts[EBuildingType.WEAPONSMITH.ordinal] = numberOfWeaponSmiths;
+		buildingCounts[EBuildingType.IRON_MINE.ordinal] = Math.round(numberOfWeaponSmiths / COAL_MINE_TO_IRON_MINE_RATIO + 1);
+		buildingCounts[EBuildingType.IRON_MELT.ordinal] = numberOfWeaponSmiths;
+		buildingCounts[EBuildingType.WEAPON_SMITH.ordinal] = numberOfWeaponSmiths;
 		buildingCounts[EBuildingType.BARRACK.ordinal] = (int) Math.ceil((double) numberOfWeaponSmiths / WEAPON_SMITH_TO_BARRACKS_RATIO);
-		buildingCounts[EBuildingType.TOOLSMITH.ordinal] = 1;
+		buildingCounts[EBuildingType.TOOL_SMITH.ordinal] = 1;
 
 		int numberOfFisher = Math.min((int) (numberOfWeaponSmiths / WEAPON_SMITH_TO_FISHER_HUT_RATIO), maxFishermen);
 		buildingCounts[EBuildingType.FISHER.ordinal] = numberOfFisher;
@@ -137,10 +137,10 @@ public class AiMapInformation {
 		buildingCounts[EBuildingType.LUMBERJACK.ordinal] = numberOfLumberJacks;
 		buildingCounts[EBuildingType.FORESTER.ordinal] = Math.max((int) (numberOfLumberJacks / LUMBERJACK_TO_FORESTER_RATIO), 1);
 		buildingCounts[EBuildingType.SAWMILL.ordinal] = Math.max((int) (numberOfLumberJacks / LUMBERJACK_TO_SAWMILL_RATIO), 1);
-		buildingCounts[EBuildingType.STONECUTTER.ordinal] = Math.max((int) (numberOfLumberJacks / LUMBERJACK_TO_STONE_CUTTER_RATIO), 1);
+		buildingCounts[EBuildingType.STONE_CUTTER.ordinal] = Math.max((int) (numberOfLumberJacks / LUMBERJACK_TO_STONE_CUTTER_RATIO), 1);
 
 		if (maxGoldMelts > 0) {
-			buildingCounts[EBuildingType.GOLDMELT.ordinal] = maxGoldMelts;
+			buildingCounts[EBuildingType.GOLD_MELT.ordinal] = maxGoldMelts;
 			buildingCounts[EBuildingType.GOLDMINE.ordinal] = 1;
 		}
 

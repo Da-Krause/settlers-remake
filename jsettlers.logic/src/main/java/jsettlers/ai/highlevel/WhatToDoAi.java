@@ -59,7 +59,7 @@ import static jsettlers.ai.highlevel.AiBuildingConstants.FARM_TO_PIG_FARM_RATIO;
 import static jsettlers.ai.highlevel.AiBuildingConstants.FARM_TO_SLAUGHTER_RATIO;
 import static jsettlers.ai.highlevel.AiBuildingConstants.FARM_TO_WATERWORKS_RATIO;
 import static jsettlers.ai.highlevel.AiBuildingConstants.IRONMELT_TO_WEAPON_SMITH_RATIO;
-import static jsettlers.ai.highlevel.AiBuildingConstants.IRON_MINE_TO_IRONMELT_RATIO;
+import static jsettlers.ai.highlevel.AiBuildingConstants.IRON_MINE_TO_IRON_MELT_RATIO;
 import static jsettlers.ai.highlevel.AiBuildingConstants.LUMBERJACK_TO_FORESTER_RATIO;
 import static jsettlers.ai.highlevel.AiBuildingConstants.LUMBERJACK_TO_SAWMILL_RATIO;
 import static jsettlers.ai.highlevel.AiBuildingConstants.WEAPON_SMITH_TO_BARRACKS_RATIO;
@@ -71,9 +71,9 @@ import static jsettlers.common.buildings.EBuildingType.BIG_TEMPLE;
 import static jsettlers.common.buildings.EBuildingType.COALMINE;
 import static jsettlers.common.buildings.EBuildingType.FARM;
 import static jsettlers.common.buildings.EBuildingType.FORESTER;
-import static jsettlers.common.buildings.EBuildingType.GOLDMELT;
-import static jsettlers.common.buildings.EBuildingType.IRONMELT;
-import static jsettlers.common.buildings.EBuildingType.IRONMINE;
+import static jsettlers.common.buildings.EBuildingType.GOLD_MELT;
+import static jsettlers.common.buildings.EBuildingType.IRON_MELT;
+import static jsettlers.common.buildings.EBuildingType.IRON_MINE;
 import static jsettlers.common.buildings.EBuildingType.LUMBERJACK;
 import static jsettlers.common.buildings.EBuildingType.MEDIUM_LIVINGHOUSE;
 import static jsettlers.common.buildings.EBuildingType.MILL;
@@ -82,11 +82,11 @@ import static jsettlers.common.buildings.EBuildingType.SAWMILL;
 import static jsettlers.common.buildings.EBuildingType.SLAUGHTERHOUSE;
 import static jsettlers.common.buildings.EBuildingType.SMALL_LIVINGHOUSE;
 import static jsettlers.common.buildings.EBuildingType.STOCK;
-import static jsettlers.common.buildings.EBuildingType.STONECUTTER;
+import static jsettlers.common.buildings.EBuildingType.STONE_CUTTER;
 import static jsettlers.common.buildings.EBuildingType.TEMPLE;
 import static jsettlers.common.buildings.EBuildingType.TOWER;
 import static jsettlers.common.buildings.EBuildingType.WATERWORKS;
-import static jsettlers.common.buildings.EBuildingType.WEAPONSMITH;
+import static jsettlers.common.buildings.EBuildingType.WEAPON_SMITH;
 import static jsettlers.common.buildings.EBuildingType.WINEGROWER;
 import static jsettlers.common.material.EMaterialType.GOLD;
 import static jsettlers.logic.constants.Constants.TOWER_SEARCH_SOLDIERS_RADIUS;
@@ -109,7 +109,7 @@ class WhatToDoAi implements IWhatToDoAi {
 	private static final float MINIMUM_NUMBER_OF_JOBLESS_BEARERS_PER_BUILDING = 1.2f;
 
 	private static final int NUMBER_OF_BEARERS_PER_HOUSE = 3;
-	private static final int MAXIMUM_STONECUTTER_WORK_RADIUS_FACTOR = 2;
+	private static final int MAXIMUM_STONE_CUTTER_WORK_RADIUS_FACTOR = 2;
 	private static final float WEAPON_SMITH_FACTOR = 7F;
 	private static final int RESOURCE_PIONEER_GROUP_COUNT = 20;
 	private static final int BROADEN_PIONEER_GROUP_COUNT = 40;
@@ -179,7 +179,7 @@ class WhatToDoAi implements IWhatToDoAi {
 		int geologistsCount = aiStatistics.getPositionsOfMovablesWithTypeForPlayer(playerId, EMovableType.GEOLOGIST).size();
 		List<ShortPoint2D> bearersPositions = aiStatistics.getPositionsOfMovablesWithTypeForPlayer(playerId, EMovableType.BEARER);
 		int bearersCount = bearersPositions.size();
-		int stoneCutterCount = aiStatistics.getNumberOfBuildingTypeForPlayer(STONECUTTER, playerId);
+		int stoneCutterCount = aiStatistics.getNumberOfBuildingTypeForPlayer(STONE_CUTTER, playerId);
 		if (geologistsCount == 0 && stoneCutterCount >= 1 && bearersCount - 3 > MINIMUM_NUMBER_OF_BEARERS) {
 			ILogicMovable coalGeologist = getBearerAt(bearersPositions.get(0));
 			ILogicMovable ironGeologist = getBearerAt(bearersPositions.get(1));
@@ -240,12 +240,12 @@ class WhatToDoAi implements IWhatToDoAi {
 
 	private void destroyBuildings() {
 		// destroy stonecutters or set their work areas
-		for (ShortPoint2D stoneCutterPosition : aiStatistics.getBuildingPositionsOfTypeForPlayer(STONECUTTER, playerId)) {
+		for (ShortPoint2D stoneCutterPosition : aiStatistics.getBuildingPositionsOfTypeForPlayer(STONE_CUTTER, playerId)) {
 			if (aiStatistics.getBuildingAt(stoneCutterPosition).cannotWork()) {
-				int numberOfStoneCutters = aiStatistics.getNumberOfBuildingTypeForPlayer(STONECUTTER, playerId);
+				int numberOfStoneCutters = aiStatistics.getNumberOfBuildingTypeForPlayer(STONE_CUTTER, playerId);
 
 				ShortPoint2D nearestStone = aiStatistics.getStonesForPlayer(playerId)
-						.getNearestPoint(stoneCutterPosition, STONECUTTER.getWorkRadius(civilisation) * MAXIMUM_STONECUTTER_WORK_RADIUS_FACTOR, null);
+						.getNearestPoint(stoneCutterPosition, STONE_CUTTER.getWorkRadius(civilisation) * MAXIMUM_STONE_CUTTER_WORK_RADIUS_FACTOR, null);
 				if (nearestStone != null && numberOfStoneCutters < economyMinister.getMidGameNumberOfStoneCutters()) {
 					taskScheduler.scheduleTask(new WorkAreaGuiTask(EGuiAction.SET_WORK_AREA, playerId, civilisation, nearestStone, stoneCutterPosition));
 				} else {
@@ -359,7 +359,7 @@ class WhatToDoAi implements IWhatToDoAi {
 	}
 
 	private boolean buildStock() {
-		if (aiStatistics.getTotalNumberOfBuildingTypeForPlayer(GOLDMELT, playerId) < 1) {
+		if (aiStatistics.getTotalNumberOfBuildingTypeForPlayer(GOLD_MELT, playerId) < 1) {
 			return false;
 		}
 		int stockCount = aiStatistics.getTotalNumberOfBuildingTypeForPlayer(STOCK, playerId);
@@ -382,15 +382,15 @@ class WhatToDoAi implements IWhatToDoAi {
 
 	private boolean buildingDependenciesAreFulfilled(EBuildingType targetBuilding) {
 		switch (targetBuilding) {
-		case IRONMINE:
-			return ratioFits(COALMINE, COAL_MINE_TO_IRON_MINE_RATIO, IRONMINE);
-		case WEAPONSMITH:
-			return ratioFits(IRONMELT, IRONMELT_TO_WEAPON_SMITH_RATIO, WEAPONSMITH);
-		case IRONMELT:
-			return ratioFits(COALMINE, COAL_MINE_TO_SMITH_RATIO, IRONMELT)
-					&& ratioFits(IRONMINE, IRON_MINE_TO_IRONMELT_RATIO, IRONMELT);
+		case IRON_MINE:
+			return ratioFits(COALMINE, COAL_MINE_TO_IRON_MINE_RATIO, IRON_MINE);
+		case WEAPON_SMITH:
+			return ratioFits(IRON_MELT, IRONMELT_TO_WEAPON_SMITH_RATIO, WEAPON_SMITH);
+		case IRON_MELT:
+			return ratioFits(COALMINE, COAL_MINE_TO_SMITH_RATIO, IRON_MELT)
+					&& ratioFits(IRON_MINE, IRON_MINE_TO_IRON_MELT_RATIO, IRON_MELT);
 		case BARRACK:
-			return ratioFits(WEAPONSMITH, WEAPON_SMITH_TO_BARRACKS_RATIO, BARRACK);
+			return ratioFits(WEAPON_SMITH, WEAPON_SMITH_TO_BARRACKS_RATIO, BARRACK);
 		case MILL:
 			return ratioFits(FARM, FARM_TO_MILL_RATIO, MILL);
 		case BAKER:
@@ -511,12 +511,12 @@ class WhatToDoAi implements IWhatToDoAi {
 				+ aiStatistics.getNumberOfNotFinishedBuildingTypesForPlayer(SMALL_LIVINGHOUSE, playerId) * NUMBER_OF_SMALL_LIVING_HOUSE_BEDS
 				+ aiStatistics.getNumberOfNotFinishedBuildingTypesForPlayer(MEDIUM_LIVINGHOUSE, playerId) * NUMBER_OF_MEDIUM_LIVING_HOUSE_BEDS;
 		if (futureNumberOfBearers < MINIMUM_NUMBER_OF_BEARERS
-				|| (aiStatistics.getNumberOfTotalBuildingsForPlayer(playerId) + aiStatistics.getNumberOfBuildingTypeForPlayer(WEAPONSMITH, playerId) * WEAPON_SMITH_FACTOR)
+				|| (aiStatistics.getNumberOfTotalBuildingsForPlayer(playerId) + aiStatistics.getNumberOfBuildingTypeForPlayer(WEAPON_SMITH, playerId) * WEAPON_SMITH_FACTOR)
 						* NUMBER_OF_BEARERS_PER_HOUSE > futureNumberOfBearers) {
-			if (aiStatistics.getTotalNumberOfBuildingTypeForPlayer(STONECUTTER, playerId) < 1
+			if (aiStatistics.getTotalNumberOfBuildingTypeForPlayer(STONE_CUTTER, playerId) < 1
 					|| aiStatistics.getTotalNumberOfBuildingTypeForPlayer(LUMBERJACK, playerId) < 1) {
 				return construct(SMALL_LIVINGHOUSE);
-			} else if (aiStatistics.getTotalNumberOfBuildingTypeForPlayer(WEAPONSMITH, playerId) < 2) {
+			} else if (aiStatistics.getTotalNumberOfBuildingTypeForPlayer(WEAPON_SMITH, playerId) < 2) {
 				return construct(MEDIUM_LIVINGHOUSE);
 			} else {
 				return construct(BIG_LIVINGHOUSE);

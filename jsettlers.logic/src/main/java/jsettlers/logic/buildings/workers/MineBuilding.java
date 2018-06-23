@@ -77,7 +77,7 @@ public final class MineBuilding extends ResourceBuilding {
 		switch (super.getBuildingType()) {
 		case COALMINE:
 			return EResourceType.COAL;
-		case IRONMINE:
+		case IRON_MINE:
 			return EResourceType.IRONORE;
 		case GOLDMINE:
 			return EResourceType.GOLDORE;

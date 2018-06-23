@@ -36,7 +36,7 @@ package jsettlers.common.movable;
  * <td></td>
  * </tr>
  * <tr>
- * <td>STONECUTTER</td>
+ * <td>STONE_CUTTER</td>
  * <td>cut stones</td>
  * <td></td>
  * </tr>

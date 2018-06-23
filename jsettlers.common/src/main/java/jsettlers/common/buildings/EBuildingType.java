@@ -37,21 +37,23 @@ import jsettlers.common.position.RelativePoint;
  * 
  * @author Michael Zangl
  * @author Andreas Eberle
+ * @author Daniel Krause
  */
 public enum EBuildingType {
-	STONECUTTER,
+	STONE_CUTTER,
 	FORESTER,
 	LUMBERJACK,
 	SAWMILL,
 
 	COALMINE,
-	IRONMINE,
+	IRON_MINE,
 	GOLDMINE,
-	GEMMINE(ECivilisation.EGYPTIANS, ECivilisation.AMAZONS),
-	GOLDMELT,
-	IRONMELT,
-	TOOLSMITH,
-	WEAPONSMITH,
+	SULFUR_MINE(ECivilisation.ASIANS, ECivilisation.AMAZONS),
+	GEM_MINE(ECivilisation.EGYPTIANS, ECivilisation.AMAZONS),
+	GOLD_MELT,
+	IRON_MELT,
+	TOOL_SMITH,
+	WEAPON_SMITH,
 
 	FARM,
 	PIG_FARM,
@@ -66,6 +68,8 @@ public enum EBuildingType {
 	WINEGROWER(ECivilisation.ROMANS),
 	CHARCOAL_BURNER(ECivilisation.ROMANS),
 	DONKEY_FARM,
+	BEEKEEPER(ECivilisation.AMAZONS),
+	MEADMAKER(ECivilisation.AMAZONS),
 
 	SMALL_LIVINGHOUSE,
 	MEDIUM_LIVINGHOUSE,
@@ -77,6 +81,7 @@ public enum EBuildingType {
 	CASTLE,
 	HOSPITAL,
 	BARRACK,
+	GONG_HALL(ECivilisation.AMAZONS),
 
 	DOCKYARD,
 	HARBOR,
@@ -84,6 +89,7 @@ public enum EBuildingType {
 
 	TEMPLE,
 	BIG_TEMPLE,
+	ALCHEMIST(ECivilisation.AMAZONS),
 
 	MARKET_PLACE;
 
@@ -119,7 +125,7 @@ public enum EBuildingType {
 	EBuildingType(ECivilisation... civilisations) {
 		this.ordinal = ordinal();
 		List civilisationsList = Arrays.asList(civilisations);
-		this.requiredCivilisations = civilisationsList.isEmpty() ? Arrays.asList(ECivilisation.ROMANS, ECivilisation.EGYPTIANS, ECivilisation.ASIANS, ECivilisation.AMAZONS) : civilisationsList;
+		this.requiredCivilisations = civilisationsList.isEmpty() ? Arrays.asList(ECivilisation.VALUES) : civilisationsList;
 
 		buildingInfos = new EnumMap<>(ECivilisation.class);
 		if (requiredCivilisations.contains(ECivilisation.ROMANS)) {

@@ -174,7 +174,7 @@ public class PlayerSlot {
 		civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.ROMANS));
 		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.EGYPTIANS)); //todo: activate if EBuildingTypes and Movable.txt correct
 		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.ASIANS));
-		//civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.AMAZONS));
+		civilisationComboBox.addItem(new CivilisationUiWrapper(ECivilisation.AMAZONS));
 	}
 
 	public void setPlayerName(String playerName) {

@@ -56,7 +56,7 @@ public class ConfigurableGeneral implements ArmyGeneral {
 	private static final byte MIN_SWORDSMEN_COUNT = 10;
 	private static final byte MIN_PIKEMEN_COUNT = 20;
 	private static final int BOWMEN_COUNT_OF_KILLING_INFANTRY = 300;
-	private static final EBuildingType[] MIN_BUILDING_REQUIREMENTS_FOR_ATTACK = { EBuildingType.COALMINE, EBuildingType.IRONMINE, EBuildingType.IRONMELT, EBuildingType.WEAPONSMITH,
+	private static final EBuildingType[] MIN_BUILDING_REQUIREMENTS_FOR_ATTACK = { EBuildingType.COALMINE, EBuildingType.IRON_MINE, EBuildingType.IRON_MELT, EBuildingType.WEAPON_SMITH,
 			EBuildingType.BARRACK };
 	private static final ESoldierType[] SOLDIER_UPGRADE_ORDER = new ESoldierType[] { ESoldierType.BOWMAN, ESoldierType.PIKEMAN, ESoldierType.SWORDSMAN };
 

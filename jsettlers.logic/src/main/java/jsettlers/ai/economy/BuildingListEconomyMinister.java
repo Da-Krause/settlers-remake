@@ -23,10 +23,10 @@ import static jsettlers.common.buildings.EBuildingType.COALMINE;
 import static jsettlers.common.buildings.EBuildingType.FARM;
 import static jsettlers.common.buildings.EBuildingType.FISHER;
 import static jsettlers.common.buildings.EBuildingType.FORESTER;
-import static jsettlers.common.buildings.EBuildingType.GOLDMELT;
+import static jsettlers.common.buildings.EBuildingType.GOLD_MELT;
 import static jsettlers.common.buildings.EBuildingType.GOLDMINE;
-import static jsettlers.common.buildings.EBuildingType.IRONMELT;
-import static jsettlers.common.buildings.EBuildingType.IRONMINE;
+import static jsettlers.common.buildings.EBuildingType.IRON_MELT;
+import static jsettlers.common.buildings.EBuildingType.IRON_MINE;
 import static jsettlers.common.buildings.EBuildingType.LUMBERJACK;
 import static jsettlers.common.buildings.EBuildingType.MEDIUM_LIVINGHOUSE;
 import static jsettlers.common.buildings.EBuildingType.MILL;
@@ -35,12 +35,12 @@ import static jsettlers.common.buildings.EBuildingType.SAWMILL;
 import static jsettlers.common.buildings.EBuildingType.SLAUGHTERHOUSE;
 import static jsettlers.common.buildings.EBuildingType.SMALL_LIVINGHOUSE;
 import static jsettlers.common.buildings.EBuildingType.STOCK;
-import static jsettlers.common.buildings.EBuildingType.STONECUTTER;
+import static jsettlers.common.buildings.EBuildingType.STONE_CUTTER;
 import static jsettlers.common.buildings.EBuildingType.TEMPLE;
-import static jsettlers.common.buildings.EBuildingType.TOOLSMITH;
+import static jsettlers.common.buildings.EBuildingType.TOOL_SMITH;
 import static jsettlers.common.buildings.EBuildingType.TOWER;
 import static jsettlers.common.buildings.EBuildingType.WATERWORKS;
-import static jsettlers.common.buildings.EBuildingType.WEAPONSMITH;
+import static jsettlers.common.buildings.EBuildingType.WEAPON_SMITH;
 import static jsettlers.common.buildings.EBuildingType.WINEGROWER;
 
 import java.util.ArrayList;
@@ -65,9 +65,9 @@ import jsettlers.logic.player.Player;
  */
 public class BuildingListEconomyMinister implements EconomyMinister {
 
-	private static final Collection<EBuildingType> RUSH_DEFENCE_BUILDINGS = EnumSet.of(LUMBERJACK, SAWMILL, STONECUTTER, IRONMELT, WEAPONSMITH, BARRACK, SMALL_LIVINGHOUSE, COALMINE, IRONMINE,
+	private static final Collection<EBuildingType> RUSH_DEFENCE_BUILDINGS = EnumSet.of(LUMBERJACK, SAWMILL, STONE_CUTTER, IRON_MELT, WEAPON_SMITH, BARRACK, SMALL_LIVINGHOUSE, COALMINE, IRON_MINE,
 			MEDIUM_LIVINGHOUSE);
-	private static final Collection<EBuildingType> BUILDING_INDUSTRY = EnumSet.of(LUMBERJACK, FORESTER, SAWMILL, STONECUTTER);
+	private static final Collection<EBuildingType> BUILDING_INDUSTRY = EnumSet.of(LUMBERJACK, FORESTER, SAWMILL, STONE_CUTTER);
 
 	private final AiStatistics aiStatistics;
 	private final boolean limitByWeakestEnemy;
@@ -124,8 +124,8 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 	}
 
 	private void addSecondToolSmith() {
-		if (mapBuildingCounts[WEAPONSMITH.ordinal] * weaponSmithFactor >= 16) {
-			buildingsToBuild.add(80, TOOLSMITH);
+		if (mapBuildingCounts[WEAPON_SMITH.ordinal] * weaponSmithFactor >= 16) {
+			buildingsToBuild.add(80, TOOL_SMITH);
 		}
 
 	}
@@ -159,7 +159,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			}
 		}
 
-		numberOfMidGameStoneCutters = (currentCountOf(STONECUTTER) / 2);
+		numberOfMidGameStoneCutters = (currentCountOf(STONE_CUTTER) / 2);
 	}
 
 	private List<EBuildingType> determineBuildingMaterialBuildings() {
@@ -171,7 +171,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			if (i % 2 == 1)
 				buildingMaterialBuildings.add(SAWMILL);
 			if (i % 2 == 1)
-				buildingMaterialBuildings.add(STONECUTTER);
+				buildingMaterialBuildings.add(STONE_CUTTER);
 		}
 		return buildingMaterialBuildings;
 	}
@@ -203,14 +203,14 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 
 	private List<EBuildingType> determineWeaponAndGoldBuildings() {
 		List<EBuildingType> weaponsBuildings = new ArrayList<>();
-		for (int i = 0; i < (mapBuildingCounts[WEAPONSMITH.ordinal] * weaponSmithFactor); i++) {
+		for (int i = 0; i < (mapBuildingCounts[WEAPON_SMITH.ordinal] * weaponSmithFactor); i++) {
 			weaponsBuildings.add(COALMINE);
 			if (i % 2 == 0)
-				weaponsBuildings.add(IRONMINE);
-			weaponsBuildings.add(IRONMELT);
-			if (i == 0 && currentCountOf(TOOLSMITH) < 1)
-				weaponsBuildings.add(TOOLSMITH);
-			weaponsBuildings.add(WEAPONSMITH);
+				weaponsBuildings.add(IRON_MINE);
+			weaponsBuildings.add(IRON_MELT);
+			if (i == 0 && currentCountOf(TOOL_SMITH) < 1)
+				weaponsBuildings.add(TOOL_SMITH);
+			weaponsBuildings.add(WEAPON_SMITH);
 			if (i % 3 == 0)
 				weaponsBuildings.add(BARRACK);
 			if (i == 2)
@@ -222,7 +222,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			if (i == 3)
 				addGoldBuildings(weaponsBuildings);
 		}
-		if (mapBuildingCounts[WEAPONSMITH.ordinal] < 4)
+		if (mapBuildingCounts[WEAPON_SMITH.ordinal] < 4)
 			addGoldBuildings(weaponsBuildings);
 		return weaponsBuildings;
 	}
@@ -230,9 +230,9 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 	private void addSmallWeaponProduction() {
 		buildingsToBuild.add(FISHER);
 		buildingsToBuild.add(COALMINE);
-		buildingsToBuild.add(IRONMINE);
-		buildingsToBuild.add(IRONMELT);
-		buildingsToBuild.add(WEAPONSMITH);
+		buildingsToBuild.add(IRON_MINE);
+		buildingsToBuild.add(IRON_MELT);
+		buildingsToBuild.add(WEAPON_SMITH);
 		buildingsToBuild.add(BARRACK);
 	}
 
@@ -324,7 +324,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
 			buildingsToBuild.add(MEDIUM_LIVINGHOUSE);
-			addIfPossible(STONECUTTER);
+			addIfPossible(STONE_CUTTER);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(SAWMILL);
 			addIfPossible(LUMBERJACK);
@@ -335,10 +335,10 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			addIfPossible(SAWMILL);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
-			addIfPossible(STONECUTTER);
-			addIfPossible(STONECUTTER);
-			addIfPossible(STONECUTTER);
-			addIfPossible(STONECUTTER);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(STONE_CUTTER);
 		} else if (isMiddleGoodsGame) {
 			addIfPossible(LUMBERJACK);
 			addIfPossible(SAWMILL);
@@ -346,38 +346,38 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
 			buildingsToBuild.add(MEDIUM_LIVINGHOUSE);
-			addIfPossible(STONECUTTER);
+			addIfPossible(STONE_CUTTER);
 			buildingsToBuild.add(MEDIUM_LIVINGHOUSE);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(SAWMILL);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
-			addIfPossible(STONECUTTER);
-			addIfPossible(IRONMELT);
-			addIfPossible(TOOLSMITH);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(IRON_MELT);
+			addIfPossible(TOOL_SMITH);
 			addIfPossible(FORESTER);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(SAWMILL);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
-			addIfPossible(STONECUTTER);
-			addIfPossible(STONECUTTER);
-			addIfPossible(STONECUTTER);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(STONE_CUTTER);
 		} else {
 			addIfPossible(LUMBERJACK);
 			addIfPossible(SAWMILL);
 			addIfPossible(LUMBERJACK);
 			buildingsToBuild.add(SMALL_LIVINGHOUSE);
-			addIfPossible(STONECUTTER);
+			addIfPossible(STONE_CUTTER);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
 			buildingsToBuild.add(MEDIUM_LIVINGHOUSE);
 			buildingsToBuild.add(MEDIUM_LIVINGHOUSE);
-			addIfPossible(IRONMELT);
-			addIfPossible(TOOLSMITH);
+			addIfPossible(IRON_MELT);
+			addIfPossible(TOOL_SMITH);
 			addIfPossible(COALMINE);
-			addIfPossible(IRONMINE);
+			addIfPossible(IRON_MINE);
 			addIfPossible(FISHER);
 			addIfPossible(FARM);
 			addIfPossible(WATERWORKS);
@@ -387,7 +387,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			addIfPossible(SAWMILL);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
-			addIfPossible(STONECUTTER);
+			addIfPossible(STONE_CUTTER);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
@@ -396,9 +396,9 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 			addIfPossible(LUMBERJACK);
 			addIfPossible(FORESTER);
 			buildingsToBuild.add(MEDIUM_LIVINGHOUSE);
-			addIfPossible(STONECUTTER);
-			addIfPossible(STONECUTTER);
-			addIfPossible(STONECUTTER);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(STONE_CUTTER);
+			addIfPossible(STONE_CUTTER);
 		}
 	}
 
@@ -415,10 +415,10 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 	}
 
 	private void addGoldBuildings(List<EBuildingType> weaponsBuildings) {
-		if (mapBuildingCounts[GOLDMELT.ordinal] > 0) {
+		if (mapBuildingCounts[GOLD_MELT.ordinal] > 0) {
 			weaponsBuildings.add(GOLDMINE);
-			for (int ii = 0; ii < mapBuildingCounts[GOLDMELT.ordinal]; ii++) {
-				weaponsBuildings.add(GOLDMELT);
+			for (int ii = 0; ii < mapBuildingCounts[GOLD_MELT.ordinal]; ii++) {
+				weaponsBuildings.add(GOLD_MELT);
 				weaponsBuildings.add(STOCK);
 			}
 		}
@@ -451,7 +451,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 				return true;
 			}
 			for (IPlayer enemy : aiStatistics.getAliveEnemiesOf(player)) {
-				if (aiStatistics.getNumberOfBuildingTypeForPlayer(WEAPONSMITH, enemy.getPlayerId()) > 0) {
+				if (aiStatistics.getNumberOfBuildingTypeForPlayer(WEAPON_SMITH, enemy.getPlayerId()) > 0) {
 					return true;
 				}
 			}
@@ -475,7 +475,7 @@ public class BuildingListEconomyMinister implements EconomyMinister {
 	public boolean automaticLivingHousesEnabled() {
 		return aiStatistics.getNumberOfBuildingTypeForPlayer(LUMBERJACK, playerId) >= 8
 				|| aiStatistics.getNumberOfBuildingTypeForPlayer(LUMBERJACK, playerId) >= mapBuildingCounts[LUMBERJACK.ordinal] * buildingIndustryFactor
-				|| aiStatistics.getNumberOfBuildingTypeForPlayer(WEAPONSMITH, playerId) >= 1;
+				|| aiStatistics.getNumberOfBuildingTypeForPlayer(WEAPON_SMITH, playerId) >= 1;
 	}
 
 	@Override

@@ -413,7 +413,7 @@ public final class BuildingWorkerStrategy extends MovableStrategy implements IMa
 			EDirection fishDirection = movable.getDirection();
 			return super.getGrid().tryTakingResource(fishDirection.getNextHexPoint(movable.getPosition()), EResourceType.FISH);
 		case COALMINE:
-		case IRONMINE:
+		case IRON_MINE:
 		case GOLDMINE:
 			return building.tryTakingResource();
 

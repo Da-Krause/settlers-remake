@@ -27,16 +27,17 @@ public enum EBuildingsCategory {
 	BUILDINGS_CATEGORY_NORMAL(
 			EBuildingType.LUMBERJACK,
 			EBuildingType.SAWMILL,
-			EBuildingType.STONECUTTER,
+			EBuildingType.STONE_CUTTER,
 			EBuildingType.FORESTER,
-			EBuildingType.IRONMINE,
-			EBuildingType.IRONMELT,
+			EBuildingType.IRON_MINE,
+			EBuildingType.IRON_MELT,
 			EBuildingType.GOLDMINE,
-			EBuildingType.GOLDMELT,
+			EBuildingType.GOLD_MELT,
 			EBuildingType.COALMINE,
-			EBuildingType.TOOLSMITH,
+			EBuildingType.TOOL_SMITH,
 			EBuildingType.CHARCOAL_BURNER,
-			EBuildingType.GEMMINE),
+			EBuildingType.SULFUR_MINE,
+			EBuildingType.GEM_MINE),
 	BUILDINGS_CATEGORY_FOOD(
 			EBuildingType.FISHER,
 			EBuildingType.FARM,
@@ -46,13 +47,16 @@ public enum EBuildingsCategory {
 			EBuildingType.BAKER,
 			EBuildingType.WATERWORKS,
 			EBuildingType.DONKEY_FARM,
-			EBuildingType.WINEGROWER),
+			EBuildingType.WINEGROWER,
+			EBuildingType.BEEKEEPER,
+			EBuildingType.MEADMAKER),
 	BUILDINGS_CATEGORY_MILITARY(
 			EBuildingType.TOWER,
 			EBuildingType.BIG_TOWER,
 			EBuildingType.CASTLE,
 			EBuildingType.LOOKOUT_TOWER,
-			EBuildingType.WEAPONSMITH,
+			EBuildingType.WEAPON_SMITH,
+			EBuildingType.GONG_HALL,
 			EBuildingType.BARRACK,
 			EBuildingType.DOCKYARD,
 			EBuildingType.HOSPITAL),
@@ -64,7 +68,8 @@ public enum EBuildingsCategory {
 			EBuildingType.MARKET_PLACE,
 			EBuildingType.HARBOR,
 			EBuildingType.TEMPLE,
-			EBuildingType.BIG_TEMPLE);
+			EBuildingType.BIG_TEMPLE,
+			EBuildingType.ALCHEMIST);
 
 	public static final EBuildingsCategory[] VALUES = values();
 	public static final int NUMBER_OF_VALUES = VALUES.length;

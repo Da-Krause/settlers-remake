@@ -22,8 +22,8 @@ class AiBuildingConstants {
 	static final float WEAPON_SMITH_TO_BARRACKS_RATIO = 3F / 1F;
 	static final float WEAPON_SMITH_TO_FISHER_HUT_RATIO = 2F / 3F;
 	static final float WEAPON_SMITH_TO_FARM_RATIO = 2F / 1F;
-	static final float WEAPON_SMITH_TO_IRONMELT_RATIO = 1F / 1F;
-	static final float IRONMELT_TO_WEAPON_SMITH_RATIO = 1F / WEAPON_SMITH_TO_IRONMELT_RATIO;
+	static final float WEAPON_SMITH_TO_IRON_MELT_RATIO = 1F / 1F;
+	static final float IRONMELT_TO_WEAPON_SMITH_RATIO = 1F / WEAPON_SMITH_TO_IRON_MELT_RATIO;
 	static final float FARM_TO_BAKER_RATIO = 1F / 1F;
 	static final float FARM_TO_MILL_RATIO = 3F / 1F;
 	static final float FARM_TO_WATERWORKS_RATIO = 3F / 1F;
@@ -34,6 +34,6 @@ class AiBuildingConstants {
 	static final float LUMBERJACK_TO_FORESTER_RATIO = 2F / 1F;
 	static final float LUMBERJACK_TO_STONE_CUTTER_RATIO = 8F / 5F;
 	static final float COAL_MINE_TO_SMITH_RATIO = 1F / 1.8F;
-	static final float IRON_MINE_TO_IRONMELT_RATIO = COAL_MINE_TO_SMITH_RATIO / COAL_MINE_TO_IRON_MINE_RATIO;
+	static final float IRON_MINE_TO_IRON_MELT_RATIO = COAL_MINE_TO_SMITH_RATIO / COAL_MINE_TO_IRON_MINE_RATIO;
 	static final float WINEGROWER_TO_TEMPLE_RATIO = 1F / 1F;
 }

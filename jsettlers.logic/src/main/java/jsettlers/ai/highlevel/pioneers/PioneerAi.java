@@ -53,7 +53,7 @@ public class PioneerAi {
 				new StoneCutterTargetFinder(aiStatistics, playerId, searchDistance, 6),
 				new ConnectPartitionsTargetFinder(aiStatistics, playerId, searchDistance),
 				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.COAL, EBuildingType.COALMINE, civilisation),
-				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.IRONORE, EBuildingType.IRONMINE, civilisation),
+				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.IRONORE, EBuildingType.IRON_MINE, civilisation),
 				new RiverTargetFinder(aiStatistics, playerId, searchDistance),
 				new MineTargetFinder(aiStatistics, playerId, searchDistance, EResourceType.GOLDORE, EBuildingType.GOLDMINE, civilisation),
 				new FishTargetFinder(aiStatistics, playerId, searchDistance)

@@ -223,15 +223,15 @@ public abstract class ToolSidebar extends JPanel implements IPlayerSetter {
 					new ToolBox(EditorLabels.getLabel("tools.category.resources"), new ToolNode[] {
 							new PlaceBuildingTool(EBuildingType.LUMBERJACK, ECivilisation.ROMANS, this), //todo: add toolbox for other civilisations
 							new PlaceBuildingTool(EBuildingType.SAWMILL, ECivilisation.ROMANS, this),
-							new PlaceBuildingTool(EBuildingType.STONECUTTER, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.STONE_CUTTER, ECivilisation.ROMANS, this),
 							new PlaceBuildingTool(EBuildingType.FORESTER, ECivilisation.ROMANS, this),
-							new PlaceBuildingTool(EBuildingType.IRONMELT, ECivilisation.ROMANS, this),
-							new PlaceBuildingTool(EBuildingType.IRONMINE, ECivilisation.ROMANS, this),
-							new PlaceBuildingTool(EBuildingType.GOLDMELT, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.IRON_MELT, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.IRON_MINE, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.GOLD_MELT, ECivilisation.ROMANS, this),
 							new PlaceBuildingTool(EBuildingType.GOLDMINE, ECivilisation.ROMANS, this),
 							new PlaceBuildingTool(EBuildingType.COALMINE, ECivilisation.ROMANS, this),
 							new PlaceBuildingTool(EBuildingType.CHARCOAL_BURNER, ECivilisation.ROMANS, this),
-							new PlaceBuildingTool(EBuildingType.TOOLSMITH, ECivilisation.ROMANS, this)
+							new PlaceBuildingTool(EBuildingType.TOOL_SMITH, ECivilisation.ROMANS, this)
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.food"), new ToolNode[] {
 							new PlaceBuildingTool(EBuildingType.FARM, ECivilisation.ROMANS, this),
@@ -248,7 +248,7 @@ public abstract class ToolSidebar extends JPanel implements IPlayerSetter {
 							new PlaceBuildingTool(EBuildingType.TOWER, ECivilisation.ROMANS, this),
 							new PlaceBuildingTool(EBuildingType.BIG_TOWER, ECivilisation.ROMANS, this),
 							new PlaceBuildingTool(EBuildingType.CASTLE, ECivilisation.ROMANS, this),
-							new PlaceBuildingTool(EBuildingType.WEAPONSMITH, ECivilisation.ROMANS, this),
+							new PlaceBuildingTool(EBuildingType.WEAPON_SMITH, ECivilisation.ROMANS, this),
 							new PlaceBuildingTool(EBuildingType.DOCKYARD, ECivilisation.ROMANS, this)
 							}),
 					new ToolBox(EditorLabels.getLabel("tools.category.social"), new ToolNode[] {
