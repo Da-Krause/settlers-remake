@@ -14,6 +14,16 @@
  *******************************************************************************/
 package jsettlers.logic.buildings;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import jsettlers.algorithms.fogofwar.IViewDistancable;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.buildings.IBuilding;
@@ -58,16 +68,6 @@ import jsettlers.logic.player.Player;
 import jsettlers.logic.timer.IScheduledTimerable;
 import jsettlers.logic.timer.RescheduleTimer;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 public abstract class Building extends AbstractHexMapObject implements IConstructableBuilding, IPlayerable, IBuilding, IScheduledTimerable,
 		IDebugable, IDiggerRequester, IViewDistancable {
 	private static final long serialVersionUID = 4379555028512391595L;
@@ -80,7 +80,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	private static final int IS_FLATTENED_RECHECK_PERIOD = 1000;
 	private static final int WAITING_FOR_MATERIAL_PERIOD = 1000;
 
-	private static final EPriority[] SUPPORTED_PRIORITIES_FOR_CONSTRUCTION = new EPriority[] { EPriority.LOW, EPriority.HIGH, EPriority.STOPPED };
+	private static final EPriority[] SUPPORTED_PRIORITIES_FOR_CONSTRUCTION = new EPriority[]{EPriority.LOW, EPriority.HIGH, EPriority.STOPPED};
 	private static final EPriority[] SUPPORTED_PRIORITIES_FOR_NON_WORKERS = new EPriority[0];
 
 	private static final ConcurrentLinkedQueue<Building> allBuildings = new ConcurrentLinkedQueue<>();
@@ -111,7 +111,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 
 		allBuildings.add(this);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void readStaticState(ObjectInputStream ois) throws IOException, ClassNotFoundException {
 		allBuildings.clear();
@@ -227,8 +227,7 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	/**
 	 * Used to set or clear the small red flag atop a building to indicate it is occupied.
 	 *
-	 * @param place
-	 * 		specifies whether the flag should appear or not.
+	 * @param place specifies whether the flag should appear or not.
 	 */
 	protected void showFlag(boolean place) {
 		ShortPoint2D flagPosition = type.getFlag(civilisation).calculatePoint(pos);
@@ -279,43 +278,43 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 	@Override
 	public int timerEvent() {
 		switch (state) {
-		case CREATED:
-			if (priority == EPriority.STOPPED) {
-				return IS_UNSTOPPED_RECHECK_PERIOD;
-			} else {
-				state = EBuildingState.IN_FLATTERNING;
-				requestDiggers();
-			}
+			case CREATED:
+				if (priority == EPriority.STOPPED) {
+					return IS_UNSTOPPED_RECHECK_PERIOD;
+				} else {
+					state = EBuildingState.IN_FLATTERNING;
+					requestDiggers();
+				}
 
-		case IN_FLATTERNING:
-			if (!isFlattened()) {
-				return IS_FLATTENED_RECHECK_PERIOD;
-			} else {
-				placeAdditionalMapObjects(grid, pos, false);
-				grid.setBlocked(getBuildingArea(), true);
-				this.state = EBuildingState.WAITING_FOR_MATERIAL;
-				// directly go into the next case!
-			}
+			case IN_FLATTERNING:
+				if (!isFlattened()) {
+					return IS_FLATTENED_RECHECK_PERIOD;
+				} else {
+					placeAdditionalMapObjects(grid, pos, false);
+					grid.setBlocked(getBuildingArea(), true);
+					this.state = EBuildingState.WAITING_FOR_MATERIAL;
+					// directly go into the next case!
+				}
 
-		case WAITING_FOR_MATERIAL:
-			if (priority != EPriority.STOPPED && (isMaterialAvailable() || remainingMaterialActions > 0)) {
-				state = EBuildingState.BRICKLAYERS_REQUESTED;
-				requestBricklayers();
-				return -1; // no new scheduling
-			} else {
-				return WAITING_FOR_MATERIAL_PERIOD;
-			}
+			case WAITING_FOR_MATERIAL:
+				if (priority != EPriority.STOPPED && (isMaterialAvailable() || remainingMaterialActions > 0)) {
+					state = EBuildingState.BRICKLAYERS_REQUESTED;
+					requestBricklayers();
+					return -1; // no new scheduling
+				} else {
+					return WAITING_FOR_MATERIAL_PERIOD;
+				}
 
-		case BRICKLAYERS_REQUESTED: // the state changes are handled by tryToTakeMaterial()
-			assert false : "Building.timerEvent() should not be called in state: " + state;
-			return -1;
+			case BRICKLAYERS_REQUESTED: // the state changes are handled by tryToTakeMaterial()
+				assert false : "Building.timerEvent() should not be called in state: " + state;
+				return -1;
 
-		case CONSTRUCTED:
-			return subTimerEvent();
+			case CONSTRUCTED:
+				return subTimerEvent();
 
-		case DESTROYED:
-		default:
-			return -1;
+			case DESTROYED:
+			default:
+				return -1;
 		}
 	}
 
@@ -634,14 +633,14 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 
 		if (newPriority == EPriority.STOPPED) {
 			switch (state) {
-			case IN_FLATTERNING:
-				state = EBuildingState.CREATED; // we're still scheduled in this state => no rescheduling!
-				break;
+				case IN_FLATTERNING:
+					state = EBuildingState.CREATED; // we're still scheduled in this state => no rescheduling!
+					break;
 
-			case BRICKLAYERS_REQUESTED:
-				state = EBuildingState.WAITING_FOR_MATERIAL;
-				RescheduleTimer.add(this, WAITING_FOR_MATERIAL_PERIOD); // we're not scheduled atm => reschedule!
-				break;
+				case BRICKLAYERS_REQUESTED:
+					state = EBuildingState.WAITING_FOR_MATERIAL;
+					RescheduleTimer.add(this, WAITING_FOR_MATERIAL_PERIOD); // we're not scheduled atm => reschedule!
+					break;
 			}
 		}
 	}
@@ -665,77 +664,83 @@ public abstract class Building extends AbstractHexMapObject implements IConstruc
 
 	public static Building createBuilding(EBuildingType type, Player player, ShortPoint2D position, IBuildingsGrid buildingsGrid) {
 		switch (type) {
-		case BIG_LIVINGHOUSE:
-			return new BigLivinghouse(player, position, buildingsGrid);
-		case MEDIUM_LIVINGHOUSE:
-			return new MediumLivinghouse(player, position, buildingsGrid);
-		case SMALL_LIVINGHOUSE:
-			return new SmallLivinghouse(player, position, buildingsGrid);
+			case BIG_LIVINGHOUSE:
+				return new BigLivinghouse(player, position, buildingsGrid);
+			case MEDIUM_LIVINGHOUSE:
+				return new MediumLivinghouse(player, position, buildingsGrid);
+			case SMALL_LIVINGHOUSE:
+				return new SmallLivinghouse(player, position, buildingsGrid);
 
-		case CHARCOAL_BURNER:
-		case BAKER:
-		case DONKEY_FARM:
-		case FARM:
-		case FORESTER:
-		case GOLD_MELT:
-		case IRON_MELT:
-		case LUMBERJACK:
-		case PIG_FARM:
-		case SAWMILL:
-		case STONE_CUTTER:
-		case TOOL_SMITH:
-		case WEAPON_SMITH:
-		case WATERWORKS:
-		case WINEGROWER:
-			return new WorkerBuilding(type, player, position, buildingsGrid);
+			case ALCHEMIST:
+			case BEEKEEPER:
+			case CHARCOAL_BURNER:
+			case BAKER:
+			case DONKEY_FARM:
+			case GONG_HALL:
+			case GOLD_MELT:
+			case FARM:
+			case FORESTER:
+			case IRON_MELT:
+			case LUMBERJACK:
+			case MEADMAKER:
+			case PIG_FARM:
+			case SAWMILL:
+			case STONE_CUTTER:
+			case TOOL_SMITH:
+			case WEAPON_SMITH:
+			case WATERWORKS:
+			case WINEGROWER:
+				return new WorkerBuilding(type, player, position, buildingsGrid);
 
-		case DOCKYARD:
-			return new DockyardBuilding(player, position, buildingsGrid);
+			case DOCKYARD:
+				return new DockyardBuilding(player, position, buildingsGrid);
 
-		case MILL:
-			return new MillBuilding(player, position, buildingsGrid);
+			case MILL:
+				return new MillBuilding(player, position, buildingsGrid);
 
-		case SLAUGHTERHOUSE:
-			return new SlaughterhouseBuilding(type, player, position, buildingsGrid);
+			case SLAUGHTERHOUSE:
+				return new SlaughterhouseBuilding(type, player, position, buildingsGrid);
 
-		case TOWER:
-		case BIG_TOWER:
-		case CASTLE:
-			return new OccupyingBuilding(type, player, position, buildingsGrid);
+			case TOWER:
+			case BIG_TOWER:
+			case CASTLE:
+				return new OccupyingBuilding(type, player, position, buildingsGrid);
 
-		case BARRACK:
-			return new Barrack(player, position, buildingsGrid);
+			case BARRACK:
+				return new Barrack(player, position, buildingsGrid);
 
-		case IRON_MINE:
-		case GOLDMINE:
-		case COALMINE:
-			return new MineBuilding(type, player, position, buildingsGrid);
+			case IRON_MINE:
+			case GOLDMINE:
+			case COALMINE:
+			case GEM_MINE:
+			case SULFUR_MINE:
+				return new MineBuilding(type, player, position, buildingsGrid);
 
-		case FISHER:
-			return new ResourceBuilding(type, player, position, buildingsGrid);
+			case FISHER:
+				return new ResourceBuilding(type, player, position, buildingsGrid);
 
-		case STOCK:
-			return new StockBuilding(player, position, buildingsGrid);
+			case STOCK:
+				return new StockBuilding(player, position, buildingsGrid);
 
-		case TEMPLE:
-			return new TempleBuilding(player, position, buildingsGrid);
+			case TEMPLE:
+				return new TempleBuilding(player, position, buildingsGrid);
 
-		case MARKET_PLACE:
-			return new MarketBuilding(type, player, position, buildingsGrid);
+			case MARKET_PLACE:
+				return new MarketBuilding(type, player, position, buildingsGrid);
 
-		case HARBOR:
-			return new HarborBuilding(type, player, position, buildingsGrid);
+			case HARBOR:
+				return new HarborBuilding(type, player, position, buildingsGrid);
 
-		case BIG_TEMPLE:
-			return new BigTemple(player, position, buildingsGrid);
+			case BIG_TEMPLE:
+				return new BigTemple(player, position, buildingsGrid);
 
-		case HOSPITAL:
-		case LOOKOUT_TOWER:
-			return new DefaultBuilding(type, player, position, buildingsGrid);
+			case HOSPITAL:
+			case LOOKOUT_TOWER:
+				return new DefaultBuilding(type, player, position, buildingsGrid);
 
-		default:
-			System.err.println("ERROR: couldn't create new building, because type is unknown: " + type);
-			return null;
+			default:
+				System.err.println("ERROR: couldn't create new building, because type is unknown: " + type);
+				return null;
 		}
 	}
 
