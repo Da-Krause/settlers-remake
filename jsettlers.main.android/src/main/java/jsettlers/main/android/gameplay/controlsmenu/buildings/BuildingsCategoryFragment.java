@@ -141,7 +141,7 @@ public class BuildingsCategoryFragment extends Fragment {
 		}
 
 		void setBuilding(BuildingViewState buildingViewState) {
-			OriginalImageProvider.get(buildingViewState.getBuildingType()).setAsImage(imageView);
+			OriginalImageProvider.get(buildingViewState.getBuildingType(), buildingViewState.getCivilisation()).setAsImage(imageView);
 			nameTextView.setText(buildingViewState.getName());
 			buildingCountTextView.setText(buildingViewState.getCount());
 			buildingConstructionCountTextView.setText(buildingViewState.getConstructionCount());
@@ -156,7 +156,7 @@ public class BuildingsCategoryFragment extends Fragment {
 	/**
 	 * Diff callback
 	 */
-	private class BuildingsDiffCallback extends DiffUtil.Callback  {
+	private class BuildingsDiffCallback extends DiffUtil.Callback {
 
 		private final BuildingViewState[] oldBuildingViewStates;
 		private final BuildingViewState[] newBuildingViewStates;

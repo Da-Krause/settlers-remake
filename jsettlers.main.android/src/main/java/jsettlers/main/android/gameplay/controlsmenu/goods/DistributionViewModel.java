@@ -24,6 +24,7 @@ import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.buildings.MaterialsOfBuildings;
 import jsettlers.common.map.partition.IMaterialDistributionSettings;
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.main.android.core.controls.ActionControls;
 import jsettlers.main.android.core.controls.ControlsResolver;
 import jsettlers.main.android.core.controls.PositionControls;
@@ -48,10 +49,12 @@ public class DistributionViewModel extends ViewModel {
 
     private final PositionControls positionControls;
     private final ActionControls actionControls;
+    private final ECivilisation civilisation;
 
     public DistributionViewModel(PositionControls positionControls, ActionControls actionControls) {
         this.positionControls = positionControls;
         this.actionControls = actionControls;
+        civilisation = ECivilisation.ROMANS; //todo: use parameter
     }
 
     public EMaterialType[] getDistributionMaterials() {
@@ -60,10 +63,10 @@ public class DistributionViewModel extends ViewModel {
 
     public DistributionState[] getDistributionStates(EMaterialType materialType) {
         IMaterialDistributionSettings materialDistributionSettings = positionControls.getCurrentPartitionData().getPartitionSettings().getDistributionSettings(materialType);
-        EBuildingType[] buildingsForMaterial = MaterialsOfBuildings.getBuildingTypesRequestingMaterial(materialType);
+        EBuildingType[] buildingsForMaterial = MaterialsOfBuildings.getBuildingTypesRequestingMaterial(materialType, civilisation);
 
         return stream(buildingsForMaterial)
-                .map(buildingType -> new DistributionState(buildingType, materialDistributionSettings))
+                .map(buildingType -> new DistributionState(buildingType, civilisation, materialDistributionSettings))
                 .toArray(DistributionState[]::new);
     }
 

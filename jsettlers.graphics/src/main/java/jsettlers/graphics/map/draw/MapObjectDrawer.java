@@ -257,7 +257,7 @@ public class MapObjectDrawer {
 		float color = getColor(fogStatus);
 		float state = stock.getStateProgress();
 		if (state >= 0.99) {
-			ImageLink[] images = EBuildingType.STOCK.getImages();
+			ImageLink[] images = EBuildingType.STOCK.getImages(stock.getCivilisation());
 			draw(imageProvider.getImage(images[0]), x, y, color);
 			draw(imageProvider.getImage(images[1]), x, y, color);
 			draw(imageProvider.getImage(images[5]), x, y, color);
@@ -273,7 +273,7 @@ public class MapObjectDrawer {
 		float color = getColor(fogStatus);
 		float state = stock.getStateProgress();
 		if (state >= 0.99) {
-			ImageLink[] images = EBuildingType.STOCK.getImages();
+			ImageLink[] images = EBuildingType.STOCK.getImages(stock.getCivilisation());
 			for (int i = 2; i < 5; i++) {
 				draw(imageProvider.getImage(images[i]), x, y, color);
 			}
@@ -377,7 +377,7 @@ public class MapObjectDrawer {
 					float xShift = PASSENGER_POSITION_TO_FRONT[j] * xShiftForward + PASSENGER_POSITION_TO_RIGHT[j] * xShiftRight;
 					IMovable passenger = passengerList.get(j);
 					Image image = this.imageMap.getImageForSettler(passenger.getMovableType(), EMovableAction.NO_ACTION,
-						EMaterialType.NO_MATERIAL, getPassengerDirection(direction, shipPosition, i), 0
+						EMaterialType.NO_MATERIAL, getPassengerDirection(direction, shipPosition, i), passenger.getCivilisation(), 0
 					);
 					image.drawAt(glDrawContext, drawBuffer, viewX + xShift, viewY + yShift + PASSENGER_DECK_HEIGHT, color, shade);
 				}
@@ -410,7 +410,7 @@ public class MapObjectDrawer {
 					float xShift = PASSENGER_POSITION_TO_FRONT[j] * xShiftForward + PASSENGER_POSITION_TO_RIGHT[j] * xShiftRight;
 					IMovable passenger = passengerList.get(j);
 					Image image = this.imageMap.getImageForSettler(passenger.getMovableType(), EMovableAction.NO_ACTION,
-						EMaterialType.NO_MATERIAL, getPassengerDirection(direction, shipPosition, i), 0
+						EMaterialType.NO_MATERIAL, getPassengerDirection(direction, shipPosition, i), passenger.getCivilisation(),0
 					);
 					image.drawAt(glDrawContext, drawBuffer, viewX + xShift, viewY + yShift + PASSENGER_DECK_HEIGHT, color, shade);
 				}
@@ -637,7 +637,7 @@ public class MapObjectDrawer {
 	private void drawPlacementBuilding(int x, int y, IMapObject object, float color) {
 		float z = context.getDrawBuffer().getZ();
 		context.getDrawBuffer().setZ(PLACEMENT_BUILDING_Z);
-		ImageLink[] images = ((IBuilding) object).getBuildingType().getImages();
+		ImageLink[] images = ((IBuilding) object).getBuildingType().getImages(((IBuilding) object).getCivilisation());
 		Image image;
 		for (ImageLink image1 : images) {
 			image = imageProvider.getImage(image1);
@@ -1244,7 +1244,7 @@ public class MapObjectDrawer {
 					int i = getAnimationStep(x, y);
 					int step = i % seq.length();
 					drawOnlyImage(seq.getImageSafe(step), x, y, color);
-					ImageLink[] images = type.getImages();
+					ImageLink[] images = type.getImages(building.getCivilisation());
 					if (images.length > 0) {
 						Image image = imageProvider.getImage(images[0]);
 						drawOnlyShadow(image, x, y, color);

@@ -14,25 +14,25 @@
  *******************************************************************************/
 package jsettlers.common.buildings;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 import jsettlers.common.buildings.stacks.RelativeStack;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.common.player.ECivilisation;
 
+import static java8.util.J8Arrays.stream;
+
 /**
  * This class calculates static data gained from configuration files. The class supplies the information what buildings can request a given
  * {@link EMaterialType}.
- * 
+ *
  * @author Andreas Eberle
- * 
  */
 public final class MaterialsOfBuildings {
 	private static final EBuildingType[][] buildingsRequestingMaterial = new EBuildingType[EMaterialType.NUMBER_OF_MATERIALS][];
 
 	static {
-		@SuppressWarnings({ "unchecked" })
+		@SuppressWarnings({"unchecked"})
 		LinkedList<EBuildingType>[] buildingsForMaterials = new LinkedList[EMaterialType.NUMBER_OF_MATERIALS];
 		for (int i = 0; i < EMaterialType.NUMBER_OF_MATERIALS; i++) {
 			buildingsForMaterials[i] = new LinkedList<>();
@@ -51,16 +51,15 @@ public final class MaterialsOfBuildings {
 	}
 
 	/**
-	 * Gets an array of {@link EBuildingType}s that can request the given {@link EMaterialType}.
-	 * <p />
-	 * NOTE: The array MUST NOT be changed! For the sake of speed, no copy is created by this method!
-	 * 
-	 * @param material
-	 *            {@link EMaterialType} to be checked.
+	 * Gets an array of {@link EBuildingType}s with the given {@link ECivilisation} that can request the given {@link EMaterialType}.
+	 * <p/>
+	 *
+	 * @param material     {@link EMaterialType} to be checked.
+	 * @param civilisation {@link ECivilisation} of the {@link EBuildingType}s
 	 * @return Returns an array of {@link EBuildingType}s that can request the given {@link EMaterialType}.
 	 */
-	public static EBuildingType[] getBuildingTypesRequestingMaterial(EMaterialType material) {
-		return buildingsRequestingMaterial[material.ordinal];
+	public static EBuildingType[] getBuildingTypesRequestingMaterial(EMaterialType material, ECivilisation civilisation) {
+		return stream(buildingsRequestingMaterial[material.ordinal]).filter(eBuildingType -> eBuildingType.requiredCivilisations.contains(civilisation)).toArray(EBuildingType[]::new);
 	}
 
 	private MaterialsOfBuildings() {

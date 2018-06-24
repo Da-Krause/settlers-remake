@@ -50,7 +50,7 @@ class WhatToDoAiFactory {
 	}
 
 	private ArmyGeneral determineArmyGeneral(EPlayerType playerType, ECivilisation civilisation, AiStatistics aiStatistics, Player player, MovableGrid movableGrid, ITaskScheduler taskScheduler) {
-		// TODO: use civilisation to determine different general when there is more than ROMAN
+		// TODO: use civilisation to determine different general when there is more than ROMANS
 		return new ConfigurableGeneral(aiStatistics, player, movableGrid, taskScheduler, playerType);
 	}
 }

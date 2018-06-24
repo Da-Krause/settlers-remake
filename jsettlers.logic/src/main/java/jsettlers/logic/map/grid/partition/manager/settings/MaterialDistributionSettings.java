@@ -16,12 +16,12 @@ package jsettlers.logic.map.grid.partition.manager.settings;
 
 import java.io.Serializable;
 
+import java8.util.J8Arrays;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.buildings.MaterialsOfBuildings;
 import jsettlers.common.map.partition.IMaterialDistributionSettings;
 import jsettlers.common.material.EMaterialType;
-
-import java8.util.J8Arrays;
+import jsettlers.common.player.ECivilisation;
 
 /**
  * This class holds the distribution settings for a given {@link EMaterialType}.
@@ -34,11 +34,11 @@ public final class MaterialDistributionSettings implements IMaterialDistribution
 	private final EMaterialType materialType;
 	private final RelativeSettings<EBuildingType> distributionSettings = new RelativeSettings<>(EBuildingType.NUMBER_OF_BUILDINGS, index -> EBuildingType.VALUES[index], false);
 	private float requestValueSum;
+
 	/**
 	 * Creates a new object of {@link MaterialDistributionSettings} holding the settings for the given {@link EMaterialType}.
 	 *
-	 * @param materialType
-	 * 		Defines the {@link EMaterialType}, this settings are used for.
+	 * @param materialType Defines the {@link EMaterialType}, this settings are used for.
 	 */
 	MaterialDistributionSettings(EMaterialType materialType) {
 		this.materialType = materialType;
@@ -50,7 +50,7 @@ public final class MaterialDistributionSettings implements IMaterialDistribution
 	}
 
 	public final EBuildingType[] getBuildingTypes() {
-		return MaterialsOfBuildings.getBuildingTypesRequestingMaterial(materialType);
+		return MaterialsOfBuildings.getBuildingTypesRequestingMaterial(materialType, ECivilisation.ROMANS); //todo: use parameter for civilisation
 	}
 
 	public void setUserConfiguredDistributionValue(EBuildingType buildingType, float value) {

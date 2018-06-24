@@ -10,6 +10,7 @@ import jsettlers.common.action.Action;
 import jsettlers.common.action.ShowConstructionMarksAction;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.map.partition.IBuildingCounts;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.graphics.map.controls.original.panel.content.buildings.EBuildingsCategory;
 import jsettlers.main.android.core.controls.ActionControls;
 import jsettlers.main.android.core.controls.ControlsResolver;
@@ -30,6 +31,7 @@ public class BuildingsCategoryViewModel extends ViewModel {
     private final PositionControls positionControls;
     private final MenuNavigator menuNavigator;
     private final EBuildingsCategory buildingsCategory;
+    private final ECivilisation civilisation;
 
     private final LiveData<BuildingViewState[]> buildingStates;
 
@@ -38,6 +40,7 @@ public class BuildingsCategoryViewModel extends ViewModel {
         this.positionControls = positionControls;
         this.menuNavigator = menuNavigator;
         this.buildingsCategory = buildingsCategory;
+        civilisation = ECivilisation.ROMANS; //todo: use parameter
 
         DrawEvents drawEvents = new DrawEvents(drawControls);
         buildingStates = Transformations.map(drawEvents, x -> buildingStates());
@@ -48,7 +51,7 @@ public class BuildingsCategoryViewModel extends ViewModel {
     }
 
     public void showConstructionMarkers(EBuildingType buildingType) {
-        Action action = new ShowConstructionMarksAction(buildingType);
+        Action action = new ShowConstructionMarksAction(buildingType, civilisation);
         actionControls.fireAction(action);
         menuNavigator.dismissMenu();
     }
@@ -62,8 +65,8 @@ public class BuildingsCategoryViewModel extends ViewModel {
             buildingCounts = null;
         }
 
-        return stream(buildingsCategory.buildingTypes)
-                .map(buildingType -> new BuildingViewState(buildingType, buildingCounts))
+        return stream(buildingsCategory.buildingTypes).filter(buildingType -> buildingType.requiredCivilisations.contains(civilisation))
+                .map(buildingType -> new BuildingViewState(buildingType, civilisation, buildingCounts))
                 .toArray(BuildingViewState[]::new);
     }
 

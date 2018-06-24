@@ -17,17 +17,19 @@ package jsettlers.graphics.map.controls.original.panel.content.material.distribu
 import java.util.List;
 
 import go.graphics.text.EFontSize;
-
+import java8.util.J8Arrays;
+import java8.util.stream.Collectors;
+import jsettlers.common.action.SetMaterialDistributionSettingsAction;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.buildings.MaterialsOfBuildings;
 import jsettlers.common.map.IGraphicsGrid;
 import jsettlers.common.map.partition.IMaterialDistributionSettings;
 import jsettlers.common.material.EMaterialType;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.common.position.IPositionSupplier;
 import jsettlers.common.position.ShortPoint2D;
 import jsettlers.graphics.action.ActionFireable;
 import jsettlers.graphics.action.ExecutableAction;
-import jsettlers.common.action.SetMaterialDistributionSettingsAction;
 import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.map.controls.original.panel.button.MaterialButton;
 import jsettlers.graphics.map.controls.original.panel.content.AbstractContentProvider;
@@ -40,11 +42,8 @@ import jsettlers.graphics.ui.Label;
 import jsettlers.graphics.ui.Label.EHorizontalAlignment;
 import jsettlers.graphics.ui.UIPanel;
 
-import java8.util.J8Arrays;
-import java8.util.stream.Collectors;
-
 public class DistributionPanel extends AbstractContentProvider implements IUiContentReceiver<IMaterialDistributionSettings> {
-	private static final EMaterialType[] MATERIAL_TYPES_FOR_DISTRIBUTION = new EMaterialType[] {
+	private static final EMaterialType[] MATERIAL_TYPES_FOR_DISTRIBUTION = new EMaterialType[]{
 			EMaterialType.COAL,
 			EMaterialType.IRON,
 			EMaterialType.PLANK,
@@ -123,8 +122,8 @@ public class DistributionPanel extends AbstractContentProvider implements IUiCon
 
 		private final List<BuildingDistributionSettingPanel> buildingDistributionSettings;
 
-		MaterialDistributionPanel(EMaterialType materialType, IPositionSupplier positionSupplier) {
-			EBuildingType[] buildingsForMaterial = MaterialsOfBuildings.getBuildingTypesRequestingMaterial(materialType);
+		MaterialDistributionPanel(EMaterialType materialType, IPositionSupplier positionSupplier, ECivilisation civilisation) {
+			EBuildingType[] buildingsForMaterial = MaterialsOfBuildings.getBuildingTypesRequestingMaterial(materialType, civilisation);
 
 			buildingDistributionSettings = J8Arrays.stream(buildingsForMaterial)
 					.map(buildingType -> new BuildingDistributionSettingPanel(materialType, buildingType, positionSupplier))
@@ -152,7 +151,7 @@ public class DistributionPanel extends AbstractContentProvider implements IUiCon
 		private final MaterialButton materialButton;
 		private final MaterialDistributionPanel configurationPanel;
 
-		private MaterialDistributionTab(EMaterialType materialType, IPositionSupplier positionSupplier) {
+		private MaterialDistributionTab(EMaterialType materialType, IPositionSupplier positionSupplier, ECivilisation civilisation) {
 			MaterialDistributionTab thisTab = this;
 			materialButton = new MaterialButton(new ExecutableAction() {
 				@Override
@@ -161,7 +160,7 @@ public class DistributionPanel extends AbstractContentProvider implements IUiCon
 				}
 			}, materialType);
 
-			configurationPanel = new MaterialDistributionPanel(materialType, positionSupplier);
+			configurationPanel = new MaterialDistributionPanel(materialType, positionSupplier, civilisation);
 		}
 	}
 
@@ -193,7 +192,7 @@ public class DistributionPanel extends AbstractContentProvider implements IUiCon
 
 	private List<MaterialDistributionTab> createTabs(IPositionSupplier positionSupplier) {
 		return J8Arrays.stream(MATERIAL_TYPES_FOR_DISTRIBUTION)
-				.map(materialType -> new MaterialDistributionTab(materialType, positionSupplier))
+				.map(materialType -> new MaterialDistributionTab(materialType, positionSupplier, ECivilisation.ROMANS)) //todo: use parameter for civilisation
 				.collect(Collectors.toList());
 	}
 

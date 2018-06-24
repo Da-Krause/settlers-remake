@@ -17,6 +17,7 @@ package jsettlers.main.android.gameplay.controlsmenu.buildings;
 
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.map.partition.IBuildingCounts;
+import jsettlers.common.player.ECivilisation;
 import jsettlers.graphics.localization.Labels;
 
 /**
@@ -25,48 +26,54 @@ import jsettlers.graphics.localization.Labels;
 
 public class BuildingViewState {
 
-    private final EBuildingType buildingType;
-    private final String name;
-    private final String count;
-    private final String constructionCount;
+	private final EBuildingType buildingType;
+	private final String name;
+	private final ECivilisation civilisation;
+	private final String count;
+	private final String constructionCount;
 
-    public BuildingViewState(EBuildingType buildingType, IBuildingCounts buildingCounts) {
-        this.buildingType = buildingType;
-        this.name = Labels.getName(buildingType);
+	public BuildingViewState(EBuildingType buildingType, ECivilisation civilisation, IBuildingCounts buildingCounts) {
+		this.buildingType = buildingType;
+		this.name = Labels.getName(buildingType);
+		this.civilisation = civilisation;
 
-        if (buildingCounts != null) {
-            this.count = Integer.toString(buildingCounts.buildingsInPartition(buildingType));
+		if (buildingCounts != null) {
+			this.count = Integer.toString(buildingCounts.buildingsInPartition(buildingType));
 
-            int constructionCount = buildingCounts.buildingsInPartitionUnderConstruction(buildingType);
-            if (constructionCount > 0) {
-                this.constructionCount = "+" + Integer.toString(constructionCount);
-            } else {
-                this.constructionCount = "";
-            }
-        } else {
-            this.count = "";
-            this.constructionCount = "";
-        }
-    }
+			int constructionCount = buildingCounts.buildingsInPartitionUnderConstruction(buildingType);
+			if (constructionCount > 0) {
+				this.constructionCount = "+" + Integer.toString(constructionCount);
+			} else {
+				this.constructionCount = "";
+			}
+		} else {
+			this.count = "";
+			this.constructionCount = "";
+		}
+	}
 
-    public EBuildingType getBuildingType() {
-        return buildingType;
-    }
+	public EBuildingType getBuildingType() {
+		return buildingType;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getCount() {
-        return count;
-    }
+	public String getCount() {
+		return count;
+	}
 
-    public String getConstructionCount() {
-        return constructionCount;
-    }
+	public String getConstructionCount() {
+		return constructionCount;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof BuildingViewState && ((BuildingViewState) obj).getBuildingType() == getBuildingType();
-    }
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof BuildingViewState && ((BuildingViewState) obj).getBuildingType() == getBuildingType();
+	}
+
+	public ECivilisation getCivilisation() {
+		return civilisation;
+	}
 }

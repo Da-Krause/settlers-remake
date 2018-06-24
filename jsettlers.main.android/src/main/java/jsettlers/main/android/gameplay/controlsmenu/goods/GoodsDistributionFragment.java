@@ -35,9 +35,9 @@ import org.androidannotations.annotations.ViewById;
 import jsettlers.common.material.EMaterialType;
 import jsettlers.main.android.R;
 import jsettlers.main.android.core.navigation.BackPressedListener;
+import jsettlers.main.android.core.resources.OriginalImageProvider;
 import jsettlers.main.android.gameplay.navigation.MenuNavigator;
 import jsettlers.main.android.gameplay.navigation.MenuNavigatorProvider;
-import jsettlers.main.android.core.resources.OriginalImageProvider;
 
 /**
  * Created by tompr on 24/11/2016.
@@ -91,9 +91,9 @@ public class GoodsDistributionFragment extends Fragment implements BackPressedLi
 
 	void showDistributionPopup(View anchor, EMaterialType materialType) {
 		DistributionState[] distributionStates = viewModel.getDistributionStates(materialType);
-        LayoutInflater layoutInflater = getLayoutInflater();
+		LayoutInflater layoutInflater = getLayoutInflater();
 
-        View popupView = layoutInflater.inflate(R.layout.popup_empty, null);
+		View popupView = layoutInflater.inflate(R.layout.popup_empty, null);
 		LinearLayout container = popupView.findViewById(R.id.container);
 
 		for (DistributionState distributionState : distributionStates) {
@@ -101,26 +101,28 @@ public class GoodsDistributionFragment extends Fragment implements BackPressedLi
 			ImageView imageView = view.findViewById(R.id.imageView_building);
 			SeekBar seekBar = view.findViewById(R.id.seekBar);
 
-			OriginalImageProvider.get(distributionState.getBuildingType()).setAsImage(imageView);
+			OriginalImageProvider.get(distributionState.getBuildingType(), distributionState.getCivilisation()).setAsImage(imageView);
 			seekBar.setProgress(Math.round(distributionState.getRatio() * seekBar.getMax()));
 
 			seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 				@Override
-				public void onProgressChanged(SeekBar seekBar, int i, boolean b) {}
+				public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+				}
 
 				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {}
+				public void onStartTrackingTouch(SeekBar seekBar) {
+				}
 
 				@Override
 				public void onStopTrackingTouch(SeekBar seekBar) {
-					viewModel.setDistributionRatio(materialType, distributionState.getBuildingType (), (float)seekBar.getProgress() / seekBar.getMax());
+					viewModel.setDistributionRatio(materialType, distributionState.getBuildingType(), (float) seekBar.getProgress() / seekBar.getMax());
 				}
 			});
 
-            container.addView(view);
+			container.addView(view);
 		}
 
-        popupView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+		popupView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 		int xOffset = -((popupView.getMeasuredWidth() - anchor.getWidth()) / 2);
 		int yOffset = -(popupView.getMeasuredHeight() + anchor.getHeight());
 

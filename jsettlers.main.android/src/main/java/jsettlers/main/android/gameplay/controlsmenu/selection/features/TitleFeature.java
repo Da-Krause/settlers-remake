@@ -55,7 +55,7 @@ public class TitleFeature extends SelectionFeature implements DrawListener {
 		}
 
 		nameTextView.setText(name);
-		OriginalImageProvider.get(getBuilding().getBuildingType()).setAsImage(imageView);
+		OriginalImageProvider.get(getBuilding().getBuildingType(), getBuilding().getCivilisation()).setAsImage(imageView);
 	}
 
 	@Override
